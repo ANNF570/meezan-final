@@ -1,0 +1,120 @@
+/* ============================================================
+   MEEZAN — ميزان  |  css/reports.css
+   Reports & Charts page styles
+   ============================================================ */
+
+/* ── BAR CHART ── */
+.report-chart-wrap {
+  position: relative;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: .5rem;
+}
+
+.report-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 160px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.chart-month-group {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  justify-content: center;
+}
+
+.chart-bar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  min-height: 3px;
+  transition: height 0.5s ease, opacity 0.2s;
+  cursor: pointer;
+  max-width: 18px;
+}
+.chart-bar:hover { opacity: 0.75; }
+.chart-bar.income  { background: linear-gradient(180deg, #1abc9c, #0d7a5f); }
+.chart-bar.expense { background: linear-gradient(180deg, #c0392b, #8b1a00); }
+
+.chart-x-labels {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+.chart-x-label {
+  flex: 1;
+  text-align: center;
+  font-size: 9px;
+  color: var(--text-dim);
+}
+
+/* ── CATEGORY PIE (CSS bars) ── */
+.cat-pie-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.cat-pie-row:last-child { border-bottom: none; }
+.cat-pie-icon   { font-size: 15px; width: 22px; text-align: center; flex-shrink: 0; }
+.cat-pie-label  { flex: 1; font-size: 12px; color: var(--text-mid); }
+.cat-pie-bar-wrap { width: 80px; }
+.cat-pie-track  { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.07); overflow: hidden; }
+.cat-pie-fill   { height: 100%; border-radius: 3px; transition: width 0.5s; }
+.cat-pie-pct    { font-size: 10px; color: var(--text-dim); min-width: 30px; text-align: right; }
+.cat-pie-amt    { font-family: 'Cinzel', serif; font-size: 11px; min-width: 70px; text-align: right; }
+
+/* ── AREA CHART (simple bars with connecting look) ── */
+.area-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 140px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 4px;
+}
+.area-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.area-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  min-height: 3px;
+  transition: height 0.5s;
+  background: linear-gradient(180deg, #d4a017, rgba(212,160,23,0.3));
+}
+.area-lbl { font-size: 8px; color: var(--text-dim); text-align: center; }
+
+/* ── TOP EXPENSES TABLE ── */
+.top-exp-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.top-exp-row:last-child { border-bottom: none; }
+.te-rank  { font-family: 'Cinzel', serif; font-size: 11px; color: var(--text-dim); width: 18px; flex-shrink: 0; }
+.te-icon  { font-size: 15px; flex-shrink: 0; }
+.te-name  { flex: 1; font-size: 12px; color: var(--text); }
+.te-cat   { font-size: 10px; color: var(--text-dim); }
+.te-amt   { font-family: 'Cinzel', serif; font-size: 12px; color: var(--fire-lt); flex-shrink: 0; }
+
+/* ── INCOME BREAKDOWN ── */
+.inc-type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 8px; }
+.inc-type-card {
+  background: var(--bg-row);
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+.itc-icon   { font-size: 22px; margin-bottom: 4px; }
+.itc-label  { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 3px; }
+.itc-amount { font-family: 'Cinzel', serif; font-size: 13px; color: var(--teal-lt); }
+.itc-count  { font-size: 10px; color: var(--text-dim); margin-top: 2px; }

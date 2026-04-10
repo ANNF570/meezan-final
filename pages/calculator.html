@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/calculator.html
+     Built-in calculator with Zakat ×2.5% shortcut
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Calculator</title>
+
+    <link rel="icon" href="../assets/favicon.png">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+    <style>
+        .calc-page {
+            max-width: 380px;
+            margin: 0 auto;
+        }
+        
+        .calc-display {
+            background: var(--bg-input);
+            border: 1px solid var(--bdr-gold);
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-align: right;
+            margin-bottom: .875rem;
+        }
+        
+        .calc-expr {
+            font-size: 13px;
+            color: var(--text-dim);
+            min-height: 20px;
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+        
+        .calc-result {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            color: var(--gold-lt);
+            word-break: break-all;
+            min-height: 44px;
+        }
+        
+        .calc-memory {
+            font-size: 10px;
+            color: var(--teal-lt);
+            margin-top: 4px;
+            min-height: 16px;
+        }
+        
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        
+        .calc-btn {
+            padding: 14px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--bdr);
+            background: var(--bg-row);
+            color: var(--text);
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: center;
+            user-select: none;
+        }
+        
+        .calc-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--bdr-gold);
+        }
+        
+        .calc-btn:active {
+            transform: scale(0.94);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .op {
+            color: var(--gold-lt);
+            background: rgba(212, 160, 23, 0.1);
+        }
+        
+        .eq {
+            background: linear-gradient(135deg, var(--teal-deep), var(--teal));
+            color: #fff;
+            border-color: var(--teal);
+        }
+        
+        .clr {
+            background: rgba(192, 57, 43, 0.2);
+            color: var(--fire-lt);
+            border-color: rgba(192, 57, 43, 0.3);
+        }
+        
+        .del {
+            background: rgba(212, 160, 23, 0.12);
+            color: var(--gold-lt);
+        }
+        
+        .zk {
+            background: rgba(26, 188, 156, 0.12);
+            color: var(--teal-lt);
+            border-color: var(--bdr-teal);
+            font-size: 11px;
+            letter-spacing: .5px;
+        }
+        
+        .pct {
+            color: var(--sky-lt);
+            background: rgba(93, 173, 226, 0.1);
+        }
+        
+        .span2 {
+            grid-column: span 2;
+        }
+        
+        .calc-section {
+            margin-bottom: 1.25rem;
+        }
+        
+        .calc-section-title {
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: .5rem;
+        }
+        
+        .zakat-result-box {
+            background: rgba(26, 188, 156, 0.08);
+            border: 1px solid rgba(26, 188, 156, 0.25);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .zr-title {
+            font-size: 10px;
+            color: var(--teal);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: .5rem;
+        }
+        
+        .zr-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 3px 0;
+        }
+        
+        .zr-label {
+            color: var(--text-mid);
+        }
+        
+        .zr-val {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div style="font-family:'Noto Naskh Arabic',serif;font-size:13px;color:var(--gold)">ميزان</div>
+    </header>
+
+    <div class="app-wrap">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap">
+                    <svg viewBox="0 0 60 60" fill="none">
+          <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
+          <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)"/>
+          <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
+          <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
+          <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)"/>
+          <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)"/>
+          <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0c040"/><stop offset="100%" stop-color="#a07010"/></linearGradient></defs>
+        </svg>
+                </div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <a class="nav-item" href="dashboard.html" title="Dashboard"><span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
+                <a class="nav-item" href="income.html" title="Income"> <span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
+                <a class="nav-item" href="expenses.html" title="Expenses"> <span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"> <span class="nav-icon">🏅</span><span class="nav-label" data-i18n="assets">Wealth &amp; Assets</span></a>
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"> <span class="nav-icon">🕌</span><span class="nav-label" data-i18n="zakat">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html" title="Calendar"> <span class="nav-icon">📅</span><span class="nav-label" data-i18n="calendar">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"> <span class="nav-icon">🌙</span><span class="nav-label" data-i18n="ramadan">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html" title="Sadaqah"> <span class="nav-icon">🤲</span><span class="nav-label" data-i18n="sadaqah">Sadaqah Log</span></a>
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html" title="Reports"><span class="nav-icon">📈</span><span class="nav-label" data-i18n="reports">Charts &amp; Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"> <span class="nav-icon">📤</span><span class="nav-label" data-i18n="exportPdf">Export PDF / Word</span></a>
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html" title="Family"> <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label" data-i18n="family">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html" title="Notifications"> <span class="nav-icon">🔔</span><span class="nav-label" data-i18n="notifications">Notifications</span></a>
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html" title="Language"> <span class="nav-icon">🌐</span><span class="nav-label" data-i18n="language">Language</span></a>
+                <a class="nav-item active" href="calculator.html" title="Calculator"><span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"> <span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-title">🧮 Calculator</div>
+
+            <div class="calc-page">
+                <!-- Display -->
+                <div class="calc-display">
+                    <div class="calc-expr" id="expr">0</div>
+                    <div class="calc-result" id="result">0</div>
+                    <div class="calc-memory" id="mem-display"></div>
+                </div>
+
+                <!-- Islamic shortcuts -->
+                <div class="calc-section">
+                    <div class="calc-section-title">Islamic shortcuts</div>
+                    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px">
+                        <button class="calc-btn zk" onclick="zakatPercent()">Zakat 2.5%</button>
+                        <button class="calc-btn zk" onclick="nisabCheck()">Nisab check</button>
+                        <button class="calc-btn zk" onclick="goldGram()">Gold/gram</button>
+                    </div>
+                </div>
+
+                <!-- Main calc grid -->
+                <div class="calc-section">
+                    <div class="calc-section-title">Calculator</div>
+                    <div class="calc-grid">
+                        <!-- Row 1 -->
+                        <button class="calc-btn clr" onclick="clearAll()">AC</button>
+                        <button class="calc-btn del" onclick="delLast()">⌫</button>
+                        <button class="calc-btn pct" onclick="percent()">%</button>
+                        <button class="calc-btn op" onclick="op('/')">÷</button>
+                        <!-- Row 2 -->
+                        <button class="calc-btn" onclick="num('7')">7</button>
+                        <button class="calc-btn" onclick="num('8')">8</button>
+                        <button class="calc-btn" onclick="num('9')">9</button>
+                        <button class="calc-btn op" onclick="op('*')">×</button>
+                        <!-- Row 3 -->
+                        <button class="calc-btn" onclick="num('4')">4</button>
+                        <button class="calc-btn" onclick="num('5')">5</button>
+                        <button class="calc-btn" onclick="num('6')">6</button>
+                        <button class="calc-btn op" onclick="op('-')">−</button>
+                        <!-- Row 4 -->
+                        <button class="calc-btn" onclick="num('1')">1</button>
+                        <button class="calc-btn" onclick="num('2')">2</button>
+                        <button class="calc-btn" onclick="num('3')">3</button>
+                        <button class="calc-btn op" onclick="op('+')">+</button>
+                        <!-- Row 5 -->
+                        <button class="calc-btn span2" onclick="num('0')">0</button>
+                        <button class="calc-btn" onclick="dot()">.</button>
+                        <button class="calc-btn eq" onclick="equals()">=</button>
+                    </div>
+                </div>
+
+                <!-- Memory buttons -->
+                <div class="calc-section">
+                    <div class="calc-section-title">Memory</div>
+                    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px">
+                        <button class="calc-btn" style="font-size:12px" onclick="memStore()">M+</button>
+                        <button class="calc-btn" style="font-size:12px" onclick="memRecall()">MR</button>
+                        <button class="calc-btn" style="font-size:12px" onclick="memClear()">MC</button>
+                        <button class="calc-btn" style="font-size:12px" onclick="memSubtract()">M−</button>
+                    </div>
+                </div>
+
+                <!-- Zakat result (shows after zakat shortcut) -->
+                <div class="zakat-result-box" id="zakat-box" style="display:none">
+                    <div class="zr-title">⚖️ Zakat calculation</div>
+                    <div class="zr-rows" id="zakat-rows"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span>Home</a>
+        <a class="bn-item" href="income.html"> <span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"> <span class="bn-icon">📊</span>Spend</a>
+        <a class="bn-item" href="assets.html"> <span class="bn-icon">🏅</span>Assets</a>
+        <a class="bn-item active" href="calculator.html"><span class="bn-icon">🧮</span>Calc</a>
+    </nav>
+
+    <script>
+        /* ── CALCULATOR STATE ── */
+        let expr = '',
+            result = '0',
+            memory = 0,
+            lastWasOp = false;
+        const GOLD_PER_G = 6842;
+        const SILVER_PER_G = 82;
+        const NISAB_AG_G = 595;
+
+        function fmt(n) {
+            return '₹' + Math.round(n).toLocaleString('en-IN');
+        }
+
+        function show() {
+            document.getElementById('expr').textContent = expr || '0';
+            document.getElementById('result').textContent = result;
+        }
+
+        /* ── DIGIT INPUT ── */
+        function num(d) {
+            if (result !== '0' && lastWasOp) {
+                expr += result;
+                lastWasOp = false;
+            }
+            result = (result === '0' || lastWasOp) ? d : result + d;
+            lastWasOp = false;
+            show();
+        }
+
+        function dot() {
+            if (!result.includes('.')) result += '.';
+            lastWasOp = false;
+            show();
+        }
+
+        function op(o) {
+            expr = (expr || '') + result + ' ' + o + ' ';
+            lastWasOp = true;
+            show();
+        }
+
+        function equals() {
+            try {
+                const full = expr + result;
+                const val = Function('"use strict"; return (' + full + ')')();
+                result = String(Math.round(val * 10000000) / 10000000);
+                expr = '';
+                lastWasOp = false;
+                show();
+            } catch {
+                result = 'Error';
+                show();
+            }
+        }
+
+        function percent() {
+            try {
+                result = String(parseFloat(result) / 100);
+                show();
+            } catch {}
+        }
+
+        function clearAll() {
+            expr = '';
+            result = '0';
+            lastWasOp = false;
+            document.getElementById('zakat-box').style.display = 'none';
+            show();
+        }
+
+        function delLast() {
+            result = result.length > 1 ? result.slice(0, -1) : '0';
+            show();
+        }
+
+        /* ── MEMORY ── */
+        function memStore() {
+            memory += parseFloat(result) || 0;
+            document.getElementById('mem-display').textContent = 'M: ' + fmt(memory);
+        }
+
+        function memSubtract() {
+            memory -= parseFloat(result) || 0;
+            document.getElementById('mem-display').textContent = 'M: ' + fmt(memory);
+        }
+
+        function memRecall() {
+            result = String(memory);
+            show();
+        }
+
+        function memClear() {
+            memory = 0;
+            document.getElementById('mem-display').textContent = '';
+        }
+
+        /* ── ZAKAT SHORTCUTS ── */
+        function zakatPercent() {
+            const val = parseFloat(result) || 0;
+            if (!val) return;
+            const zakat = Math.round(val * 0.025);
+            document.getElementById('zakat-box').style.display = 'block';
+            document.getElementById('zakat-rows').innerHTML = `
+      <div class="zr-row"><span class="zr-label">Wealth entered</span><span class="zr-val">${fmt(val)}</span></div>
+      <div class="zr-row"><span class="zr-label">Zakat rate</span><span class="zr-val" style="color:var(--teal-lt)">2.5%</span></div>
+      <div class="zr-row" style="border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:4px">
+        <span class="zr-label" style="font-size:14px;font-weight:600">Zakat due</span>
+        <span class="zr-val" style="color:var(--gold-lt);font-size:16px">${fmt(zakat)}</span>
+      </div>`;
+            result = String(zakat);
+            show();
+        }
+
+        function nisabCheck() {
+            const val = parseFloat(result) || 0;
+            const nisabAg = Math.round(NISAB_AG_G * SILVER_PER_G);
+            const nisabAu = Math.round(85 * GOLD_PER_G);
+            const metAg = val >= nisabAg;
+            const metAu = val >= nisabAu;
+            document.getElementById('zakat-box').style.display = 'block';
+            document.getElementById('zakat-rows').innerHTML = `
+      <div class="zr-row"><span class="zr-label">Your wealth</span><span class="zr-val">${fmt(val)}</span></div>
+      <div class="zr-row"><span class="zr-label">Silver nisab (595g)</span><span class="zr-val" style="${metAg?'color:var(--teal-lt)':'color:var(--fire-lt)'}">${fmt(nisabAg)} ${metAg?'✓ MET':'✗ Not met'}</span></div>
+      <div class="zr-row"><span class="zr-label">Gold nisab (85g)</span><span class="zr-val" style="${metAu?'color:var(--teal-lt)':'color:var(--fire-lt)'}">${fmt(nisabAu)} ${metAu?'✓ MET':'✗ Not met'}</span></div>
+      <div class="zr-row" style="border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:4px">
+        <span class="zr-label" style="font-size:14px;font-weight:600">Zakat eligible?</span>
+        <span class="zr-val" style="font-size:15px;color:${metAg?'var(--teal-lt)':'var(--fire-lt)'}">${metAg?'✓ Yes — pay Zakat':'✗ Not yet'}</span>
+      </div>
+      ${metAg?`<div class="zr-row" style="margin-top:4px"><span class="zr-label">Zakat due (2.5%)</span><span class="zr-val" style="color:var(--gold-lt)">${fmt(Math.round(val*0.025))}</span></div>`:''}`;
+  }
+
+  function goldGram() {
+    const grams = parseFloat(result) || 0;
+    if (!grams) return;
+    const val24 = Math.round(grams * GOLD_PER_G);
+    const val22 = Math.round(grams * GOLD_PER_G * 22/24);
+    const val18 = Math.round(grams * GOLD_PER_G * 18/24);
+    document.getElementById('zakat-box').style.display = 'block';
+    document.getElementById('zakat-rows').innerHTML = `
+      <div class="zr-row"><span class="zr-label">Weight entered</span><span class="zr-val">${grams}g</span></div>
+      <div class="zr-row"><span class="zr-label">24K value</span><span class="zr-val" style="color:var(--gold-lt)">${fmt(val24)}</span></div>
+      <div class="zr-row"><span class="zr-label">22K value</span><span class="zr-val" style="color:var(--gold-lt)">${fmt(val22)}</span></div>
+      <div class="zr-row"><span class="zr-label">18K value</span><span class="zr-val" style="color:var(--gold)">${fmt(val18)}</span></div>
+      <div class="zr-row" style="border-top:1px solid rgba(255,255,255,0.07);margin-top:4px;padding-top:4px">
+        <span class="zr-label">Zakat on 22K gold</span>
+        <span class="zr-val" style="color:var(--teal-lt)">${fmt(Math.round(val22*0.025))}</span>
+      </div>`;
+    result = String(val22);
+    show();
+  }
+
+  /* ── KEYBOARD SUPPORT ── */
+  document.addEventListener('keydown', e => {
+    if ('0123456789'.includes(e.key)) num(e.key);
+    else if (e.key === '.') dot();
+    else if (['+','-','*','/'].includes(e.key)) op(e.key);
+    else if (e.key === 'Enter' || e.key === '=') equals();
+    else if (e.key === 'Backspace') delLast();
+    else if (e.key === 'Escape') clearAll();
+    else if (e.key === '%') percent();
+  });
+
+  /* ── THEME ── */
+  const t = localStorage.getItem('meezan-theme')||'glass';
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme-pill').forEach(p=>p.classList.toggle('active',p.title===t));
+  window.setTheme=(th)=>{document.documentElement.setAttribute('data-theme',th);localStorage.setItem('meezan-theme',th);document.querySelectorAll('.theme-pill').forEach(p=>p.classList.toggle('active',p.title===th));};
+
+  /* ── PARTICLES ── */
+  const pc=document.getElementById('particles');
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');
+    p.className='particle '+(i<12?'p-fire':'p-star');
+    p.style.cssText=`left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+    pc.appendChild(p);
+  }
+    </script>
+
+
+
+</body>
+
+</html>
+
+</html>
+
+</html>
+
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/groups.html
+     Group Expenses — trip/event bill splitting with settlement
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Group Expenses</title>
+    <link rel="icon" href="../assets/favicon.png">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+    <style>
+        .groups-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 1.25rem;
+            align-items: start;
+        }
+        
+        @media(max-width:1000px) {
+            .groups-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .split-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1.25rem;
+            align-items: start;
+        }
+        
+        @media(max-width:900px) {
+            .split-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .group-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: var(--bg-row);
+            border: 1px solid var(--bdr);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .group-card:hover {
+            border-color: rgba(212, 160, 23, .35);
+            background: rgba(212, 160, 23, 0.05);
+        }
+        
+        .group-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(212, 160, 23, 0.12);
+            border: 1px solid rgba(212, 160, 23, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        
+        .member-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(93, 173, 226, 0.1);
+            border: 1px solid rgba(93, 173, 226, 0.25);
+            font-size: 12px;
+            color: var(--sky-lt);
+        }
+        
+        .member-tag button {
+            background: none;
+            border: none;
+            color: var(--fire-lt);
+            cursor: pointer;
+            font-size: 11px;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .exp-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .06);
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        
+        .settle-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(26, 188, 156, 0.06);
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            margin-bottom: 6px;
+        }
+        
+        .settle-arrow {
+            color: var(--teal-lt);
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .share-section {
+            background: rgba(212, 160, 23, 0.06);
+            border: 1px solid rgba(212, 160, 23, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: .75rem;
+        }
+    </style>
+</head>
+
+<body data-page="groups">
+
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="avatar" id="mob-avatar">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap">
+                    <svg viewBox="0 0 60 60" fill="none">
+                        <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
+                        <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)"/>
+                        <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
+                        <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
+                        <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+                        <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)"/>
+                        <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+                        <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)"/>
+                        <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#f0c040"/>
+                            <stop offset="100%" stop-color="#a07010"/>
+                        </linearGradient></defs>
+                    </svg>
+                </div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <a class="nav-item" href="dashboard.html" title="Dashboard"><span class="nav-icon">⚖️</span><span class="nav-label">Dashboard</span></a>
+                <a class="nav-item" href="income.html" title="Income"><span class="nav-icon">💰</span><span class="nav-label">Income</span></a>
+                <a class="nav-item" href="expenses.html" title="Expenses"><span class="nav-icon">📊</span><span class="nav-label">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"><span class="nav-icon">🏅</span><span class="nav-label">Wealth & Assets</span></a>
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"><span class="nav-icon">🕌</span><span class="nav-label">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html" title="Calendar"><span class="nav-icon">📅</span><span class="nav-label">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"><span class="nav-icon">🌙</span><span class="nav-label">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html" title="Sadaqah"><span class="nav-icon">🤲</span><span class="nav-label">Sadaqah Log</span></a>
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html" title="Reports"><span class="nav-icon">📈</span><span class="nav-label">Charts & Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"><span class="nav-icon">📤</span><span class="nav-label">Export PDF / Word</span></a>
+                <span class="nav-section">Social</span>
+                <a class="nav-item active" href="family.html" title="Family"><span class="nav-icon">👨‍👩‍👧</span><span class="nav-label">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html" title="Notifications"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></a>
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html" title="Language"><span class="nav-icon">🌐</span><span class="nav-label">Language</span></a>
+                <a class="nav-item" href="calculator.html" title="Calculator"><span class="nav-icon">🧮</span><span class="nav-label">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Theme: Glass</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <!-- JOIN BANNER (shown when arriving via invite link) -->
+            <div id="join-banner" style="display:none"></div>
+
+            <!-- BREADCRUMB -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:.75rem;flex-wrap:wrap">
+                <a href="family.html" style="font-size:12px;color:var(--text-dim);text-decoration:none">👨‍👩‍👧 Family Hub</a>
+                <span style="color:var(--bdr)">›</span>
+                <div class="section-title" style="margin:0">🧾 Group Expenses</div>
+                <div id="current-user-badge" style="margin-left:auto;font-size:11px;color:var(--gold-lt);
+                     background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.25);
+                     border-radius:20px;padding:4px 12px"></div>
+            </div>
+
+            <!-- ══ GROUP LIST PANEL ══ -->
+            <div id="groups-list-panel">
+
+                <div class="groups-layout">
+
+                    <!-- LEFT: Create group -->
+                    <div>
+                        <div class="glass-card" style="border-color:rgba(212,160,23,.3)">
+                            <div class="card-title">➕ Create New Group</div>
+                            <div style="font-size:11px;color:var(--text-dim);margin-bottom:.75rem">
+                                Create a group for trips, events, or shared expenses — split bills automatically.
+                            </div>
+                            <div style="display:grid;grid-template-columns:72px 1fr;gap:8px;margin-bottom:8px">
+                                <div class="field-wrap">
+                                    <div class="field-label">Icon</div>
+                                    <select class="mz-select" id="new-group-icon" style="font-size:16px;text-align:center">
+                                        <option>🗺️</option><option>✈️</option><option>🏖️</option>
+                                        <option>🏕️</option><option>🎉</option><option>🍽️</option>
+                                        <option>🛒</option><option>🕌</option><option>🏠</option>
+                                        <option>💼</option><option>🎓</option><option>🏥</option>
+                                        <option>🚗</option><option>⚽</option><option>🎮</option>
+                                    </select>
+                                </div>
+                                <div class="field-wrap">
+                                    <div class="field-label">Group name *</div>
+                                    <input class="mz-input" id="new-group-name" placeholder="e.g. Delhi Trip, Wedding, Family Tour" />
+                                </div>
+                            </div>
+                            <div class="field-wrap" style="margin-bottom:8px">
+                                <div class="field-label">Description (optional)</div>
+                                <input class="mz-input" id="new-group-desc" placeholder="e.g. 8 friends trip to Delhi, April 2026" />
+                            </div>
+                            <button class="btn btn-gold" id="create-group-btn" onclick="createGroup()">
+                                + Create Group
+                            </button>
+                            <div id="create-group-msg" style="font-size:12px;min-height:16px;margin-top:6px;text-align:center"></div>
+                        </div>
+
+                        <!-- HOW IT WORKS -->
+                        <div class="glass-card" style="margin-top:1rem">
+                            <div class="card-title">ℹ️ How it works</div>
+                            <div style="font-size:12px;color:var(--text-mid);line-height:1.8">
+                                · <strong style="color:var(--gold-lt)">Create</strong> a group for any trip or event<br> · <strong style="color:var(--teal-lt)">Add members</strong> by name (no login needed)<br> · <strong style="color:var(--sky-lt)">Log expenses</strong>                                — who paid, who owes<br> · <strong style="color:var(--amber)">View settlement</strong> — exact who pays whom<br> · <strong style="color:var(--gold-lt)">Share link</strong> via WhatsApp to anyone<br> · <strong style="color:var(--teal-lt)">Import</strong>                                your share to Meezan Expenses
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Your groups list -->
+                    <div>
+                        <div class="glass-card">
+                            <div class="card-title">📋 Your Groups</div>
+                            <div id="group-list">
+                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:1.5rem">
+                                    Loading groups...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ══ GROUP DETAIL PANEL ══ -->
+            <div id="group-detail-panel" style="display:none">
+
+                <!-- HEADER -->
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
+                    <button onclick="backToGroups()" style="background:rgba(255,255,255,.07);
+                        border:1px solid var(--bdr);color:var(--text-dim);padding:7px 14px;
+                        border-radius:8px;font-size:12px;cursor:pointer;flex-shrink:0">
+                        ← Back
+                    </button>
+                    <div style="flex:1">
+                        <div style="font-size:18px;font-weight:700;color:var(--text)" id="grp-title">Group</div>
+                        <div style="font-size:11px;color:var(--text-dim)" id="grp-desc-line"></div>
+                    </div>
+                    <div id="grp-status-badge" style="font-size:11px;color:var(--teal-lt)">🔄 Ongoing</div>
+                    <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--fire-lt)" id="grp-total">₹0</div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+                    <button id="btn-mark-complete" onclick="markGroupComplete()" style="padding:8px 14px;border-radius:10px;background:rgba(26,188,156,.12);
+                               border:1px solid rgba(26,188,156,.3);color:var(--teal-lt);
+                               font-size:11px;cursor:pointer;font-family:inherit">
+                        ✅ Mark Complete
+                    </button>
+                    <button id="btn-reopen" onclick="reopenGroup()" style="display:none;
+                        padding:8px 14px;border-radius:10px;background:rgba(243,156,18,.12);
+                        border:1px solid rgba(243,156,18,.3);color:var(--amber);
+                        font-size:11px;cursor:pointer;font-family:inherit">
+                        🔄 Reopen
+                    </button>
+                    <button id="btn-import-expenses" id="btn-import-expenses" onclick="importGroupToExpenses()" style="display:none;
+                        padding:8px 14px;border-radius:10px;background:rgba(212,160,23,.12);
+                        border:1px solid rgba(212,160,23,.3);color:var(--gold-lt);
+                        font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">
+                        📥 Import to My Expenses
+                    </button>
+                    <button id="btn-delete-group" onclick="deleteGroup()" style="margin-left:auto;padding:8px 14px;
+                        border-radius:10px;background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.2);
+                        color:var(--fire-lt);font-size:11px;cursor:pointer;font-family:inherit">
+                        🗑️ Delete Group
+                    </button>
+                </div>
+                <div id="import-msg" style="font-size:12px;min-height:16px;margin-bottom:.5rem;text-align:center"></div>
+
+                <div class="split-layout">
+
+                    <!-- LEFT: Members + Add expense + Expense list -->
+                    <div style="display:flex;flex-direction:column;gap:1rem">
+
+                        <!-- MEMBERS -->
+                        <div class="glass-card">
+                            <div class="card-title">👥 Group Members</div>
+                            <div id="grp-member-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.75rem"></div>
+                            <div style="display:flex;gap:8px">
+                                <input class="mz-input" id="new-member-name" placeholder="Add member name (e.g. Ahmed)" style="flex:1" />
+                                <button class="btn btn-ghost" style="width:auto;padding:8px 14px;font-size:11px" onclick="addGroupMember()">+ Add</button>
+                            </div>
+                        </div>
+
+                        <!-- ADD EXPENSE -->
+                        <div class="glass-card">
+                            <div class="card-title">➕ Add Expense</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                                <div class="field-wrap">
+                                    <div class="field-label">Expense name *</div>
+                                    <input class="mz-input" id="exp-name" placeholder="e.g. Hotel Room" />
+                                </div>
+                                <div class="field-wrap">
+                                    <div class="field-label">Amount (₹) *</div>
+                                    <input class="mz-input" id="exp-amount" type="number" placeholder="6000" />
+                                </div>
+                                <div class="field-wrap">
+                                    <div class="field-label">Paid by *</div>
+                                    <select class="mz-select" id="exp-paid-by"></select>
+                                </div>
+                                <div class="field-wrap">
+                                    <div class="field-label">Date</div>
+                                    <input class="mz-input" id="exp-date" type="date" />
+                                </div>
+                            </div>
+                            <div class="field-wrap" style="margin-bottom:6px">
+                                <div class="field-label">Split type</div>
+                                <select class="mz-select" id="exp-split-type" onchange="updateCustomSplit()">
+                                    <option value="equal">Equal split among selected</option>
+                                    <option value="custom">Custom amounts per person</option>
+                                </select>
+                            </div>
+                            <div style="font-size:11px;color:var(--text-dim);margin-bottom:5px">Split among:</div>
+                            <div id="split-checkboxes" style="max-height:140px;overflow-y:auto;margin-bottom:8px"></div>
+                            <div class="field-wrap" style="margin-bottom:8px">
+                                <div class="field-label">Note (optional)</div>
+                                <input class="mz-input" id="exp-note" placeholder="e.g. 3 nights stay" />
+                            </div>
+                            <button class="btn btn-fire" id="add-exp-btn" onclick="addGroupExpense()">
+                                + Add Expense
+                            </button>
+                            <div id="exp-add-msg" style="font-size:12px;min-height:16px;margin-top:4px;text-align:center"></div>
+                        </div>
+
+                        <!-- EXPENSE LIST -->
+                        <div class="glass-card">
+                            <div class="card-title">📋 All Expenses</div>
+                            <div id="grp-expense-list">
+                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:1rem">
+                                    No expenses yet.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- end left -->
+
+                    <!-- RIGHT: Balance + Settlement + Share -->
+                    <div style="display:flex;flex-direction:column;gap:1rem">
+
+                        <!-- BALANCE SUMMARY -->
+                        <div class="glass-card">
+                            <div class="card-title">📊 Balance Summary</div>
+                            <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:4px;font-size:10px;
+                                 color:var(--text-dim);padding:4px 10px;border-bottom:1px solid var(--bdr);margin-bottom:6px">
+                                <span>Person</span>
+                                <span style="text-align:center">Paid</span>
+                                <span style="text-align:center">Owes</span>
+                                <span style="text-align:right">Net</span>
+                            </div>
+                            <div id="person-summary-table"></div>
+                        </div>
+
+                        <!-- SETTLEMENT -->
+                        <div class="glass-card" style="border-color:rgba(26,188,156,.3)">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+                                <div class="card-title" style="margin:0">⚖️ Who Pays Whom</div>
+                                <div style="font-size:11px;color:var(--text-dim)">
+                                    Total: <span id="settlement-total" style="color:var(--gold-lt);font-family:'Cinzel',serif">₹0</span>
+                                </div>
+                            </div>
+                            <div style="font-size:10px;color:var(--teal-lt);margin-bottom:.75rem;padding:6px 10px;
+                                 border-radius:8px;background:rgba(26,188,156,.07);border:1px solid rgba(26,188,156,.15)">
+                                ✓ Exact settlement · Transparent split · Net balancing
+                            </div>
+                            <div id="settlement-results">
+                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:1rem">
+                                    Add expenses to see settlement
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MY PERSONAL SUMMARY (who I owe / who owes me) -->
+                        <div class="glass-card" style="border-color:rgba(212,160,23,0.3)">
+                            <div id="my-summary-box">
+                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:.5rem">Add expenses to see your summary</div>
+                            </div>
+                        </div>
+
+                        <!-- INVITE LINK — others join by clicking this -->
+                        <div class="glass-card" style="border-color:rgba(26,188,156,0.3)">
+                            <div class="card-title">🔗 Invite Others to Join</div>
+                            <div style="font-size:12px;color:var(--text-mid);margin-bottom:.75rem">
+                                Share this link — anyone who clicks it will join this group and see all expenses in real-time:
+                            </div>
+                            <div style="display:flex;gap:8px;margin-bottom:8px">
+                                <input id="invite-link" class="mz-input" readonly
+                                    style="flex:1;font-size:10px;color:var(--teal-lt)" />
+                                <button onclick="copyInviteLink()" style="padding:8px 12px;border-radius:8px;
+                                    background:rgba(212,160,23,0.12);border:1px solid rgba(212,160,23,0.3);
+                                    color:var(--gold-lt);font-size:11px;cursor:pointer;white-space:nowrap;font-family:inherit">
+                                    📋 Copy
+                                </button>
+                            </div>
+                            <button onclick="shareInviteWhatsApp()" style="width:100%;padding:10px;border-radius:10px;
+                                background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);
+                                color:#25d366;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:5px">
+                                💬 Share Invite via WhatsApp
+                            </button>
+                            <div id="invite-copy-msg" style="font-size:11px;min-height:16px;text-align:center"></div>
+                        </div>
+
+                        <!-- SHARE EXPENSE SUMMARY -->
+                        <div class="glass-card">
+                            <div class="card-title">📤 Share Expense Summary</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                                <button onclick="shareGroupWhatsApp()" style="display:flex;align-items:center;
+                                    justify-content:center;gap:7px;background:rgba(37,211,102,0.12);
+                                    border:1px solid rgba(37,211,102,0.3);color:#25d366;padding:10px;
+                                    border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
+                                    💬 WhatsApp
+                                </button>
+                                <button onclick="shareGroupNative()" style="display:flex;align-items:center;
+                                    justify-content:center;gap:7px;background:rgba(93,173,226,0.12);
+                                    border:1px solid rgba(93,173,226,0.3);color:var(--teal-lt);padding:10px;
+                                    border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
+                                    📤 Share
+                                </button>
+                            </div>
+                            <div id="share-msg" style="font-size:11px;color:var(--teal-lt);margin-top:6px;text-align:center;min-height:16px"></div>
+                        </div>
+
+                    </div>
+                    <!-- end right -->
+                </div>
+                <!-- end split-layout -->
+
+            </div>
+            <!-- end group-detail-panel -->
+
+        </main>
+    </div>
+
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span>Home</a>
+        <a class="bn-item" href="income.html"><span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"><span class="bn-icon">📊</span>Spend</a>
+        <a class="bn-item" href="assets.html"><span class="bn-icon">🏅</span>Assets</a>
+        <a class="bn-item active" href="family.html"><span class="bn-icon">👨‍👩‍👧</span>Family</a>
+    </nav>
+
+    <script type="module" src="../js/groups.js"></script>
+    <script>
+        const pc = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle ' + (i < 12 ? 'p-fire' : 'p-star');
+            p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+            pc.appendChild(p);
+        }
+        const t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', t);
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
+        window.setTheme = (th) => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+        };
+
+        document.getElementById('exp-date').value = new Date().toISOString().slice(0, 10);
+    </script>
+</body>
+
+</html>
+</body>
+
+</html>
+
+</html> <a class="bn-item active" href="family.html"><span class="bn-icon">👨‍👩‍👧</span>Family</a>
+</nav>
+
+<script type="module" src="../js/groups.js"></script>
+<script>
+    const pc = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle ' + (i < 12 ? 'p-fire' : 'p-star');
+        p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+        pc.appendChild(p);
+    }
+    const t = localStorage.getItem('meezan-theme') || 'glass';
+    document.documentElement.setAttribute('data-theme', t);
+    document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
+    window.setTheme = (th) => {
+        document.documentElement.setAttribute('data-theme', th);
+        localStorage.setItem('meezan-theme', th);
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+        document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+    };
+
+    document.getElementById('exp-date').value = new Date().toISOString().slice(0, 10);
+</script>
+</body>
+
+</html>
+</body>
+
+</html>

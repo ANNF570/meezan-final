@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/expenses.html
+     Expenditure tracker — all categories, filter, chart
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Expenses</title>
+
+    <link rel="icon" href="../assets/favicon.png">
+
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <link rel="stylesheet" href="../css/expenses.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+</head>
+
+<body data-page="expenses">
+
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="notif-btn" onclick="location.href='notifications.html'">🔔
+                <div class="notif-dot"></div>
+            </div>
+            <div class="avatar" id="mob-avatar">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap">
+                    <svg viewBox="0 0 60 60" fill="none">
+          <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
+          <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)"/>
+          <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
+          <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
+          <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)"/>
+          <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)"/>
+          <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0c040"/><stop offset="100%" stop-color="#a07010"/></linearGradient></defs>
+        </svg>
+                </div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <a class="nav-item" href="dashboard.html" title="Dashboard"> <span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
+                <a class="nav-item" href="income.html" title="Income"> <span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
+                <a class="nav-item active" href="expenses.html" title="Expenses"> <span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"> <span class="nav-icon">🏅</span><span class="nav-label" data-i18n="assets">Wealth &amp; Assets</span></a>
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"> <span class="nav-icon">🕌</span><span class="nav-label" data-i18n="zakat">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html" title="Calendar"> <span class="nav-icon">📅</span><span class="nav-label" data-i18n="calendar">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"> <span class="nav-icon">🌙</span><span class="nav-label" data-i18n="ramadan">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html" title="Sadaqah"> <span class="nav-icon">🤲</span><span class="nav-label" data-i18n="sadaqah">Sadaqah Log</span></a>
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html" title="Reports"> <span class="nav-icon">📈</span><span class="nav-label" data-i18n="reports">Charts &amp; Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"> <span class="nav-icon">📤</span><span class="nav-label" data-i18n="exportPdf">Export PDF / Word</span></a>
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html" title="Family"> <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label" data-i18n="family">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html" title="Notifications"><span class="nav-icon">🔔</span><span class="nav-label" data-i18n="notifications">Notifications</span></a>
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html" title="Language"> <span class="nav-icon">🌐</span><span class="nav-label" data-i18n="language">Language</span></a>
+                <a class="nav-item" href="calculator.html" title="Calculator"> <span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"> <span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Theme: Glass</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-title" data-i18n="pageExpenses">🔥 Expenditure</div>
+
+            <!-- SUMMARY -->
+            <div class="sum-bar cols4">
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="totalSpentLabel">Total spent</div>
+                    <div class="sum-value" id="s-total" style="color:var(--fire-lt)">₹0</div>
+                </div>
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="thisMonth">This month</div>
+                    <div class="sum-value" id="s-month" style="color:var(--amber)">₹0</div>
+                </div>
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="itemsLabel">Items</div>
+                    <div class="sum-value" id="s-count" style="color:var(--text-mid)">0</div>
+                </div>
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="charityLabel">Charity</div>
+                    <div class="sum-value" id="s-charity" style="color:var(--teal-lt)">₹0</div>
+                </div>
+            </div>
+
+            <!-- DATE RANGE FILTER -->
+            <div class="glass-card" style="padding:.875rem">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px">
+                    <div style="font-size:11px; color:var(--text-dim); font-family:'Cinzel',serif; letter-spacing:1px">FILTER</div>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap">
+                        <button class="cf on" id="dr-all" onclick="setDateRange('all',this)">All time</button>
+                        <button class="cf" id="dr-month" onclick="setDateRange('month',this)">This month</button>
+                        <button class="cf" id="dr-week" onclick="setDateRange('week',this)">This week</button>
+                        <button class="cf" id="dr-custom" onclick="toggleCustom()">Custom</button>
+                    </div>
+                    <div id="custom-dates" style="display:none; display:flex; gap:6px; align-items:center; flex-wrap:wrap">
+                        <input class="mz-input" id="from-date" type="date" style="width:140px" />
+                        <span style="color:var(--text-dim); font-size:12px">to</span>
+                        <input class="mz-input" id="to-date" type="date" style="width:140px" />
+                        <button class="btn btn-ghost" style="width:auto;padding:6px 14px;font-size:11px" onclick="applyCustom()">Apply</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATEGORY FILTER -->
+            <div class="cat-filters" id="cat-filters">
+                <div class="cf on" onclick="filterCat('All',this)">All</div>
+                <div class="cf" onclick="filterCat('Food',this)">🍽️ Food</div>
+                <div class="cf" onclick="filterCat('Shopping',this)">🛍️ Shopping</div>
+                <div class="cf" onclick="filterCat('Transport',this)">🚆 Transport</div>
+                <div class="cf" onclick="filterCat('Utilities',this)">💡 Utilities</div>
+                <div class="cf" onclick="filterCat('Charity',this)">🤲 Charity</div>
+                <div class="cf" onclick="filterCat('Entertainment',this)">🎬 Entertainment</div>
+                <div class="cf" onclick="filterCat('Education',this)">📚 Education</div>
+                <div class="cf" onclick="filterCat('Health',this)">🏥 Health</div>
+                <div class="cf" onclick="filterCat('Zakat',this)">⚖️ Zakat</div>
+                <div class="cf" onclick="filterCat('Other',this)">💰 Other</div>
+            </div>
+
+            <!-- 2-COLUMN LAYOUT -->
+            <div class="exp-layout">
+
+                <!-- LEFT: Expense list -->
+                <div class="glass-card">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem">
+                        <div class="card-title" style="margin:0" data-i18n="expenseRecords">📋 Expense Records</div>
+                        <div style="font-size:11px; color:var(--text-dim)" id="filtered-count"></div>
+                    </div>
+                    <div id="expense-list">
+                        <div class="empty-state">Loading expenses...</div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Form + Pie chart -->
+                <div style="display:flex; flex-direction:column; gap:1rem">
+
+                    <!-- ADD FORM -->
+                    <div class="glass-card">
+                        <div class="card-title" id="exp-form-title" data-i18n="addExpense">➕ Add Expense</div>
+                        <div class="form-grid fg2">
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="itemName">Item name *</div>
+                                <input class="mz-input" id="ef-name" placeholder="e.g. Haleem" />
+                            </div>
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="amountLabel">Amount (₹) *</div>
+                                <input class="mz-input" id="ef-amt" type="number" min="0" placeholder="500" />
+                            </div>
+                        </div>
+                        <div class="form-grid fg2">
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="categoryLabel">Category *</div>
+                                <select class="mz-select" id="ef-cat">
+                <option>Food</option><option>Shopping</option><option>Transport</option>
+                <option>Utilities</option><option>Charity</option><option>Entertainment</option>
+                <option>Education</option><option>Health</option><option>Zakat</option><option>Other</option>
+              </select>
+                            </div>
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="dateLabel">Date *</div>
+                                <input class="mz-input" id="ef-date" type="date" />
+                            </div>
+                        </div>
+                        <!-- ★ NEW: Income source selector ★ -->
+                        <div class="form-grid fg2">
+                            <div class="field-wrap">
+                                <div class="field-label" style="color:var(--teal-lt)" data-i18n="spendingFrom">💳 Spending from (income source)</div>
+                                <select class="mz-select" id="ef-income-src">
+                <option value="Any">🔀 Any / General</option>
+                <option value="Salary">💼 Salary</option>
+                <option value="Freelance">💻 Freelance</option>
+                <option value="Rental">🏠 Rental</option>
+                <option value="Business">🏪 Business</option>
+                <option value="Investment">📈 Investment</option>
+                <option value="Gift">🎁 Gift / Eid</option>
+                <option value="Other">💡 Other</option>
+              </select>
+                            </div>
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="notesOptional">Notes (optional)</div>
+                                <input class="mz-input" id="ef-notes" placeholder="e.g. Bought from Al-Amin restaurant" />
+                            </div>
+                        </div>
+                        <input type="hidden" id="exp-edit-id" />
+                        <div style="display:flex; gap:8px">
+                            <button class="btn btn-fire" id="exp-add-btn" onclick="submitExpense()" style="flex:1">− Add Expense</button>
+                            <button class="btn btn-ghost" id="exp-cancel-btn" onclick="cancelExpEdit()" style="display:none;width:auto;padding:10px 16px">Cancel</button>
+                        </div>
+                    </div>
+
+                    <!-- PIE CHART BY CATEGORY -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="byCategory">🥧 By Category</div>
+                        <div id="cat-breakdown"></div>
+                    </div>
+
+                    <!-- INCOME SOURCE BREAKDOWN (NEW) -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="byIncomeSource">💳 By Income Source</div>
+                        <div id="source-breakdown">
+                            <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:.5rem">Tag expenses with income source to see breakdown</div>
+                        </div>
+                    </div>
+
+                    <!-- MONTHLY TREND -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="monthlyTrend">📊 Monthly Trend</div>
+                        <div class="mini-chart" id="exp-chart"></div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:#c0392b"></div>Expenses</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span><span data-i18n="dashboard">Home</span></a>
+        <a class="bn-item" href="income.html"> <span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item active" href="expenses.html"> <span class="bn-icon">📊</span><span data-i18n="expenses">Spend</span></a>
+        <a class="bn-item" href="assets.html"> <span class="bn-icon">🏅</span><span data-i18n="assets">Assets</span></a>
+        <a class="bn-item" href="settings.html"> <span class="bn-icon">⚙️</span>Settings</a>
+    </nav>
+
+    <script type="module" src="../js/expenses.js"></script>
+    <script>
+        const pc = document.getElementById('particles');
+        for (let i = 0; i < 28; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle ' + (i < 16 ? 'p-fire' : 'p-star');
+            p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+            pc.appendChild(p);
+        }
+        const t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', t);
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
+        window.setTheme = (th) => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+        };
+        window.toggleCustom = () => {
+            const el = document.getElementById('custom-dates');
+            el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+        };
+    </script>
+</body>
+
+</html>

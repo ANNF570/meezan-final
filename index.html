@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<!--
+  MEEZAN — ميزان  |  index.html
+  CLEAN VERSION — no minification, all auth working
+-->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — ميزان | Sign In</title>
+
+    <link rel="icon" href="../assets/images/favicons/favicon.png" />
+
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/themes.css" />
+    <link rel="stylesheet" href="css/phone.css" />
+    <link rel="stylesheet" href="css/tablet.css" />
+    <script type="module" src="js/index1.js"></script>
+    <script src="js/i18n.js"></script>
+    <script type="module" src="js/i18n-loader.js"></script>
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            z-index: 1;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 160, 23, 0.5), rgba(26, 188, 156, 0.35), transparent);
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 1.75rem;
+        }
+        
+        .login-logo-name {
+            font-family: 'Cinzel', serif;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, #e74c3c, #d4a017, #1abc9c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+        
+        .login-logo-ar {
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 16px;
+            color: var(--gold);
+        }
+        
+        .login-sub {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 6px;
+        }
+        
+        .login-tabs {
+            display: flex;
+            background: var(--bg-row);
+            border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 1.25rem;
+        }
+        
+        .login-tab {
+            flex: 1;
+            text-align: center;
+            padding: 7px;
+            border-radius: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+        }
+        
+        .login-tab.active {
+            background: rgba(212, 160, 23, 0.15);
+            color: var(--gold-lt);
+            border: 1px solid rgba(212, 160, 23, 0.3);
+        }
+        
+        .google-btn {
+            width: 100%;
+            padding: 11px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.07);
+            color: var(--text);
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .google-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(212, 160, 23, 0.4);
+        }
+        
+        .google-icon {
+            font-size: 18px;
+        }
+        
+        .divider {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+        
+        .login-link {
+            background: none;
+            border: none;
+            color: var(--teal-lt);
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'Crimson Pro', serif;
+            text-decoration: underline;
+            display: block;
+            text-align: center;
+            margin-top: 8px;
+        }
+        
+        .login-link:hover {
+            color: var(--gold-lt);
+        }
+        
+        .err-msg {
+            font-size: 12px;
+            color: var(--fire-lt);
+            margin-top: 8px;
+            text-align: center;
+            min-height: 18px;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .tab-panel {
+            display: none;
+        }
+        
+        .tab-panel.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ANIMATED BACKGROUND -->
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <!-- LOGIN CARD -->
+    <div class="login-box">
+
+        <!-- Logo -->
+        <div class="login-logo">
+            <div class="login-logo-name">MEEZAN</div>
+            <div class="login-logo-ar">ميزان</div>
+            <div class="login-sub">The Scale of Balance</div>
+        </div>
+
+        <!-- Tabs: Sign In / Register -->
+        <div class="login-tabs">
+            <button class="login-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+            <button class="login-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+        </div>
+
+        <!-- Google Sign-In -->
+        <button class="google-btn" id="google-btn" onclick="doGoogle()">
+      <span class="google-icon">G</span> Continue with Google
+    </button>
+        <div class="divider">— or continue with email —</div>
+
+        <!-- SIGN IN PANEL -->
+        <div class="tab-panel active" id="panel-login">
+            <div class="form-grid fg1" style="gap:8px">
+                <div class="field-wrap">
+                    <div class="field-label">Email</div>
+                    <input class="mz-input" id="li-email" type="email" placeholder="you@email.com" />
+                </div>
+                <div class="field-wrap">
+                    <div class="field-label">Password</div>
+                    <input class="mz-input" id="li-pass" type="password" placeholder="••••••••" minlength="6" />
+                </div>
+            </div>
+            <button class="btn btn-fire" style="margin-top:4px" id="login-btn" onclick="doLogin()">
+        Sign In
+      </button>
+            <button class="login-link" onclick="doReset()">Forgot password?</button>
+        </div>
+
+        <!-- REGISTER PANEL -->
+        <div class="tab-panel" id="panel-register">
+            <div class="form-grid fg1" style="gap:8px">
+                <div class="field-wrap">
+                    <div class="field-label">Your name</div>
+                    <input class="mz-input" id="reg-name" type="text" placeholder="Abdul Kareem" />
+                </div>
+                <div class="field-wrap">
+                    <div class="field-label">Email</div>
+                    <input class="mz-input" id="reg-email" type="email" placeholder="you@email.com" />
+                </div>
+                <div class="field-wrap">
+                    <div class="field-label">Password (min 6 chars)</div>
+                    <input class="mz-input" id="reg-pass" type="password" placeholder="••••••••" minlength="6" />
+                </div>
+            </div>
+            <button class="btn btn-teal" style="margin-top:4px" id="reg-btn" onclick="doRegister()">
+        Create Account
+      </button>
+        </div>
+
+        <!-- Error message -->
+        <div class="err-msg" id="err-msg"></div>
+
+    </div>
+    <!-- end .login-box -->
+
+
+
+
+    <!-- ============================================================
+       PARTICLES + THEME (plain JS — no Firebase needed)
+       ============================================================ -->
+    <script>
+        // Apply saved theme immediately
+        var savedTheme = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Create floating particles
+        var pc = document.getElementById('particles');
+        for (var i = 0; i < 28; i++) {
+            var p = document.createElement('div');
+            p.className = 'particle ' + (i < 16 ? 'p-fire' : 'p-star');
+            p.style.cssText =
+                'left:' + (i < 16 ? Math.random() * 45 : Math.random() * 100) + '%;' +
+                'animation-duration:' + (4 + Math.random() * 8) + 's;' +
+                'animation-delay:' + (Math.random() * 6) + 's;';
+            pc.appendChild(p);
+        }
+    </script>
+
+</body>
+
+</html>

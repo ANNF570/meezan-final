@@ -1,0 +1,38 @@
+/* ============================================================
+   MEEZAN — ميزان  |  css/phone.css
+   Phone-specific layout tweaks.
+   Sidebar behaviour is now handled by sidebar.css
+   ============================================================ */
+
+/* Phone-only responsive helpers */
+@media (max-width: 767px) {
+    /* Filters: horizontal scroll */
+    .cat-filters {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .cat-filters::-webkit-scrollbar { display: none; }
+
+    /* Calculator */
+    .calc-wrap   { max-width: 100% !important; }
+    .calc-result { font-size: 22px !important; }
+    .calc-btn    { padding: 10px 6px !important; font-size: 14px !important; }
+
+    /* Summary bar */
+    .sum-bar.cols4 { grid-template-columns: repeat(2, 1fr) !important; }
+    .sum-bar.cols3 { grid-template-columns: repeat(3, 1fr) !important; }
+
+    /* Metal prices */
+    .metal-prices-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+    /* Glass card: tighter */
+    .glass-card { padding: 0.875rem !important; border-radius: 12px !important; }
+
+    /* Topbar */
+    .topbar-date { display: none; }
+
+    /* Hide phone */
+    .hide-phone { display: none !important; }
+}

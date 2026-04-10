@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/sadaqah.html
+     Sadaqah Log — voluntary charity tracker
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Sadaqah Log</title>
+    <link rel="icon" href="../assets/favicon.png">
+
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+    <style>
+        .sadaqah-layout {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 1.25rem;
+            align-items: start;
+        }
+        
+        @media(max-width:1000px) {
+            .sadaqah-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .sd-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-row);
+            border-radius: 11px;
+            border: 1px solid var(--bdr);
+            padding: 10px 12px;
+            margin-bottom: 7px;
+            transition: all 0.2s;
+        }
+        
+        .sd-row:hover {
+            border-color: rgba(26, 188, 156, 0.25);
+        }
+        
+        .sd-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(26, 188, 156, 0.15);
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .sd-body {
+            flex: 1;
+        }
+        
+        .sd-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .sd-meta {
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+        
+        .sd-amt {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            color: var(--teal-lt);
+            flex-shrink: 0;
+        }
+        
+        .del-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            background: rgba(192, 57, 43, .1);
+            border: 1px solid rgba(192, 57, 43, .2);
+            color: var(--fire-lt);
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            flex-shrink: 0;
+        }
+        
+        .sd-row:hover .del-btn {
+            opacity: 1;
+        }
+        
+        .verse-card {
+            background: rgba(26, 188, 156, 0.06);
+            border: 1px solid rgba(26, 188, 156, 0.18);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+        
+        .vc-arabic {
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 18px;
+            color: var(--sky-lt);
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            margin-bottom: .5rem;
+        }
+        
+        .vc-trans {
+            font-size: 12px;
+            color: var(--text-mid);
+            line-height: 1.6;
+            font-style: italic;
+        }
+        
+        .vc-ref {
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: .25rem;
+        }
+    </style>
+</head>
+
+<body data-page="sadaqah">
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="avatar" id="mob-avatar">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap"><svg viewBox="0 0 60 60" fill="none"><rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/><ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)"/><circle cx="30" cy="10" r="4" fill="url(#gg)"/><rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/><line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/><ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)"/><line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/><ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0c040"/><stop offset="100%" stop-color="#a07010"/></linearGradient></defs></svg></div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <a class="nav-item" href="dashboard.html" title="Dashboard"><span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
+                <a class="nav-item" href="income.html" title="Income"> <span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
+                <a class="nav-item" href="expenses.html" title="Expenses"> <span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"> <span class="nav-icon">🏅</span><span class="nav-label" data-i18n="assets">Wealth &amp; Assets</span></a>
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"> <span class="nav-icon">🕌</span><span class="nav-label" data-i18n="zakat">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html" title="Calendar"> <span class="nav-icon">📅</span><span class="nav-label" data-i18n="calendar">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"> <span class="nav-icon">🌙</span><span class="nav-label" data-i18n="ramadan">Ramadan Mode</span></a>
+                <a class="nav-item active" href="sadaqah.html" title="Sadaqah"> <span class="nav-icon">🤲</span><span class="nav-label" data-i18n="sadaqah">Sadaqah Log</span></a>
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html" title="Reports"><span class="nav-icon">📈</span><span class="nav-label" data-i18n="reports">Charts &amp; Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"> <span class="nav-icon">📤</span><span class="nav-label" data-i18n="exportPdf">Export PDF / Word</span></a>
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html" title="Family"> <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label" data-i18n="family">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html" title="Notifications"> <span class="nav-icon">🔔</span><span class="nav-label" data-i18n="notifications">Notifications</span></a>
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html" title="Language"> <span class="nav-icon">🌐</span><span class="nav-label" data-i18n="language">Language</span></a>
+                <a class="nav-item" href="calculator.html" title="Calculator"><span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"> <span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Theme: Glass</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-title" data-i18n="pageSadaqah">🤲 Sadaqah Log</div>
+
+            <div class="sum-bar cols3" style="margin-bottom:1rem">
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="totalSadaqah">Total Sadaqah</div>
+                    <div class="sum-value" id="sd-total" style="color:var(--teal-lt)">₹0</div>
+                </div>
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="thisMonth">This month</div>
+                    <div class="sum-value" id="sd-month" style="color:var(--gold-lt)">₹0</div>
+                </div>
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="recordsLabel">Records</div>
+                    <div class="sum-value" id="sd-count" style="color:var(--text-mid)">0</div>
+                </div>
+            </div>
+
+            <div class="sadaqah-layout">
+
+                <!-- LEFT: List -->
+                <div class="glass-card">
+                    <div class="card-title" data-i18n="allSadaqahRecords">📋 All Sadaqah Records</div>
+                    <div id="sadaqah-list">
+                        <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:1rem">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Add form + Quran verse -->
+                <div style="display:flex;flex-direction:column;gap:1rem">
+
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="recordSadaqah">🤲 Record Sadaqah</div>
+                        <div class="form-grid fg2">
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="amountLabel">Amount (₹) *</div><input class="mz-input" id="sd-amt" type="number" min="0" placeholder="500" /></div>
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="dateLabel">Date *</div><input class="mz-input" id="sd-date" type="date" /></div>
+                        </div>
+                        <div class="form-grid fg1">
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="descriptionLabel">Description *</div><input class="mz-input" id="sd-desc" placeholder="e.g. Masjid donation, Poor family" /></div>
+                        </div>
+                        <div class="form-grid fg1">
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="categoryLabel">Category</div>
+                                <select class="mz-select" id="sd-cat">
+                <option>Masjid</option><option>Poor &amp; Needy</option><option>Orphan</option>
+                <option>Education</option><option>Medical</option><option>Food / Iftar</option>
+                <option>Disaster Relief</option><option>Family</option><option>Other</option>
+              </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-teal" onclick="addSadaqah()" id="sd-submit">🤲 Record Sadaqah</button>
+                    </div>
+
+                    <!-- Quran verse about charity -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="verseOnSadaqah">📖 Verse on Sadaqah</div>
+                        <div class="verse-card">
+                            <div class="vc-arabic" id="verse-ar">مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ</div>
+                            <div class="vc-trans" id="verse-en">"The example of those who spend their wealth in the way of Allah is like a grain of corn that sprouts seven ears, and in every ear there are a hundred grains."</div>
+                            <div class="vc-ref" id="verse-ref">— Surah Al-Baqarah 2:261</div>
+                        </div>
+                    </div>
+
+                    <!-- Sadaqah categories breakdown -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="byCategory">📊 By Category</div>
+                        <div id="sd-breakdown" style="margin-bottom:.75rem">
+                            <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:.5rem">Add records to see breakdown</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span><span data-i18n="dashboard">Home</span></a>
+        <a class="bn-item" href="income.html"> <span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"> <span class="bn-icon">📊</span><span data-i18n="expenses">Spend</span></a>
+        <a class="bn-item" href="assets.html"> <span class="bn-icon">🏅</span><span data-i18n="assets">Assets</span></a>
+        <a class="bn-item" href="settings.html"> <span class="bn-icon">⚙️</span>Settings</a>
+    </nav>
+
+    <script type="module" src="../js/sadaqah.js"></script>
+    <script>
+        const pc = document.getElementById('particles');
+        for (let i = 0; i < 18; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle p-star';
+            p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+            pc.appendChild(p);
+        }
+        const t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', t);
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
+        window.setTheme = (th) => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+        };
+    </script>
+
+</body>
+
+</html>

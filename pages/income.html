@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/income.html
+     Income tracker — Salary, Freelance, Rental, Business etc.
+     Firebase Firestore real-time sync
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Income</title>
+
+    <link rel="icon" href="../assets/favicon.png">
+
+    <!-- ── SHARED CSS (same 3 files for every page) ── -->
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+
+    <!-- ── PAGE-SPECIFIC CSS ── -->
+    <link rel="stylesheet" href="../css/income.css" />
+</head>
+
+<body data-page="income">
+
+    <!-- ANIMATED BACKGROUND (same on every page) -->
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <!-- MOBILE HEADER (visible only on phone) -->
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="notif-btn" onclick="location.href='notifications.html'">🔔
+                <div class="notif-dot"></div>
+            </div>
+            <div class="avatar" id="mob-avatar">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+
+        <!-- ════ SIDEBAR — same on every page, only change "active" class ════ -->
+        <!-- HOW TO LINK: change href to the page you want, add class="nav-item active" to current page -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap">
+                    <svg viewBox="0 0 60 60" fill="none">
+          <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
+          <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)" opacity=".9"/>
+          <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
+          <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
+          <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)" opacity=".85"/>
+          <ellipse cx="12" cy="33" rx="6" ry="2.5" fill="#e67e22" opacity=".6"/>
+          <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)" opacity=".85"/>
+          <ellipse cx="48" cy="29" rx="6" ry="2.5" fill="#1abc9c" opacity=".5"/>
+          <defs>
+            <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f0c040"/>
+              <stop offset="100%" stop-color="#a07010"/>
+            </linearGradient>
+          </defs>
+        </svg>
+                </div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <!-- LINKING: href="../pages/dashboard.html" OR just "dashboard.html" if same folder -->
+                <a class="nav-item" href="dashboard.html" title="Dashboard"> <span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
+                <a class="nav-item active" href="income.html" title="Income"> <span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
+                <a class="nav-item" href="expenses.html" title="Expenses"> <span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"> <span class="nav-icon">🏅</span><span class="nav-label" data-i18n="assets">Wealth &amp; Assets</span></a>
+
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"> <span class="nav-icon">🕌</span><span class="nav-label" data-i18n="zakat">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html" title="Calendar"> <span class="nav-icon">📅</span><span class="nav-label" data-i18n="calendar">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"> <span class="nav-icon">🌙</span><span class="nav-label" data-i18n="ramadan">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html" title="Sadaqah"> <span class="nav-icon">🤲</span><span class="nav-label" data-i18n="sadaqah">Sadaqah Log</span></a>
+
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html" title="Reports"> <span class="nav-icon">📈</span><span class="nav-label" data-i18n="reports">Charts &amp; Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"> <span class="nav-icon">📤</span><span class="nav-label" data-i18n="exportPdf">Export PDF / Word</span></a>
+
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html" title="Family"> <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label" data-i18n="family">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html" title="Notifications"><span class="nav-icon">🔔</span><span class="nav-label" data-i18n="notifications">Notifications</span></a>
+
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html" title="Language"> <span class="nav-icon">🌐</span><span class="nav-label" data-i18n="language">Language</span></a>
+                <a class="nav-item" href="calculator.html" title="Calculator"> <span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"> <span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass  active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Theme: Glass</div>
+            </div>
+        </aside>
+
+        <!-- ════ MAIN CONTENT ════ -->
+        <main class="main-content">
+
+            <!-- Page heading -->
+            <div class="section-title" data-i18n="pageIncome">💰 Income Sources</div>
+
+            <!-- SUMMARY BAR -->
+            <div class="sum-bar cols4" id="income-summary">
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="totalIncomeLabel">Total income</div>
+                    <div class="sum-value" id="s-total" style="color:var(--teal-lt)">₹0</div>
+                </div>
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="thisMonth">This month</div>
+                    <div class="sum-value" id="s-month" style="color:var(--gold-lt)">₹0</div>
+                </div>
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="salaryLabel">Salary</div>
+                    <div class="sum-value" id="s-salary" style="color:var(--teal)">₹0</div>
+                </div>
+                <div class="sum-item">
+                    <div class="sum-label" data-i18n="otherIncomeLabel">Other income</div>
+                    <div class="sum-value" id="s-other" style="color:var(--amber)">₹0</div>
+                </div>
+            </div>
+
+            <!-- INCOME TYPE FILTER PILLS -->
+            <div class="cat-filters" id="type-filters">
+                <div class="cf on" onclick="filterType('All',this)">All</div>
+                <div class="cf" onclick="filterType('Salary',this)">Salary</div>
+                <div class="cf" onclick="filterType('Freelance',this)">Freelance</div>
+                <div class="cf" onclick="filterType('Rental',this)">Rental</div>
+                <div class="cf" onclick="filterType('Business',this)">Business</div>
+                <div class="cf" onclick="filterType('Investment',this)">Investment</div>
+                <div class="cf" onclick="filterType('Gift',this)">Gift / Eid</div>
+                <div class="cf" onclick="filterType('Other',this)">Other</div>
+            </div>
+
+            <!-- 2-COLUMN LAYOUT: Form (left) + Charts (right) -->
+            <div class="income-layout">
+
+                <!-- LEFT: Add form -->
+                <div style="display:flex; flex-direction:column; gap:1rem">
+
+                    <!-- ADD FORM -->
+                    <div class="glass-card">
+                        <div class="card-title" id="form-title" data-i18n="addIncomeSource">➕ Add Income Source</div>
+
+                        <div class="form-grid fg2">
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="sourceName">Source name *</div>
+                                <input class="mz-input" id="f-name" placeholder="e.g. Monthly Salary" />
+                            </div>
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="amountLabel">Amount (₹) *</div>
+                                <input class="mz-input" id="f-amt" type="number" min="0" placeholder="65000" />
+                            </div>
+                        </div>
+
+                        <div class="form-grid fg2">
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="typeLabel">Type *</div>
+                                <select class="mz-select" id="f-type">
+                <option value="Salary">💼 Salary</option>
+                <option value="Freelance">💻 Freelance</option>
+                <option value="Rental">🏠 Rental</option>
+                <option value="Business">🏪 Business</option>
+                <option value="Investment">📈 Investment (Halal)</option>
+                <option value="Gift">🎁 Gift / Eid</option>
+                <option value="Other">💡 Other</option>
+              </select>
+                            </div>
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="recurringLabel">Recurring?</div>
+                                <select class="mz-select" id="f-recur">
+                <option value="One-off">One-off</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Yearly">Yearly</option>
+              </select>
+                            </div>
+                        </div>
+
+                        <div class="form-grid fg2">
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="dateReceived">Date received *</div>
+                                <input class="mz-input" id="f-date" type="date" />
+                            </div>
+                            <div class="field-wrap">
+                                <div class="field-label" data-i18n="currencyLabel">Currency</div>
+                                <select class="mz-select" id="f-currency">
+                <option value="INR">₹ INR</option>
+                <option value="USD">$ USD</option>
+                <option value="SAR">SAR</option>
+                <option value="AED">AED</option>
+                <option value="GBP">£ GBP</option>
+                <option value="PKR">PKR</option>
+              </select>
+                            </div>
+                        </div>
+
+                        <div class="field-wrap" style="margin-bottom:8px">
+                            <div class="field-label" data-i18n="notesOptional">Notes (optional)</div>
+                            <input class="mz-input" id="f-notes" placeholder="e.g. Employer: TCS, Project: Web app" />
+                        </div>
+
+                        <!-- Hidden edit ID -->
+                        <input type="hidden" id="edit-id" value="" />
+
+                        <div style="display:flex; gap:8px">
+                            <button class="btn btn-teal" id="add-btn" onclick="submitForm()" style="flex:1">
+              + Add Income
+            </button>
+                            <button class="btn btn-ghost" id="cancel-btn" onclick="cancelEdit()" style="display:none; width:auto; padding:10px 16px">
+              Cancel
+            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end left col -->
+
+                <!-- RIGHT: Charts + Breakdown -->
+                <div style="display:flex; flex-direction:column; gap:1rem">
+
+                    <!-- INCOME CHART (monthly breakdown) -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="monthlyIncomeTrend">📊 Monthly Income Trend</div>
+                        <div class="mini-chart" id="income-chart" style="display:flex;align-items:flex-end;gap:6px;height:72px;padding:0 4px;overflow-x:auto;"></div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:#1abc9c"></div>Salary</div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:#d4a017"></div>Freelance</div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:#5dade2"></div>Other</div>
+                        </div>
+                    </div>
+
+                    <!-- INCOME BREAKDOWN BY TYPE -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="bySourceType">📂 By Source Type</div>
+                        <div id="type-breakdown"></div>
+                    </div>
+
+                </div>
+                <!-- end right col -->
+            </div>
+
+            <!-- INCOME RECORDS (full list, below main layout) -->
+            <div class="glass-card" style="margin-top:0">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+                    <div class="card-title" style="margin:0">📋 All Income Records</div>
+                </div>
+                <div id="income-list">
+                    <div class="empty-state">Loading income records...</div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV (phone only) -->
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span><span data-i18n="dashboard">Home</span></a>
+        <a class="bn-item active" href="income.html"> <span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"> <span class="bn-icon">📊</span><span data-i18n="expenses">Spend</span></a>
+        <a class="bn-item" href="assets.html"> <span class="bn-icon">🏅</span><span data-i18n="assets">Assets</span></a>
+        <a class="bn-item" href="settings.html"> <span class="bn-icon">⚙️</span>Settings</a>
+    </nav>
+
+    <!-- ── FIREBASE + PAGE LOGIC ── -->
+    <script type="module" src="../js/income.js"></script>
+
+    <!-- ── PARTICLES + THEME (vanilla, no Firebase needed) ── -->
+    <script>
+        // Particles
+        const pc = document.getElementById('particles');
+        for (let i = 0; i < 28; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle ' + (i < 16 ? 'p-fire' : 'p-star');
+            p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+            pc.appendChild(p);
+        }
+        // Theme
+        const t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', t);
+        window.setTheme = (th) => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+        };
+        // Mark active theme pill
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
+    </script>
+</body>
+
+</html>

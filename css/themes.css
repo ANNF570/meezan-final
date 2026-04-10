@@ -1,0 +1,397 @@
+/* ============================================================
+   MEEZAN — ميزان  |  css/themes.css
+   ALL 4 THEMES: Glass · Hell · Heaven · Marble
+   Import this AFTER main.css on every page
+   ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════
+   HOW THEMES WORK:
+   - data-theme="glass"   → dark navy, frosted glass cards
+   - data-theme="hell"    → deep red/crimson, fire accents
+   - data-theme="heaven"  → deep teal/blue, celestial light
+   - data-theme="marble"  → light white marble, gold accents
+   Each theme changes CSS variables only → every component
+   automatically picks up the right colour.
+   JS call: document.documentElement.setAttribute('data-theme','hell')
+══════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   THEME 1: GLASS (default) — deep navy + frosted glass + gold
+────────────────────────────────────────────────────────────── */
+[data-theme="glass"],
+:root {
+  /* Backgrounds */
+  --bg:          #0b0f18;
+  --bg-card:     #131720;
+  --bg-row:      #1a1f2e;
+  --bg-input:    #161b27;
+
+  /* Borders */
+  --bdr:         rgba(255,255,255,0.09);
+  --bdr-gold:    rgba(212,160,23,0.40);
+  --bdr-teal:    rgba(26,188,156,0.30);
+
+  /* Accent colours */
+  --gold:        #d4a017;
+  --gold-lt:     #f0c040;
+  --gold-pale:   #fdeaa8;
+  --fire:        #c0392b;
+  --fire-lt:     #e74c3c;
+  --fire-deep:   #8b1a00;
+  --teal:        #1abc9c;
+  --teal-lt:     #48d1b0;
+  --teal-deep:   #0d7a5f;
+  --sky:         #5dade2;
+  --sky-lt:      #85c1e9;
+  --silver:      #a8b2bd;
+  --silver-lt:   #d5dbdb;
+  --diamond:     #85c1e9;
+  --stone:       #a569bd;
+  --stone-lt:    #c39bd3;
+  --amber:       #e67e22;
+
+  /* Text */
+  --text:        #eee8dc;
+  --text-mid:    rgba(238,232,220,0.65);
+  --text-dim:    rgba(238,232,220,0.38);
+
+  /* Shadows */
+  --shadow:      0 8px 32px rgba(0,0,0,0.50);
+  --glow-gold:   0 0 20px rgba(212,160,23,0.40);
+  --glow-teal:   0 0 20px rgba(26,188,156,0.35);
+  --glow-fire:   0 0 20px rgba(192,57,43,0.40);
+
+  /* Glass card */
+  --glass-bg:      rgba(255,255,255,0.06);
+  --glass-border:  rgba(255,255,255,0.14);
+  --glass-shine:   rgba(255,255,255,0.22);
+  --glass-blur:    blur(18px);
+
+  /* Scene background */
+  --scene-bg:    linear-gradient(135deg,#1a0500 0%,#0d0d1a 40%,#001220 70%,#001a0a 100%);
+  --fire-glow:   rgba(192,57,43,0.20);
+  --heaven-glow: rgba(26,188,156,0.15);
+
+  /* Navigation */
+  --nav-bg:      rgba(8,12,18,0.75);
+  --nav-active:  linear-gradient(135deg,rgba(192,57,43,0.20),rgba(26,188,156,0.15));
+  --nav-active-border: rgba(212,160,23,0.30);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   THEME 2: HELL — deep crimson, fire red, ember glow
+────────────────────────────────────────────────────────────── */
+[data-theme="hell"] {
+  --bg:          #0e0505;
+  --bg-card:     #1a0808;
+  --bg-row:      #220d0d;
+  --bg-input:    #180606;
+
+  --bdr:         rgba(192,57,43,0.18);
+  --bdr-gold:    rgba(212,160,23,0.50);
+  --bdr-teal:    rgba(26,188,156,0.30);
+
+  --gold:        #d4a017;
+  --gold-lt:     #f0c040;
+  --gold-pale:   #fdeaa8;
+  --fire:        #c0392b;
+  --fire-lt:     #e74c3c;
+  --fire-deep:   #8b1a00;
+  --teal:        #1abc9c;
+  --teal-lt:     #48d1b0;
+  --teal-deep:   #0d7a5f;
+  --sky:         #5dade2;
+  --sky-lt:      #85c1e9;
+  --silver:      #a8b2bd;
+  --silver-lt:   #d5dbdb;
+  --diamond:     #85c1e9;
+  --stone:       #a569bd;
+  --stone-lt:    #c39bd3;
+  --amber:       #e67e22;
+
+  --text:        #f5e0da;
+  --text-mid:    rgba(245,224,218,0.65);
+  --text-dim:    rgba(245,224,218,0.38);
+
+  --shadow:      0 8px 32px rgba(139,26,0,0.45);
+  --glow-gold:   0 0 20px rgba(212,160,23,0.40);
+  --glow-teal:   0 0 20px rgba(26,188,156,0.35);
+  --glow-fire:   0 0 30px rgba(192,57,43,0.60);
+
+  --glass-bg:      rgba(139,26,0,0.12);
+  --glass-border:  rgba(192,57,43,0.22);
+  --glass-shine:   rgba(255,150,100,0.15);
+  --glass-blur:    blur(18px);
+
+  --scene-bg:    linear-gradient(135deg,#2a0400 0%,#1a0808 50%,#0d0d1a 100%);
+  --fire-glow:   rgba(192,57,43,0.35);
+  --heaven-glow: rgba(26,188,156,0.08);
+
+  --nav-bg:      rgba(14,5,5,0.85);
+  --nav-active:  linear-gradient(135deg,rgba(192,57,43,0.30),rgba(139,26,0,0.25));
+  --nav-active-border: rgba(192,57,43,0.50);
+}
+
+/* Hell theme — background scene override */
+[data-theme="hell"] .bg-scene {
+  background: linear-gradient(135deg,#2a0400 0%,#1a0808 50%,#0d0500 100%) !important;
+}
+[data-theme="hell"] .bg-fire-glow {
+  background: radial-gradient(ellipse, rgba(192,57,43,0.40) 0%, rgba(139,26,0,0.25) 40%, transparent 70%) !important;
+}
+[data-theme="hell"] .bg-heaven-glow {
+  background: radial-gradient(ellipse, rgba(212,160,23,0.12) 0%, transparent 70%) !important;
+}
+
+/* Hell theme — glass card has ember shimmer */
+[data-theme="hell"] .glass-card::before {
+  background: linear-gradient(90deg, transparent, rgba(192,57,43,0.5), rgba(212,160,23,0.4), transparent) !important;
+}
+
+/* Hell theme — sidebar */
+[data-theme="hell"] .sidebar {
+  background: rgba(14,5,5,0.85) !important;
+  border-right-color: rgba(192,57,43,0.22) !important;
+}
+
+/* Hell theme — metric card accents */
+[data-theme="hell"] .metric-card { border-color: rgba(192,57,43,0.18) !important; }
+[data-theme="hell"] .metric-card:hover { border-color: rgba(192,57,43,0.40) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   THEME 3: HEAVEN — deep navy-teal, celestial blue, divine light
+────────────────────────────────────────────────────────────── */
+[data-theme="heaven"] {
+  --bg:          #030f18;
+  --bg-card:     #071a28;
+  --bg-row:      #0d2236;
+  --bg-input:    #071724;
+
+  --bdr:         rgba(26,188,156,0.16);
+  --bdr-gold:    rgba(212,160,23,0.40);
+  --bdr-teal:    rgba(26,188,156,0.40);
+
+  --gold:        #d4a017;
+  --gold-lt:     #f0c040;
+  --gold-pale:   #fdeaa8;
+  --fire:        #c0392b;
+  --fire-lt:     #e74c3c;
+  --fire-deep:   #8b1a00;
+  --teal:        #1abc9c;
+  --teal-lt:     #48d1b0;
+  --teal-deep:   #0d7a5f;
+  --sky:         #5dade2;
+  --sky-lt:      #85c1e9;
+  --silver:      #a8b2bd;
+  --silver-lt:   #d5dbdb;
+  --diamond:     #85c1e9;
+  --stone:       #a569bd;
+  --stone-lt:    #c39bd3;
+  --amber:       #e67e22;
+
+  --text:        #ddf0ec;
+  --text-mid:    rgba(221,240,236,0.65);
+  --text-dim:    rgba(221,240,236,0.38);
+
+  --shadow:      0 8px 32px rgba(13,122,95,0.30);
+  --glow-gold:   0 0 20px rgba(212,160,23,0.40);
+  --glow-teal:   0 0 25px rgba(26,188,156,0.45);
+  --glow-fire:   0 0 20px rgba(192,57,43,0.35);
+
+  --glass-bg:      rgba(26,188,156,0.06);
+  --glass-border:  rgba(26,188,156,0.20);
+  --glass-shine:   rgba(100,220,200,0.18);
+  --glass-blur:    blur(18px);
+
+  --scene-bg:    linear-gradient(135deg,#020d16 0%,#041825 40%,#061e10 100%);
+  --fire-glow:   rgba(192,57,43,0.12);
+  --heaven-glow: rgba(26,188,156,0.28);
+
+  --nav-bg:      rgba(3,15,24,0.88);
+  --nav-active:  linear-gradient(135deg,rgba(13,122,95,0.30),rgba(26,188,156,0.20));
+  --nav-active-border: rgba(26,188,156,0.45);
+}
+
+/* Heaven theme — background scene */
+[data-theme="heaven"] .bg-scene {
+  background: linear-gradient(135deg,#020d16 0%,#041825 50%,#061e10 100%) !important;
+}
+[data-theme="heaven"] .bg-fire-glow {
+  background: radial-gradient(ellipse, rgba(13,122,95,0.15) 0%, transparent 70%) !important;
+}
+[data-theme="heaven"] .bg-heaven-glow {
+  background: radial-gradient(ellipse, rgba(26,188,156,0.30) 0%, rgba(93,173,226,0.15) 40%, transparent 70%) !important;
+  right: -5%; top: 0%; width: 60%; height: 80%;
+}
+
+/* Heaven theme — glass card shimmer */
+[data-theme="heaven"] .glass-card::before {
+  background: linear-gradient(90deg, transparent, rgba(26,188,156,0.45), rgba(93,173,226,0.30), transparent) !important;
+}
+
+/* Heaven theme — sidebar */
+[data-theme="heaven"] .sidebar {
+  background: rgba(3,15,24,0.88) !important;
+  border-right-color: rgba(26,188,156,0.20) !important;
+}
+
+/* Heaven theme — nav active */
+[data-theme="heaven"] .nav-item.active {
+  background: linear-gradient(135deg,rgba(13,122,95,0.30),rgba(26,188,156,0.20)) !important;
+  border-color: rgba(26,188,156,0.45) !important;
+  color: var(--teal-lt) !important;
+}
+[data-theme="heaven"] .nav-item.active::before {
+  background: linear-gradient(180deg, var(--teal), var(--sky), var(--teal-lt)) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   THEME 4: MARBLE — light white marble, premium clean
+────────────────────────────────────────────────────────────── */
+[data-theme="marble"] {
+  --bg:          #f0ede8;
+  --bg-card:     #faf8f5;
+  --bg-row:      #eeebe6;
+  --bg-input:    #e8e5e0;
+
+  --bdr:         rgba(0,0,0,0.10);
+  --bdr-gold:    rgba(160,112,16,0.50);
+  --bdr-teal:    rgba(13,122,95,0.35);
+
+  --gold:        #a07010;
+  --gold-lt:     #c08820;
+  --gold-pale:   #f5e8c0;
+  --fire:        #c0392b;
+  --fire-lt:     #e74c3c;
+  --fire-deep:   #8b1a00;
+  --teal:        #0d7a5f;
+  --teal-lt:     #1abc9c;
+  --teal-deep:   #085041;
+  --sky:         #2980b9;
+  --sky-lt:      #3498db;
+  --silver:      #7f8c8d;
+  --silver-lt:   #95a5a6;
+  --diamond:     #2980b9;
+  --stone:       #8e44ad;
+  --stone-lt:    #9b59b6;
+  --amber:       #d35400;
+
+  --text:        #1a1208;
+  --text-mid:    rgba(26,18,8,0.65);
+  --text-dim:    rgba(26,18,8,0.42);
+
+  --shadow:      0 4px 20px rgba(0,0,0,0.12);
+  --glow-gold:   0 0 15px rgba(160,112,16,0.30);
+  --glow-teal:   0 0 15px rgba(13,122,95,0.25);
+  --glow-fire:   0 0 15px rgba(192,57,43,0.25);
+
+  --glass-bg:      rgba(255,255,255,0.80);
+  --glass-border:  rgba(0,0,0,0.09);
+  --glass-shine:   rgba(255,255,255,0.90);
+  --glass-blur:    blur(12px);
+
+  --scene-bg:    linear-gradient(135deg,#f5f2ed 0%,#ece8e2 50%,#e8f0eb 100%);
+  --fire-glow:   transparent;
+  --heaven-glow: transparent;
+
+  --nav-bg:      rgba(250,248,245,0.92);
+  --nav-active:  linear-gradient(135deg,rgba(160,112,16,0.12),rgba(13,122,95,0.08));
+  --nav-active-border: rgba(160,112,16,0.40);
+}
+
+/* Marble theme — scene */
+[data-theme="marble"] .bg-scene {
+  background: linear-gradient(135deg,#f5f2ed,#ece8e2 50%,#e8f0eb) !important;
+}
+[data-theme="marble"] .bg-fire-glow,
+[data-theme="marble"] .bg-heaven-glow,
+[data-theme="marble"] .p-fire,
+[data-theme="marble"] .p-star { opacity: 0 !important; }
+
+/* Marble theme — sidebar */
+[data-theme="marble"] .sidebar {
+  background: rgba(250,248,245,0.94) !important;
+  border-right-color: rgba(0,0,0,0.09) !important;
+}
+[data-theme="marble"] .logo-name {
+  background: linear-gradient(135deg,#c0392b,#a07010,#0d7a5f) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+[data-theme="marble"] .nav-item { color: rgba(26,18,8,0.60) !important; }
+[data-theme="marble"] .nav-item:hover { background: rgba(0,0,0,0.04) !important; color: #1a1208 !important; }
+[data-theme="marble"] .nav-item.active { color: #a07010 !important; }
+[data-theme="marble"] .nav-section { color: rgba(26,18,8,0.35) !important; }
+[data-theme="marble"] .theme-label { color: rgba(26,18,8,0.45) !important; }
+
+/* Marble theme — glass card */
+[data-theme="marble"] .glass-card {
+  background: rgba(255,255,255,0.85) !important;
+  border-color: rgba(0,0,0,0.09) !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
+}
+[data-theme="marble"] .glass-card::before {
+  background: linear-gradient(90deg, transparent, rgba(160,112,16,0.35), rgba(13,122,95,0.25), transparent) !important;
+}
+
+/* Marble theme — topbar */
+[data-theme="marble"] .topbar { background: rgba(255,255,255,0.75) !important; border-color: rgba(0,0,0,0.08) !important; }
+
+/* Marble theme — sum items */
+[data-theme="marble"] .sum-item { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+[data-theme="marble"] .mz-row   { background: rgba(0,0,0,0.03) !important; border-color: rgba(0,0,0,0.07) !important; }
+[data-theme="marble"] .mz-input,
+[data-theme="marble"] .mz-select { background: #fff !important; border-color: rgba(0,0,0,0.12) !important; color: #1a1208 !important; }
+[data-theme="marble"] .mz-input::placeholder { color: rgba(26,18,8,0.35) !important; }
+
+/* Marble theme — buttons get darker gold */
+[data-theme="marble"] .btn-teal { background: linear-gradient(135deg,#085041,#0d7a5f) !important; }
+[data-theme="marble"] .btn-gold { background: linear-gradient(135deg,#7a5008,#a07010,#c08820) !important; }
+
+/* Marble theme — mobile header */
+[data-theme="marble"] .mobile-header  { background: rgba(250,248,245,0.95) !important; border-bottom-color: rgba(0,0,0,0.09) !important; }
+[data-theme="marble"] .bottom-nav     { background: rgba(250,248,245,0.95) !important; border-top-color: rgba(0,0,0,0.09) !important; }
+[data-theme="marble"] .bn-item        { color: rgba(26,18,8,0.45) !important; }
+[data-theme="marble"] .bn-item.active { color: #a07010 !important; }
+
+/* Marble theme — scrollbar */
+[data-theme="marble"] ::-webkit-scrollbar-thumb { background: rgba(160,112,16,0.35) !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   SMART DYNAMIC THEME SHIFT
+   When budget is exceeded → accent shifts toward fire (hell)
+   When Zakat is paid     → accent resets to teal (heaven)
+   Apply class "over-budget" to <html> from JS to trigger
+══════════════════════════════════════════════════════════════ */
+html.over-budget [data-theme="glass"] .nav-item.active,
+html.over-budget [data-theme="heaven"] .nav-item.active {
+  background: linear-gradient(135deg,rgba(192,57,43,0.25),rgba(212,160,23,0.15)) !important;
+  border-color: rgba(192,57,43,0.45) !important;
+  color: var(--fire-lt) !important;
+}
+html.over-budget [data-theme="glass"] .topbar-greeting,
+html.over-budget [data-theme="heaven"] .topbar-greeting {
+  color: var(--fire-lt) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   THEME TRANSITION — smooth when switching
+══════════════════════════════════════════════════════════════ */
+body,
+.sidebar,
+.glass-card,
+.topbar,
+.mz-row,
+.sum-item,
+.metric-card,
+.nav-item,
+.mz-input,
+.mz-select,
+.mobile-header,
+.bottom-nav {
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    color 0.25s ease,
+    box-shadow 0.35s ease;
+}

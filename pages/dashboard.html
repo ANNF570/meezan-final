@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/dashboard.html
+     FIXED: Single script block, all CSS linked, no conflicts
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Dashboard</title>
+
+    <link rel="icon" href="../assets/favicon.png">
+
+    <!-- ① Core CSS — these 4 on EVERY page, in this order -->
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+
+    <!-- ② Dashboard has no separate page CSS — styles are inline below -->
+    <style>
+        /* Dashboard-specific layout */
+        
+        .dash-3col {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr 1.2fr;
+            gap: 1rem;
+        }
+        
+        @media(max-width:1100px) {
+            .dash-3col {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+        
+        .scale-status {
+            font-size: 11px;
+            color: var(--amber);
+            margin-top: 4px;
+            text-align: center;
+        }
+        
+        .zakat-ring-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: .75rem;
+        }
+        
+        .zakat-ring {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+        }
+        
+        .zakat-ring svg {
+            transform: rotate(-90deg);
+        }
+        
+        .zakat-pct {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gold-lt);
+        }
+        
+        .mh-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin-bottom: 3px;
+        }
+        
+        .mh-l {
+            color: var(--text-dim);
+        }
+        
+        .mh-v {
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        .income-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            margin-bottom: 6px;
+            transition: all 0.2s;
+        }
+        
+        .income-row:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+        
+        .ii {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body data-page="dashboard">
+
+    <!-- ANIMATED BACKGROUND -->
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <!-- MOBILE HEADER (phone only) -->
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="notif-btn" onclick="location.href='notifications.html'">
+                🔔
+                <div class="notif-dot"></div>
+            </div>
+            <div class="avatar" id="mob-avatar" onclick="location.href='settings.html'">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+
+        <!-- ═══════════════════════════════════════════════════════
+       SIDEBAR — same on every page
+       To mark active page: add class="nav-item active" to that link
+       ═══════════════════════════════════════════════════════ -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap">
+                    <svg viewBox="0 0 60 60" fill="none">
+          <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
+          <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)" opacity=".9"/>
+          <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
+          <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
+          <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)" opacity=".85"/>
+          <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)" opacity=".85"/>
+          <defs>
+            <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f0c040"/>
+              <stop offset="100%" stop-color="#a07010"/>
+            </linearGradient>
+          </defs>
+        </svg>
+                </div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+
+            <nav class="nav">
+                <!-- MAIN -->
+                <span class="nav-section">Main</span>
+                <!-- ↓ "active" class = current page (gold left bar) -->
+                <a class="nav-item active" href="dashboard.html" title="Dashboard"> <span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
+                <a class="nav-item" href="income.html" title="Income"> <span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
+                <a class="nav-item" href="expenses.html" title="Expenses"> <span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"> <span class="nav-icon">🏅</span><span class="nav-label" data-i18n="assets">Wealth &amp; Assets</span></a>
+
+                <!-- ISLAMIC -->
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"> <span class="nav-icon">🕌</span><span class="nav-label" data-i18n="zakat">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html" title="Calendar"> <span class="nav-icon">📅</span><span class="nav-label" data-i18n="calendar">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"> <span class="nav-icon">🌙</span><span class="nav-label" data-i18n="ramadan">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html" title="Sadaqah"> <span class="nav-icon">🤲</span><span class="nav-label" data-i18n="sadaqah">Sadaqah Log</span></a>
+
+                <!-- REPORTS -->
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html" title="Reports"> <span class="nav-icon">📈</span><span class="nav-label" data-i18n="reports">Charts &amp; Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"> <span class="nav-icon">📤</span><span class="nav-label" data-i18n="exportPdf">Export PDF / Word</span></a>
+
+                <!-- SOCIAL -->
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html" title="Family"> <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label" data-i18n="family">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html" title="Notifications"> <span class="nav-icon">🔔</span><span class="nav-label" data-i18n="notifications">Notifications</span></a>
+
+                <!-- SETTINGS -->
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html" title="Language"> <span class="nav-icon">🌐</span><span class="nav-label" data-i18n="language">Language</span></a>
+                <a class="nav-item" href="calculator.html" title="Calculator"> <span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"> <span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
+            </nav>
+
+            <!-- THEME PILLS (bottom of sidebar) -->
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass  active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Glass</div>
+            </div>
+        </aside>
+
+        <!-- ═══════════════════════════════════════════════════════
+       MAIN CONTENT
+       ═══════════════════════════════════════════════════════ -->
+        <main class="main-content">
+
+            <!-- TOP BAR (desktop) -->
+            <div class="topbar desktop-topbar">
+                <div>
+                    <div class="topbar-greeting">
+                        بِسْمِ اللَّهِ — Welcome back, <span id="user-name">...</span>
+                    </div>
+                    <div class="topbar-date" id="topbar-dates">Loading dates...</div>
+                </div>
+                <div class="topbar-right">
+                    <div class="notif-btn" onclick="location.href='notifications.html'">
+                        🔔
+                        <div class="notif-dot"></div>
+                    </div>
+                    <div class="avatar" id="desk-avatar" onclick="location.href='settings.html'">M</div>
+                </div>
+            </div>
+
+            <!-- ── METRIC CARDS ── -->
+            <div class="metrics-grid">
+                <div class="metric-card mc-fire">
+                    <div class="mc-label">Total Spent</div>
+                    <div class="mc-value" id="m-spent">₹0</div>
+                    <div class="mc-change down" id="m-spent-sub">This month</div>
+                </div>
+                <div class="metric-card mc-gold">
+                    <div class="mc-label">Net Worth</div>
+                    <div class="mc-value" id="m-networth">₹0</div>
+                    <div class="mc-change up">Income − Expenses + Assets</div>
+                </div>
+                <div class="metric-card mc-heaven">
+                    <div class="mc-label">Income (Month)</div>
+                    <div class="mc-value" id="m-income">₹0</div>
+                    <div class="mc-change up">All sources</div>
+                </div>
+                <div class="metric-card mc-sky">
+                    <div class="mc-label">Zakat Due</div>
+                    <div class="mc-value" id="m-zakat">₹0</div>
+                    <div class="mc-change" id="m-zakat-sub" style="color:var(--amber)">Based on assets</div>
+                </div>
+            </div>
+
+            <!-- ── ROW: BALANCE SCALE + INCOME + ZAKAT ── -->
+            <div class="dash-3col">
+
+                <!-- Balance Scale -->
+                <div class="glass-card">
+                    <div class="card-title" data-i18n="yourBalance">⚖️ Your Balance</div>
+                    <div style="text-align:center;padding:.5rem 0">
+                        <div style="max-width:200px;margin:0 auto .75rem;filter:drop-shadow(0 0 12px rgba(212,160,23,0.4))">
+                            <svg viewBox="0 0 120 90" fill="none">
+              <rect x="57" y="20" width="6" height="55" rx="3" fill="url(#s1)"/>
+              <ellipse cx="60" cy="77" rx="22" ry="6" fill="url(#s1)" opacity=".85"/>
+              <circle cx="60" cy="14" r="6" fill="url(#s1)"/>
+              <rect x="16" y="26" width="88" height="5" rx="2.5" fill="url(#s1)"/>
+              <line x1="22" y1="31" x2="18" y2="52" stroke="#d4a017" stroke-width="1.5" stroke-dasharray="3,2"/>
+              <ellipse cx="18" cy="55" rx="16" ry="5" fill="url(#s1)" opacity=".8"/>
+              <ellipse cx="18" cy="53" rx="12" ry="4" fill="#e67e22" opacity=".5"/>
+              <circle cx="14" cy="49" r="2" fill="#f39c12" opacity=".9"/>
+              <line x1="98" y1="31" x2="102" y2="44" stroke="#d4a017" stroke-width="1.5" stroke-dasharray="3,2"/>
+              <ellipse cx="102" cy="47" rx="16" ry="5" fill="url(#s1)" opacity=".8"/>
+              <ellipse cx="102" cy="45" rx="12" ry="4" fill="#1abc9c" opacity=".4"/>
+              <circle cx="98" cy="42" r="2" fill="#48d1b0" opacity=".9"/>
+              <defs>
+                <linearGradient id="s1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#f0c040"/>
+                  <stop offset="100%" stop-color="#a07010"/>
+                </linearGradient>
+              </defs>
+            </svg>
+                        </div>
+                        <div class="scale-labels">
+                            <span style="color:var(--fire-lt)">🔥 Spent</span>
+                            <span style="color:var(--teal-lt)">✨ Saved</span>
+                        </div>
+                        <div class="scale-meter">
+                            <div class="scale-cursor" id="scale-cursor" style="left:50%"></div>
+                        </div>
+                        <div class="scale-status" id="scale-status">Calculating...</div>
+                    </div>
+                </div>
+
+                <!-- Recent Income -->
+                <div class="glass-card">
+                    <div class="card-title" data-i18n="recentIncome">💰 Recent Income</div>
+                    <div id="dash-income-list">
+                        <div style="font-size:12px;color:var(--text-dim);text-align:center;padding:1rem">Loading...</div>
+                    </div>
+                    <a href="income.html" style="display:block;text-align:center;font-size:11px;color:var(--teal-lt);margin-top:.5rem;text-decoration:none">
+                        <span data-i18n="viewAllIncome">View all income →</span>
+                    </a>
+                </div>
+
+                <!-- Zakat Ring -->
+                <div class="glass-card">
+                    <div class="card-title" data-i18n="zakatStatus">🕌 Zakat Status</div>
+                    <div class="zakat-ring-wrap">
+                        <div class="zakat-ring">
+                            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
+              <circle cx="40" cy="40" r="32" fill="none" stroke="url(#zg)" stroke-width="7"
+                stroke-dasharray="201" stroke-dashoffset="201"
+                stroke-linecap="round" id="zakat-ring-circle"/>
+              <defs>
+                <linearGradient id="zg" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%"   stop-color="#d4a017"/>
+                  <stop offset="100%" stop-color="#1abc9c"/>
+                </linearGradient>
+              </defs>
+            </svg>
+                            <div class="zakat-pct" id="zakat-ring-pct">0%</div>
+                        </div>
+                        <div>
+                            <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Hawl Progress</div>
+                            <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold-lt);margin:3px 0" id="zakat-ring-amount">₹0</div>
+                            <div style="font-size:10px;color:var(--teal-lt)" id="zakat-ring-sub">Add assets to track</div>
+                        </div>
+                    </div>
+                    <div id="zakat-detail-rows"></div>
+                    <a href="zakat.html" style="display:block;text-align:center;font-size:11px;color:var(--teal-lt);margin-top:.75rem;text-decoration:none">
+                        <span data-i18n="fullZakatCalc">Full Zakat Calculator →</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ── ROW: CALENDAR + GOLD + CHART + EXPENSES ── -->
+            <div class="grid-2">
+
+                <!-- Left: Calendar + Metals -->
+                <div style="display:flex;flex-direction:column;gap:1rem">
+
+                    <!-- Dual Calendar (live Aladhan API) -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="dualCalendar">📅 Dual Calendar</div>
+                        <div class="cal-dual">
+                            <div class="cal-side cal-greg">
+                                <div class="cal-type">Gregorian</div>
+                                <div class="cal-date" id="cal-greg-day">—</div>
+                                <div class="cal-month" id="cal-greg-month">—</div>
+                                <div class="cal-day" id="cal-greg-wd">—</div>
+                            </div>
+                            <div class="cal-side cal-hijri">
+                                <div class="cal-type">Hijri</div>
+                                <div class="cal-date" id="cal-hijri-day">—</div>
+                                <div class="cal-month" id="cal-hijri-month">—</div>
+                                <div class="cal-day" id="cal-hijri-wd">—</div>
+                            </div>
+                        </div>
+                        <div class="cal-events" id="cal-events" style="margin-top:8px"></div>
+                    </div>
+
+                    <!-- Gold & Silver -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="goldSilver">🥇 Gold & Silver</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem">
+                            <div style="background:rgba(212,160,23,0.12);border:1px solid rgba(212,160,23,0.3);border-radius:11px;padding:10px;text-align:center">
+                                <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Gold 24K</div>
+                                <div style="font-family:'Cinzel',serif;font-size:15px;color:var(--gold-lt);margin:3px 0" id="dash-gold24">₹6,842/g</div>
+                                <div style="font-size:10px;color:var(--teal-lt)">Live price</div>
+                            </div>
+                            <div style="background:rgba(168,178,189,0.10);border:1px solid rgba(168,178,189,0.2);border-radius:11px;padding:10px;text-align:center">
+                                <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Silver</div>
+                                <div style="font-family:'Cinzel',serif;font-size:15px;color:var(--silver-lt);margin:3px 0" id="dash-silver">₹82/g</div>
+                                <div style="font-size:10px;color:var(--silver-lt)">Live price</div>
+                            </div>
+                        </div>
+                        <div class="mh-row"><span class="mh-l">Gold held</span><span class="mh-v" id="dash-goldg">0g → ₹0</span></div>
+                        <div class="mh-row"><span class="mh-l">Silver held</span><span class="mh-v" id="dash-silvg">0g → ₹0</span></div>
+                        <div class="mh-row" style="margin-top:4px;padding-top:4px;border-top:1px solid var(--bdr)">
+                            <span class="mh-l">Total metals</span>
+                            <span class="mh-v" style="color:var(--gold-lt)" id="dash-metals-total">₹0</span>
+                        </div>
+                        <a href="assets.html" style="display:block;text-align:center;font-size:11px;color:var(--teal-lt);margin-top:.75rem;text-decoration:none">
+                            <span data-i18n="manageAssets">Manage assets →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Chart + Expenses -->
+                <div style="display:flex;flex-direction:column;gap:1rem">
+
+                    <!-- Mini Chart -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="monthlyTrend">📊 Monthly Trend</div>
+                        <div class="mini-chart" id="mini-chart"></div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:#c0392b"></div>Expenses</div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:#1abc9c"></div>Income</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Expenses -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="recentExpenses">🧾 Recent Expenses</div>
+                        <div id="dash-expense-list">
+                            <div style="font-size:12px;color:var(--text-dim);text-align:center;padding:1rem">Loading...</div>
+                        </div>
+                        <a href="expenses.html" style="display:block;text-align:center;font-size:11px;color:var(--fire-lt);margin-top:.5rem;text-decoration:none">
+                            <span data-i18n="viewAllExpenses">View all expenses →</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <!-- end main-content -->
+    </div>
+    <!-- end app-wrap -->
+
+    <!-- BOTTOM NAV (phone only) -->
+    <nav class="bottom-nav">
+        <a class="bn-item active" href="dashboard.html"> <span class="bn-icon">⚖️</span><span data-i18n="dashboard">Home</span></a>
+        <a class="bn-item" href="income.html"> <span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"> <span class="bn-icon">📊</span><span data-i18n="expenses">Spend</span></a>
+        <a class="bn-item" href="assets.html"> <span class="bn-icon">🏅</span><span data-i18n="assets">Assets</span></a>
+        <a class="bn-item" href="settings.html"> <span class="bn-icon">⚙️</span>Settings</a>
+    </nav>
+
+
+    <!-- ══════════════════════════════════════════════════════════
+     ③ FIREBASE — single clean module, no duplicates
+     ══════════════════════════════════════════════════════════ -->
+    <script type="module" src="../js/dashboard.js"></script>
+
+
+    <!-- ══════════════════════════════════════════════════════════
+     ④ LANGUAGE SYSTEM
+     ══════════════════════════════════════════════════════════ -->
+
+
+
+    <!-- ══════════════════════════════════════════════════════════
+     ⑤ THEME + PARTICLES — vanilla JS, runs on every page
+     ══════════════════════════════════════════════════════════ -->
+    <script>
+        /* Apply saved theme immediately (prevents flash) */
+        const _t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', _t);
+        document.querySelectorAll('.theme-pill')
+            .forEach(p => p.classList.toggle('active', p.title === _t));
+        document.getElementById('theme-label').textContent =
+            _t.charAt(0).toUpperCase() + _t.slice(1);
+
+        /* setTheme — called by sidebar pills onclick */
+        window.setTheme = th => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill')
+                .forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent =
+                th.charAt(0).toUpperCase() + th.slice(1);
+        };
+
+        /* Floating particles */
+        const _pc = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle ' + (i < 18 ? 'p-fire' : 'p-star');
+            p.style.cssText =
+                `left:${i<18 ? Math.random()*45 : Math.random()*100}%;` +
+                `animation-duration:${4 + Math.random()*8}s;` +
+                `animation-delay:${Math.random()*6}s;`;
+            _pc.appendChild(p);
+        }
+    </script>
+</body>
+
+</html>
+
+</html>
+
+</html>

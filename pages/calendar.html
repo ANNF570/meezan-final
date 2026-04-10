@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/calendar.html
+     Dual Hijri + Gregorian Calendar with Aladhan API (FREE)
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Calendar</title>
+    <link rel="icon" href="../assets/favicon.png">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+    <style>
+        /* ── CALENDAR PAGE SPECIFIC ── */
+        
+        .cal-page-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+        
+        @media(max-width:1000px) {
+            .cal-page-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* Date display banner */
+        
+        .date-banner {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            position: relative;
+        }
+        
+        .date-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 160, 23, 0.5), rgba(26, 188, 156, 0.35), transparent);
+        }
+        
+        .date-side {
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        
+        .ds-greg {
+            background: rgba(139, 26, 0, 0.15);
+            border: 1px solid rgba(192, 57, 43, 0.2);
+        }
+        
+        .ds-hijri {
+            background: rgba(13, 64, 96, 0.20);
+            border: 1px solid rgba(26, 188, 156, 0.2);
+        }
+        
+        .ds-type {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: .4rem;
+        }
+        
+        .ds-greg .ds-type {
+            color: var(--amber);
+        }
+        
+        .ds-hijri .ds-type {
+            color: var(--teal-lt);
+        }
+        
+        .ds-day {
+            font-family: 'Cinzel', serif;
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .ds-greg .ds-day {
+            color: var(--gold-lt);
+        }
+        
+        .ds-hijri .ds-day {
+            color: var(--sky-lt);
+        }
+        
+        .ds-month {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: .25rem;
+            color: var(--text);
+        }
+        
+        .ds-year {
+            font-size: 13px;
+            color: var(--text-mid);
+            margin-top: 2px;
+        }
+        
+        .ds-wd {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+        /* Upcoming events */
+        
+        .event-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-row);
+            border-radius: 10px;
+            border: 1px solid var(--bdr);
+            padding: 10px 13px;
+            margin-bottom: 7px;
+        }
+        
+        .event-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        
+        .event-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .event-date {
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+        
+        .event-badge {
+            margin-left: auto;
+            font-size: 9px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background: rgba(26, 188, 156, 0.12);
+            color: var(--teal-lt);
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            flex-shrink: 0;
+        }
+        /* Month calendar grid */
+        
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+            margin-top: .5rem;
+        }
+        
+        .cal-day-hdr {
+            text-align: center;
+            font-size: 9px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            padding: 5px 2px;
+        }
+        
+        .cal-day-cell {
+            text-align: center;
+            padding: 6px 3px;
+            border-radius: 7px;
+            cursor: default;
+            font-size: 12px;
+            color: var(--text-mid);
+            transition: all 0.15s;
+            min-height: 42px;
+        }
+        
+        .cal-day-cell .greg-d {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 12px;
+        }
+        
+        .cal-day-cell .hijri-d {
+            font-size: 9px;
+            color: var(--text-dim);
+            margin-top: 1px;
+        }
+        
+        .cal-day-cell.today {
+            background: rgba(212, 160, 23, 0.15);
+            border: 1px solid rgba(212, 160, 23, 0.4);
+        }
+        
+        .cal-day-cell.today .greg-d {
+            color: var(--gold-lt);
+        }
+        
+        .cal-day-cell.event {
+            background: rgba(26, 188, 156, 0.08);
+            border: 1px solid rgba(26, 188, 156, 0.2);
+        }
+        
+        .cal-day-cell.other-month .greg-d {
+            color: var(--text-dim);
+        }
+        
+        .cal-day-cell:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        /* Month nav */
+        
+        .month-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .75rem;
+        }
+        
+        .month-nav-btn {
+            background: var(--bg-row);
+            border: 1px solid var(--bdr);
+            border-radius: 8px;
+            color: var(--text-mid);
+            font-size: 14px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        
+        .month-nav-btn:hover {
+            border-color: var(--bdr-gold);
+            color: var(--gold-lt);
+        }
+        
+        .month-title {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            color: var(--gold-lt);
+            letter-spacing: 1px;
+        }
+        /* Prayer times */
+        
+        .prayer-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .05);
+            font-size: 12px;
+        }
+        
+        .prayer-row:last-child {
+            border-bottom: none;
+        }
+        
+        .prayer-name {
+            color: var(--text-mid);
+        }
+        
+        .prayer-time {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-lt);
+            font-size: 12px;
+        }
+        
+        .prayer-row.next {
+            background: rgba(212, 160, 23, 0.08);
+            padding: 7px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 160, 23, 0.2);
+            margin-bottom: 3px;
+        }
+        
+        .prayer-row.next .prayer-name {
+            color: var(--gold-lt);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="notif-btn">🔔
+                <div class="notif-dot"></div>
+            </div>
+            <div class="avatar" id="mob-avatar">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+        <!-- SIDEBAR (same on every page) -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap"><svg viewBox="0 0 60 60" fill="none"><rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/><ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)"/><circle cx="30" cy="10" r="4" fill="url(#gg)"/><rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/><line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/><ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)"/><line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/><ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0c040"/><stop offset="100%" stop-color="#a07010"/></linearGradient></defs></svg></div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <a class="nav-item" href="dashboard.html" title="Dashboard"><span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
+                <a class="nav-item" href="income.html" title="Income"> <span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
+                <a class="nav-item" href="expenses.html" title="Expenses"> <span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"> <span class="nav-icon">🏅</span><span class="nav-label" data-i18n="assets">Wealth &amp; Assets</span></a>
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"> <span class="nav-icon">🕌</span><span class="nav-label" data-i18n="zakat">Zakat Calculator</span></a>
+                <a class="nav-item active" href="calendar.html" title="Calendar"> <span class="nav-icon">📅</span><span class="nav-label" data-i18n="calendar">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"> <span class="nav-icon">🌙</span><span class="nav-label">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html" title="Sadaqah"> <span class="nav-icon">🤲</span><span class="nav-label">Sadaqah Log</span></a>
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html" title="Reports"> <span class="nav-icon">📈</span><span class="nav-label" data-i18n="reports">Charts &amp; Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"> <span class="nav-icon">📤</span><span class="nav-label">Export PDF / Word</span></a>
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html" title="Family"> <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label" data-i18n="family">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html" title="Notifications"> <span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></a>
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html" title="Language"> <span class="nav-icon">🌐</span><span class="nav-label" data-i18n="language">Language</span></a>
+                <a class="nav-item" href="calculator.html" title="Calculator"> <span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"> <span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Theme: Glass</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-title" data-i18n="pageCalendar">📅 Dual Calendar</div>
+
+            <!-- TODAY'S DATE BANNER -->
+            <div class="date-banner" id="date-banner">
+                <div class="date-side ds-greg">
+                    <div class="ds-type">Gregorian Calendar</div>
+                    <div class="ds-day" id="g-day">—</div>
+                    <div class="ds-month" id="g-month">—</div>
+                    <div class="ds-year" id="g-year">—</div>
+                    <div class="ds-wd" id="g-wd">—</div>
+                </div>
+                <div class="date-side ds-hijri">
+                    <div class="ds-type">Hijri Calendar — التقويم الهجري</div>
+                    <div class="ds-day" id="h-day">—</div>
+                    <div class="ds-month" id="h-month">—</div>
+                    <div class="ds-year" id="h-year">—</div>
+                    <div class="ds-wd" id="h-wd" style="font-family:'Noto Naskh Arabic',serif;font-size:14px">—</div>
+                </div>
+            </div>
+
+            <!-- 2-COLUMN: Month calendar + Events -->
+            <div class="cal-page-grid">
+
+                <!-- LEFT: Month view -->
+                <div class="glass-card">
+                    <div class="month-nav">
+                        <button class="month-nav-btn" onclick="changeMonth(-1)">◀</button>
+                        <div class="month-title" id="month-title">—</div>
+                        <button class="month-nav-btn" onclick="changeMonth(1)">▶</button>
+                    </div>
+                    <div class="month-grid" id="month-grid">
+                        <div class="cal-day-hdr">Sun</div>
+                        <div class="cal-day-hdr">Mon</div>
+                        <div class="cal-day-hdr">Tue</div>
+                        <div class="cal-day-hdr">Wed</div>
+                        <div class="cal-day-hdr">Thu</div>
+                        <div class="cal-day-hdr">Fri</div>
+                        <div class="cal-day-hdr">Sat</div>
+                    </div>
+                    <div style="font-size:10px;color:var(--text-dim);text-align:center;margin-top:.5rem" id="hijri-month-label">Hijri dates loading...</div>
+                </div>
+
+                <!-- RIGHT: Islamic events + Prayer times -->
+                <div style="display:flex;flex-direction:column;gap:1rem">
+
+                    <!-- ISLAMIC EVENTS -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="islamicEvents">🌙 Islamic Events</div>
+                        <div id="islamic-events">
+                            <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:.75rem">Loading events...</div>
+                        </div>
+                    </div>
+
+                    <!-- PRAYER TIMES (Aladhan API) -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="prayerTimes">🕌 Prayer Times Today</div>
+                        <div style="font-size:11px;color:var(--text-dim);margin-bottom:.5rem" id="pt-location">Loading...</div>
+                        <div id="prayer-times">
+                            <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:.75rem">Fetching prayer times...</div>
+                        </div>
+                        <div style="font-size:10px;color:var(--text-dim);margin-top:.5rem;text-align:center">Times based on your location · Method: Karachi</div>
+                    </div>
+
+                    <!-- CONVERT DATE TOOL -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="convertDate">🔄 Convert Date</div>
+                        <div style="font-size:11px;color:var(--text-dim);margin-bottom:.5rem">Enter any date to see both calendars</div>
+                        <div class="form-grid fg1" style="gap:8px">
+                            <div class="field-wrap">
+                                <div class="field-label">Gregorian date</div>
+                                <input class="mz-input" id="conv-date" type="date" />
+                            </div>
+                        </div>
+                        <button class="btn btn-teal" onclick="convertDate()" style="margin-top:4px">Convert →</button>
+                        <div id="conv-result" style="margin-top:.75rem;display:none;background:rgba(26,188,156,0.08);border:1px solid rgba(26,188,156,0.2);border-radius:9px;padding:10px;font-size:12px"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span>Home</a>
+        <a class="bn-item" href="income.html"> <span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"> <span class="bn-icon">📊</span>Spend</a>
+        <a class="bn-item" href="assets.html"> <span class="bn-icon">🏅</span>Assets</a>
+        <a class="bn-item" href="settings.html"> <span class="bn-icon">⚙️</span>Settings</a>
+    </nav>
+
+    <script>
+        /* ── CALENDAR LOGIC (no Firebase needed for calendar) ── */
+
+        const ALADHAN = 'https://api.aladhan.com/v1';
+        let viewYear = new Date().getFullYear();
+        let viewMonth = new Date().getMonth(); // 0-based
+        let hijriCache = {}; // cache Hijri conversions to avoid API overload
+
+        /* ── ISLAMIC EVENTS (Hijri based) ── */
+        const EVENTS = [{
+            name: 'Islamic New Year',
+            icon: '🌙',
+            month: 1,
+            day: 1
+        }, {
+            name: 'Ashura',
+            icon: '🤲',
+            month: 1,
+            day: 10
+        }, {
+            name: 'Mawlid al-Nabi ﷺ',
+            icon: '🕌',
+            month: 3,
+            day: 12
+        }, {
+            name: 'Ramadan begins',
+            icon: '🌙',
+            month: 9,
+            day: 1
+        }, {
+            name: 'Laylatul Qadr',
+            icon: '✨',
+            month: 9,
+            day: 27
+        }, {
+            name: 'Eid ul-Fitr',
+            icon: '🎉',
+            month: 10,
+            day: 1
+        }, {
+            name: 'Eid ul-Adha',
+            icon: '🐑',
+            month: 12,
+            day: 10
+        }, ];
+
+        /* ── LOAD TODAY ── */
+        async function loadToday() {
+            const now = new Date();
+            const dd = String(now.getDate()).padStart(2, '0');
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const yyyy = now.getFullYear();
+
+            document.getElementById('g-day').textContent = now.getDate();
+            document.getElementById('g-month').textContent = now.toLocaleString('en', {
+                month: 'long'
+            });
+            document.getElementById('g-year').textContent = yyyy;
+            document.getElementById('g-wd').textContent = now.toLocaleString('en', {
+                weekday: 'long'
+            });
+
+            try {
+                const res = await fetch(`${ALADHAN}/gToH/${dd}-${mm}-${yyyy}`);
+                const json = await res.json();
+                const h = json.data ? .hijri;
+                if (h) {
+                    document.getElementById('h-day').textContent = h.day;
+                    document.getElementById('h-month').textContent = h.month.en;
+                    document.getElementById('h-year').textContent = h.year + ' AH';
+                    document.getElementById('h-wd').textContent = h.weekday.ar;
+                    showIslamicEvents(parseInt(h.year), parseInt(h.month.number));
+                }
+            } catch {
+                document.getElementById('h-day').textContent = 'API unavailable';
+            }
+        }
+
+        /* ── ISLAMIC EVENTS LIST ── */
+        function showIslamicEvents(hijriYear, currentHijriMonth) {
+            const upcoming = EVENTS.filter(e => e.month >= currentHijriMonth);
+            const el = document.getElementById('islamic-events');
+            if (!upcoming.length) {
+                el.innerHTML = '<div style="color:var(--text-dim);font-size:12px">No upcoming events</div>';
+                return;
+            }
+            el.innerHTML = upcoming.map(e => `
+    <div class="event-card">
+      <div class="event-icon">${e.icon}</div>
+      <div>
+        <div class="event-name">${e.name}</div>
+        <div class="event-date">${e.day} ${monthName(e.month)} ${hijriYear} AH</div>
+      </div>
+      <div class="event-badge">${e.month===currentHijriMonth?'This month':'Upcoming'}</div>
+    </div>`).join('');
+        }
+
+        function monthName(m) {
+            const names = ['', 'Muharram', 'Safar', 'Rabi ul-Awwal', 'Rabi ul-Thani', 'Jumada ul-Awwal', 'Jumada ul-Thani', 'Rajab', 'Sha\'ban', 'Ramadan', 'Shawwal', 'Dhul Qa\'dah', 'Dhul Hijjah'];
+            return names[m] || '';
+        }
+
+        /* ── MONTH GRID ── */
+        async function buildMonthGrid() {
+            const now = new Date();
+            const todayISO = now.toISOString().slice(0, 10);
+            const firstDay = new Date(viewYear, viewMonth, 1);
+            const lastDay = new Date(viewYear, viewMonth + 1, 0);
+            const startDow = firstDay.getDay(); // 0=Sun
+
+            document.getElementById('month-title').textContent =
+                firstDay.toLocaleString('en', {
+                    month: 'long',
+                    year: 'numeric'
+                });
+
+            // Get headers
+            const grid = document.getElementById('month-grid');
+            // Clear only day cells (keep headers)
+            const cells = grid.querySelectorAll('.cal-day-cell');
+            cells.forEach(c => c.remove());
+
+            // Fill blanks for days before month start
+            for (let i = 0; i < startDow; i++) {
+                const blank = document.createElement('div');
+                blank.className = 'cal-day-cell other-month';
+                const prevD = new Date(viewYear, viewMonth, i - startDow + 1);
+                blank.innerHTML = `<div class="greg-d">${prevD.getDate()}</div>`;
+                grid.appendChild(blank);
+            }
+
+            // Fill days
+            for (let d = 1; d <= lastDay.getDate(); d++) {
+                const cell = document.createElement('div');
+                const dateISO = `${viewYear}-${String(viewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const isToday = dateISO === todayISO;
+                cell.className = 'cal-day-cell' + (isToday ? ' today' : '');
+                cell.innerHTML = `<div class="greg-d">${d}</div><div class="hijri-d" id="hd-${dateISO}">...</div>`;
+                grid.appendChild(cell);
+            }
+
+            // Fetch Hijri for visible days (batch, avoid hammering API)
+            fetchHijriForMonth(viewYear, viewMonth + 1, lastDay.getDate());
+        }
+
+        async function fetchHijriForMonth(year, month, days) {
+            // Fetch first, middle, last day to avoid too many API calls
+            const targets = [1, Math.ceil(days / 2), days];
+            for (const d of targets) {
+                const dd = String(d).padStart(2, '0'),
+                    mm = String(month).padStart(2, '0');
+                const key = `${year}-${mm}-${dd}`;
+                if (hijriCache[key]) continue;
+                try {
+                    const res = await fetch(`${ALADHAN}/gToH/${dd}-${mm}-${year}`);
+                    const j = await res.json();
+                    if (j.data ? .hijri) {
+                        hijriCache[key] = j.data.hijri.day;
+                    }
+                } catch {}
+                const el = document.getElementById('hd-' + key);
+                if (el && hijriCache[key]) el.textContent = hijriCache[key];
+            }
+            // Fill all remaining from estimated offsets
+            const ref = 1,
+                refKey = `${year}-${String(month).padStart(2,'0')}-01`;
+            if (hijriCache[refKey]) {
+                let hijriBase = parseInt(hijriCache[refKey]);
+                for (let d = 1; d <= days; d++) {
+                    const key = `${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                    const el = document.getElementById('hd-' + key);
+                    if (el) el.textContent = ((hijriBase + d - 1 - 1) % 30) + 1;
+                }
+                document.getElementById('hijri-month-label').textContent = 'Showing estimated Hijri dates. Numbers may vary ±1 day.';
+            }
+        }
+
+        window.changeMonth = (dir) => {
+            viewMonth += dir;
+            if (viewMonth > 11) {
+                viewMonth = 0;
+                viewYear++;
+            }
+            if (viewMonth < 0) {
+                viewMonth = 11;
+                viewYear--;
+            }
+            buildMonthGrid();
+        };
+
+        /* ── PRAYER TIMES ── */
+        async function loadPrayerTimes() {
+            try {
+                // Use IP-based location (Aladhan auto-detect)
+                const res = await fetch(`${ALADHAN}/timingsByCity?city=Hyderabad&country=India&method=1`);
+                const json = await res.json();
+                const t = json.data ? .timings;
+                if (!t) throw new Error('no data');
+                const prayers = [{
+                    name: 'Fajr',
+                    time: t.Fajr
+                }, {
+                    name: 'Sunrise',
+                    time: t.Sunrise
+                }, {
+                    name: 'Dhuhr',
+                    time: t.Dhuhr
+                }, {
+                    name: 'Asr',
+                    time: t.Asr
+                }, {
+                    name: 'Maghrib',
+                    time: t.Maghrib
+                }, {
+                    name: 'Isha',
+                    time: t.Isha
+                }, ];
+                const now = new Date(),
+                    nowMin = now.getHours() * 60 + now.getMinutes();
+                let nextIdx = prayers.findIndex(p => {
+                    const [h, m] = p.time.split(':');
+                    return parseInt(h) * 60 + parseInt(m) > nowMin;
+                });
+                if (nextIdx < 0) nextIdx = 0;
+                document.getElementById('pt-location').textContent = '📍 Hyderabad, India — change city in Settings';
+                document.getElementById('prayer-times').innerHTML = prayers.map((p, i) => `
+      <div class="prayer-row${i===nextIdx?' next':''}">
+        <span class="prayer-name">${i===nextIdx?'⏰ ':''}${p.name}</span>
+        <span class="prayer-time">${p.time}</span>
+      </div>`).join('');
+            } catch {
+                document.getElementById('prayer-times').innerHTML = '<div style="color:var(--text-dim);font-size:12px">Could not load prayer times. Check your connection.</div>';
+            }
+        }
+
+        /* ── CONVERT DATE TOOL ── */
+        window.convertDate = async() => {
+            const val = document.getElementById('conv-date').value;
+            if (!val) {
+                alert('Select a date first.');
+                return;
+            }
+            const [y, m, d] = val.split('-');
+            try {
+                const res = await fetch(`${ALADHAN}/gToH/${d}-${m}-${y}`);
+                const j = await res.json();
+                const h = j.data ? .hijri;
+                const g = j.data ? .gregorian;
+                if (h && g) {
+                    const el = document.getElementById('conv-result');
+                    el.style.display = 'block';
+                    el.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div style="font-size:9px;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Gregorian</div>
+            <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold-lt)">${g.day} ${g.month.en} ${g.year}</div>
+            <div style="font-size:11px;color:var(--text-dim)">${g.weekday.en}</div>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--teal-lt);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Hijri</div>
+            <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--sky-lt)">${h.day} ${h.month.en} ${h.year} AH</div>
+            <div style="font-size:11px;color:var(--text-dim);font-family:'Noto Naskh Arabic',serif">${h.weekday.ar}</div>
+          </div>
+        </div>`;
+                }
+            } catch {
+                alert('Could not convert date. Check your internet connection.');
+            }
+        };
+
+        /* ── INIT ── */
+        const t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', t);
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
+        window.setTheme = (th) => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+        };
+
+        document.getElementById('conv-date').value = new Date().toISOString().slice(0, 10);
+        const pc = document.getElementById('particles');
+        for (let i = 0; i < 24; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle ' + (i < 14 ? 'p-fire' : 'p-star');
+            p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+            pc.appendChild(p);
+        }
+
+        loadToday();
+        buildMonthGrid();
+        loadPrayerTimes();
+    </script>
+
+
+
+    <script src="../js/calendar.js"></script>
+</body>
+
+</html>
+
+</html>

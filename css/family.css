@@ -1,0 +1,70 @@
+/* ============================================================
+   MEEZAN — ميزان  |  css/family.css
+   Family Hub page styles
+   ============================================================ */
+
+.family-layout { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; align-items:start; }
+@media(max-width:1000px){ .family-layout{ grid-template-columns:1fr; } }
+
+/* Member card */
+.family-member-card {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg-row); border-radius: 12px;
+  border: 1px solid var(--bdr); padding: 11px 13px;
+  margin-bottom: 8px; transition: all 0.2s;
+  position: relative;
+}
+.family-member-card:hover { border-color: rgba(212,160,23,0.22); }
+
+/* Avatar circle */
+.fam-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700;
+  flex-shrink: 0;
+}
+.av-owner  { background: linear-gradient(135deg,#c0392b,#d4a017); }
+.av-member { background: linear-gradient(135deg,#0d7a5f,#1abc9c); }
+.av-view   { background: linear-gradient(135deg,#1a6faa,#5dade2); }
+
+/* Member info */
+.fam-info  { flex: 1; min-width: 0; }
+.fam-name  { font-size: 13px; font-weight: 600; color: var(--text); }
+.fam-email { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+.fam-spend { font-size: 11px; color: var(--text-mid); margin-top: 2px; }
+
+/* Role badge */
+.fam-badge { font-size: 9px; padding: 3px 9px; border-radius: 10px; margin-left: auto; flex-shrink: 0; }
+.fb-owner  { background:rgba(212,160,23,0.18); color:var(--gold-lt);  border:1px solid rgba(212,160,23,0.3); }
+.fb-member { background:rgba(26,188,156,0.15); color:var(--teal-lt);  border:1px solid rgba(26,188,156,0.25); }
+.fb-view   { background:rgba(255,255,255,0.07);color:var(--text-mid); border:1px solid rgba(255,255,255,0.12); }
+
+/* Remove button */
+.fam-remove {
+  position: absolute; top: 8px; right: 8px;
+  width: 20px; height: 20px; border-radius: 5px;
+  background: rgba(192,57,43,0.1); border: 1px solid rgba(192,57,43,0.2);
+  color: var(--fire-lt); font-size: 10px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: all 0.15s;
+}
+.family-member-card:hover .fam-remove { opacity: 1; }
+
+/* Permission description rows */
+.perm-row  { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+.perm-row:last-of-type { border-bottom:none; }
+.perm-badge  { font-size:9px; padding:3px 9px; border-radius:10px; flex-shrink:0; margin-top:1px; }
+.owner-badge { background:rgba(212,160,23,0.18);color:var(--gold-lt);border:1px solid rgba(212,160,23,0.3); }
+.member-badge{ background:rgba(26,188,156,0.15);color:var(--teal-lt);border:1px solid rgba(26,188,156,0.25); }
+.view-badge  { background:rgba(255,255,255,0.07);color:var(--text-mid);border:1px solid rgba(255,255,255,0.12); }
+.perm-desc   { font-size:11px; color:var(--text-mid); line-height:1.5; }
+
+/* Member spending bar */
+.ms-row  { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+.ms-row:last-child { border-bottom:none; }
+.ms-ava  { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-family:'Cinzel',serif; flex-shrink:0; }
+.ms-name { flex:1; font-size:12px; color:var(--text-mid); }
+.ms-bar-wrap { width:70px; }
+.ms-bar-track{ height:4px; border-radius:2px; background:rgba(255,255,255,0.07); overflow:hidden; }
+.ms-bar-fill { height:100%; border-radius:2px; transition:width 0.4s; }
+.ms-amt  { font-family:'Cinzel',serif; font-size:11px; color:var(--fire-lt); min-width:65px; text-align:right; }

@@ -1,0 +1,65 @@
+/* ============================================================
+   MEEZAN — ميزان  |  css/export.css
+   Export PDF/Word page styles
+   ============================================================ */
+
+.export-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 1000px) { .export-layout { grid-template-columns: 1fr; } }
+
+/* ── EXPORT OPTION CARD ── */
+.export-option {
+  background: var(--bg-row); border: 1px solid var(--bdr);
+  border-radius: 12px; padding: 1rem; margin-bottom: .75rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.export-option:hover   { border-color: var(--bdr-gold); }
+.export-option.selected {
+  border-color: var(--gold);
+  background: rgba(212,160,23,.08);
+}
+.eo-header { display: flex; align-items: center; gap: 10px; margin-bottom: .4rem; }
+.eo-icon   { font-size: 22px; }
+.eo-name   { font-family: 'Cinzel', serif; font-size: 13px; color: var(--gold-lt); letter-spacing: 1px; }
+.eo-desc   { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+/* ── INCLUDE CHECKBOX ── */
+.include-check {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; color: var(--text-mid);
+  margin-top: 6px; cursor: pointer;
+}
+.include-check input[type=checkbox] {
+  width: 14px; height: 14px;
+  accent-color: var(--teal); cursor: pointer;
+}
+
+/* ── EXPORT BUTTON ── */
+.export-btn-big {
+  width: 100%; padding: 14px; border-radius: 12px; border: none;
+  font-family: 'Cinzel', serif; font-size: 13px;
+  font-weight: 600; letter-spacing: 2px;
+  cursor: pointer; transition: all 0.2s; margin-top: .75rem;
+}
+
+/* ── REPORT PREVIEW BOX ── */
+.export-preview {
+  background: rgba(255,255,255,.04); border: 1px solid var(--bdr);
+  border-radius: 10px; padding: 1rem;
+  font-size: 11px; color: var(--text-dim);
+  line-height: 1.7; font-family: 'Cinzel', serif;
+}
+.preview-row {
+  display: flex; justify-content: space-between;
+  padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.preview-row:last-child { border-bottom: none; font-weight: 600; color: var(--gold-lt); }
+
+/* ── PROGRESS BAR ── */
+.progress-bar-wrap { display: none; margin-top: .75rem; }
+.progress-track    { height: 6px; border-radius: 3px; background: rgba(255,255,255,.07); overflow: hidden; }
+.progress-fill     { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--teal-deep), var(--teal)); width: 0%; transition: width .3s; }

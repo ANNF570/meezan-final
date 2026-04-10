@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/notifications.html
+     Notification settings — 13 customisable alerts
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Notifications</title>
+
+    <link rel="icon" href="../assets/favicon.png">
+
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+    <style>
+        .notif-layout {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 1.25rem;
+            align-items: start;
+        }
+        
+        @media(max-width:1000px) {
+            .notif-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .notif-group-title {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 1rem 0 .4rem;
+            padding-bottom: .4rem;
+            border-bottom: 1px solid var(--bdr);
+        }
+        
+        .notif-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: var(--bg-row);
+            border: 1px solid var(--bdr);
+            margin-bottom: 6px;
+            transition: all 0.2s;
+        }
+        
+        .notif-item:hover {
+            border-color: rgba(212, 160, 23, .2);
+        }
+        
+        .notif-icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .notif-info {
+            flex: 1;
+        }
+        
+        .notif-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .notif-desc {
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+        
+        .notif-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .notif-time {
+            font-size: 10px;
+            color: var(--text-dim);
+            background: var(--bg-input);
+            border: 1px solid var(--bdr);
+            border-radius: 6px;
+            padding: 3px 7px;
+            cursor: pointer;
+        }
+        
+        .save-bar {
+            position: sticky;
+            bottom: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: .875rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .save-bar-msg {
+            font-size: 12px;
+            color: var(--teal-lt);
+        }
+        
+        .pending-count {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            color: var(--gold-lt);
+        }
+    </style>
+</head>
+
+<body data-page="notifications">
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="avatar" id="mob-avatar">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap"><svg viewBox="0 0 60 60" fill="none"><rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/><ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)"/><circle cx="30" cy="10" r="4" fill="url(#gg)"/><rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/><line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/><ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)"/><line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/><ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0c040"/><stop offset="100%" stop-color="#a07010"/></linearGradient></defs></svg></div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <a class="nav-item" href="dashboard.html" title="Dashboard"><span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
+                <a class="nav-item" href="income.html" title="Income"> <span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
+                <a class="nav-item" href="expenses.html" title="Expenses"> <span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"> <span class="nav-icon">🏅</span><span class="nav-label" data-i18n="assets">Wealth &amp; Assets</span></a>
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"> <span class="nav-icon">🕌</span><span class="nav-label" data-i18n="zakat">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html" title="Calendar"> <span class="nav-icon">📅</span><span class="nav-label" data-i18n="calendar">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"> <span class="nav-icon">🌙</span><span class="nav-label" data-i18n="ramadan">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html" title="Sadaqah"> <span class="nav-icon">🤲</span><span class="nav-label" data-i18n="sadaqah">Sadaqah Log</span></a>
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html" title="Reports"><span class="nav-icon">📈</span><span class="nav-label" data-i18n="reports">Charts &amp; Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"> <span class="nav-icon">📤</span><span class="nav-label" data-i18n="exportPdf">Export PDF / Word</span></a>
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html" title="Family"> <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label" data-i18n="family">Family Hub</span></a>
+                <a class="nav-item active" href="notifications.html" title="Notifications"><span class="nav-icon">🔔</span><span class="nav-label" data-i18n="notifications">Notifications</span></a>
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html" title="Language"> <span class="nav-icon">🌐</span><span class="nav-label" data-i18n="language">Language</span></a>
+                <a class="nav-item" href="calculator.html" title="Calculator"><span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"> <span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Theme: Glass</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-title" data-i18n="pageNotifications">🔔 Notifications</div>
+
+            <!-- PERMISSION BANNER -->
+            <div id="notif-permission-banner" style="display:none"></div>
+
+            <div class="notif-layout">
+                <!-- LEFT: All notifications -->
+                <div class="glass-card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.25rem">
+                        <div class="card-title" style="margin:0" data-i18n="allNotifications">All Notifications</div>
+                        <div style="display:flex;gap:6px">
+                            <button class="btn btn-ghost" style="width:auto;padding:5px 12px;font-size:10px" onclick="toggleAll(true)" data-i18n="enableAll">Enable All</button>
+                            <button class="btn btn-ghost" style="width:auto;padding:5px 12px;font-size:10px" onclick="toggleAll(false)" data-i18n="disableAll">Disable All</button>
+                        </div>
+                    </div>
+                    <div id="notif-list">
+                        <!-- built by JS -->
+                    </div>
+                </div>
+
+                <!-- RIGHT: Info + Quick stats -->
+                <div style="display:flex;flex-direction:column;gap:1rem">
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="notifSummary">📊 Summary</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                            <div class="sum-item">
+                                <div class="sum-label" data-i18n="enabledLabel">Enabled</div>
+                                <div class="sum-value" id="notif-enabled-count" style="color:var(--teal-lt)">0</div>
+                            </div>
+                            <div class="sum-item">
+                                <div class="sum-label" data-i18n="disabledLabel">Disabled</div>
+                                <div class="sum-value" id="notif-disabled-count" style="color:var(--text-dim)">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="howItWorks">ℹ️ How it works</div>
+                        <div style="font-size:12px;color:var(--text-mid);line-height:1.8;margin-bottom:.75rem">
+                            Real browser notifications fire <strong style="color:var(--gold-lt)">at the exact time you set</strong>. No server needed — they work as long as the browser is open.<br><br> · <strong style="color:var(--teal-lt)">Budget alerts</strong>                            fire automatically when you add expenses<br> · <strong style="color:var(--gold-lt)">Timed reminders</strong> fire at your scheduled time each day<br> · <strong style="color:var(--teal-lt)">Zakat</strong> alerts when nisab is
+                            met
+                            <br> · <strong style="color:var(--sky-lt)">Islamic reminders</strong> follow the Hijri calendar
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- STICKY SAVE BAR -->
+            <div class="save-bar">
+                <div>
+                    <div style="font-size:12px;font-weight:600;color:var(--text)">Notification Settings</div>
+                    <div class="save-bar-msg" id="notif-save-msg">Changes not saved yet</div>
+                </div>
+                <button class="btn btn-teal" style="width:auto;padding:10px 24px" onclick="saveNotifications()" data-i18n="saveAllSettings">✓ Save All Settings</button>
+            </div>
+
+        </main>
+    </div>
+
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span><span data-i18n="dashboard">Home</span></a>
+        <a class="bn-item" href="income.html"> <span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"> <span class="bn-icon">📊</span><span data-i18n="expenses">Spend</span></a>
+        <a class="bn-item" href="assets.html"> <span class="bn-icon">🏅</span><span data-i18n="assets">Assets</span></a>
+        <a class="bn-item" href="settings.html"> <span class="bn-icon">⚙️</span>Settings</a>
+    </nav>
+
+    <script type="module" src="../js/notifications.js"></script>
+    <script>
+        const pc = document.getElementById('particles');
+        for (let i = 0; i < 18; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle ' + (i < 10 ? 'p-fire' : 'p-star');
+            p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+            pc.appendChild(p);
+        }
+        const t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', t);
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
+        window.setTheme = (th) => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+        };
+    </script>
+
+    <!-- Language system -->
+    <script src="../js/i18n.js"></script>
+</body>
+
+</html>

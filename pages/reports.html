@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/reports.html
+     Charts & Reports — monthly trends, category breakdown,
+     income vs expenses, net worth over time
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Charts & Reports</title>
+
+    <link rel="icon" href="../assets/favicon.png">
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <link rel="stylesheet" href="../css/reports.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+</head>
+
+<body data-page="reports">
+
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="avatar" id="mob-avatar">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap">
+                    <svg viewBox="0 0 60 60" fill="none">
+          <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
+          <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)"/>
+          <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
+          <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
+          <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)"/>
+          <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+          <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)"/>
+          <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#f0c040"/>
+            <stop offset="100%" stop-color="#a07010"/>
+          </linearGradient></defs>
+        </svg>
+                </div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <a class="nav-item" href="dashboard.html" title="Dashboard"> <span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
+                <a class="nav-item" href="income.html" title="Income"> <span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
+                <a class="nav-item" href="expenses.html" title="Expenses"> <span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"> <span class="nav-icon">🏅</span><span class="nav-label" data-i18n="assets">Wealth & Assets</span></a>
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"> <span class="nav-icon">🕌</span><span class="nav-label" data-i18n="zakat">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html" title="Calendar"> <span class="nav-icon">📅</span><span class="nav-label" data-i18n="calendar">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"> <span class="nav-icon">🌙</span><span class="nav-label" data-i18n="ramadan">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html" title="Sadaqah"> <span class="nav-icon">🤲</span><span class="nav-label" data-i18n="sadaqah">Sadaqah Log</span></a>
+                <span class="nav-section">Reports</span>
+                <a class="nav-item active" href="reports.html" title="Reports"><span class="nav-icon">📈</span><span class="nav-label" data-i18n="reports">Charts & Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"> <span class="nav-icon">📤</span><span class="nav-label" data-i18n="exportPdf">Export PDF / Word</span></a>
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html" title="Family"> <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label" data-i18n="family">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html" title="Notifications"> <span class="nav-icon">🔔</span><span class="nav-label" data-i18n="notifications">Notifications</span></a>
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html" title="Language"> <span class="nav-icon">🌐</span><span class="nav-label" data-i18n="language">Language</span></a>
+                <a class="nav-item" href="calculator.html" title="Calculator"> <span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"> <span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass  active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Theme: Glass</div>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main-content">
+            <div class="section-title" data-i18n="pageReports">📈 Charts & Reports</div>
+
+            <!-- PERIOD SELECTOR -->
+            <div class="glass-card" style="padding:.875rem">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+                    <span style="font-size:11px;color:var(--text-dim);font-family:'Cinzel',serif;letter-spacing:1px" data-i18n="periodLabel">PERIOD</span>
+                    <div class="cat-filters" style="margin:0;flex:1">
+                        <div class="cf" onclick="setPeriod(3,this)" data-i18n="threeMonths">3 months</div>
+                        <div class="cf on" onclick="setPeriod(6,this)" data-i18n="sixMonths">6 months</div>
+                        <div class="cf" onclick="setPeriod(12,this)" data-i18n="oneYear">1 year</div>
+                        <div class="cf" onclick="setPeriod(0,this)" data-i18n="allTime2">All time</div>
+                    </div>
+                    <a href="export.html" class="btn btn-ghost" style="width:auto;padding:7px 14px;font-size:11px;text-decoration:none">📤 Export</a>
+                </div>
+            </div>
+
+            <!-- SUMMARY CARDS -->
+            <div class="metrics-grid">
+                <div class="metric-card mc-heaven">
+                    <div class="mc-label" data-i18n="totalIncomeLabel">Total income</div>
+                    <div class="mc-value" id="r-income">₹0</div>
+                    <div class="mc-change up" id="r-income-sub">All sources</div>
+                </div>
+                <div class="metric-card mc-fire">
+                    <div class="mc-label" data-i18n="totalExpensesLabel">Total expenses</div>
+                    <div class="mc-value" id="r-expense">₹0</div>
+                    <div class="mc-change down" id="r-expense-sub">All categories</div>
+                </div>
+                <div class="metric-card mc-gold">
+                    <div class="mc-label" data-i18n="netSavedLabel">Net saved</div>
+                    <div class="mc-value" id="r-net">₹0</div>
+                    <div class="mc-change up" id="r-net-sub">Income − expenses</div>
+                </div>
+                <div class="metric-card mc-sky">
+                    <div class="mc-label" data-i18n="savingsRate">Savings rate</div>
+                    <div class="mc-value" id="r-rate">0%</div>
+                    <div class="mc-change up" data-i18n="ofTotalIncome">Of total income</div>
+                </div>
+            </div>
+
+            <!-- CHARTS ROW 1 -->
+            <div class="grid-2">
+
+                <!-- Income vs Expenses bar chart -->
+                <div class="glass-card">
+                    <div class="card-title" data-i18n="incomeVsExpenses">📊 Income vs Expenses</div>
+                    <div id="chart-inc-exp" style="display:flex;align-items:flex-end;gap:6px;height:145px;padding:4px 4px 0;overflow-x:auto;margin-bottom:8px;min-height:145px"></div>
+                    <div style="display:flex;gap:12px;margin-top:6px;padding:0 4px">
+                        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-dim,#888)">
+                            <div style="width:10px;height:10px;border-radius:2px;background:#1abc9c"></div>Income</div>
+                        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-dim,#888)">
+                            <div style="width:10px;height:10px;border-radius:2px;background:#e74c3c"></div>Expenses</div>
+                    </div>
+                </div>
+
+                <!-- Category pie (CSS-based) -->
+                <div class="glass-card" style="overflow:visible">
+                    <div class="card-title" data-i18n="spendingByCategory">🥧 Spending by Category</div>
+                    <div id="cat-pie-wrap" style="overflow:visible;padding:8px 0"></div>
+                </div>
+            </div>
+
+            <!-- CHARTS ROW 2 -->
+            <div class="grid-2">
+
+                <!-- Net worth trend -->
+                <div class="glass-card">
+                    <div class="card-title" data-i18n="cumulativeNetSaved">📈 Cumulative Net Saved</div>
+                    <div id="chart-networth" style="display:flex;align-items:flex-end;gap:5px;height:130px;padding:4px 4px 0;overflow-x:auto;min-height:130px"></div>
+                </div>
+
+                <!-- Top expenses table -->
+                <div class="glass-card">
+                    <div class="card-title" data-i18n="topExpenses">🔥 Top Expenses</div>
+                    <div id="top-expenses"></div>
+                </div>
+            </div>
+
+            <!-- INCOME BREAKDOWN -->
+            <div class="glass-card">
+                <div class="card-title" data-i18n="incomeBreakdown">💰 Income Breakdown by Type</div>
+                <div id="income-breakdown"></div>
+            </div>
+
+            <!-- WEEKLY VIEW -->
+            <div class="glass-card">
+                <div class="card-title" data-i18n="weeklyView">📅 Weekly View</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                    <button onclick="changeWeek(-1)" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);
+                        color:var(--text);padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer">‹</button>
+                    <div style="text-align:center">
+                        <div style="font-size:13px;font-weight:600" id="weekly-title">—</div>
+                        <div style="font-size:10px;color:var(--teal-lt)" id="weekly-subtitle"></div>
+                    </div>
+                    <button onclick="changeWeek(1)" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);
+                        color:var(--text);padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer">›</button>
+                </div>
+                <div id="weekly-stats" style="display:flex;justify-content:space-around;padding:10px;
+                    background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:12px"></div>
+                <div id="weekly-view-content"></div>
+            </div>
+
+            <!-- SPENDING DEEP DIVE -->
+            <div class="glass-card">
+                <div class="card-title" data-i18n="spendingDeepDive">🔍 Spending Deep-Dive by Category</div>
+                <div id="spending-deepdive"></div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span><span data-i18n="dashboard">Home</span></a>
+        <a class="bn-item" href="income.html"> <span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"> <span class="bn-icon">📊</span><span data-i18n="expenses">Spend</span></a>
+        <a class="bn-item active" href="reports.html"> <span class="bn-icon">📈</span><span data-i18n="reports">Reports</span></a>
+        <a class="bn-item" href="settings.html"> <span class="bn-icon">⚙️</span>Settings</a>
+    </nav>
+
+    <script type="module" src="../js/reports.js"></script>
+    <script>
+        /* particles + theme */
+        const pc = document.getElementById('particles');
+        for (let i = 0; i < 24; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle ' + (i < 14 ? 'p-fire' : 'p-star');
+            p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+            pc.appendChild(p);
+        }
+        const t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', t);
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
+        window.setTheme = (th) => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+        };
+    </script>
+
+    <!-- Language system -->
+    <script src="../js/i18n.js"></script>
+</body>
+
+</html>
+
+</html>

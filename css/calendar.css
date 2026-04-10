@@ -1,0 +1,94 @@
+/* ============================================================
+   MEEZAN — ميزان  |  css/calendar.css
+   Dual Calendar page styles
+   ============================================================ */
+
+.cal-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+@media (max-width: 1000px) { .cal-page-grid { grid-template-columns: 1fr; } }
+
+/* ── TODAY BANNER ── */
+.date-banner {
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border); border-radius: 16px;
+  padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1rem; position: relative;
+}
+.date-banner::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,160,23,.5), rgba(26,188,156,.35), transparent);
+}
+
+.date-side  { border-radius: 12px; padding: 1.25rem; }
+.ds-greg    { background: rgba(139,26,0,.15);  border: 1px solid rgba(192,57,43,.2); }
+.ds-hijri   { background: rgba(13,64,96,.20);  border: 1px solid rgba(26,188,156,.2); }
+.ds-type    { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: .4rem; }
+.ds-greg  .ds-type  { color: var(--amber); }
+.ds-hijri .ds-type  { color: var(--teal-lt); }
+.ds-day     { font-family: 'Cinzel', serif; font-size: 52px; font-weight: 700; line-height: 1; }
+.ds-greg  .ds-day   { color: var(--gold-lt); }
+.ds-hijri .ds-day   { color: var(--sky-lt); }
+.ds-month   { font-size: 16px; font-weight: 600; margin-top: .25rem; color: var(--text); }
+.ds-year    { font-size: 13px; color: var(--text-mid); margin-top: 2px; }
+.ds-wd      { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+/* ── MONTH CALENDAR ── */
+.month-nav {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem;
+}
+.month-nav-btn {
+  background: var(--bg-row); border: 1px solid var(--bdr);
+  border-radius: 8px; color: var(--text-mid);
+  font-size: 14px; padding: 6px 12px; cursor: pointer; transition: all 0.15s;
+}
+.month-nav-btn:hover { border-color: var(--bdr-gold); color: var(--gold-lt); }
+.month-title { font-family: 'Cinzel', serif; font-size: 14px; color: var(--gold-lt); letter-spacing: 1px; }
+
+.month-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; margin-top: .5rem; }
+.cal-day-hdr {
+  text-align: center; font-size: 9px; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: .5px; padding: 5px 2px;
+}
+.cal-day-cell {
+  text-align: center; padding: 6px 3px; border-radius: 7px;
+  cursor: default; font-size: 12px; color: var(--text-mid);
+  transition: all 0.15s; min-height: 42px;
+}
+.cal-day-cell .greg-d  { font-weight: 600; color: var(--text); font-size: 12px; }
+.cal-day-cell .hijri-d { font-size: 9px; color: var(--text-dim); margin-top: 1px; }
+.cal-day-cell.today    { background: rgba(212,160,23,.15); border: 1px solid rgba(212,160,23,.4); }
+.cal-day-cell.today .greg-d { color: var(--gold-lt); }
+.cal-day-cell.other-month .greg-d { color: var(--text-dim); }
+.cal-day-cell:hover    { background: rgba(255,255,255,.05); }
+
+/* ── EVENTS ── */
+.event-card {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg-row); border-radius: 10px;
+  border: 1px solid var(--bdr); padding: 10px 13px; margin-bottom: 7px;
+}
+.event-icon  { font-size: 22px; flex-shrink: 0; }
+.event-name  { font-size: 13px; font-weight: 600; color: var(--text); }
+.event-date  { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+.event-badge {
+  margin-left: auto; font-size: 9px; padding: 3px 8px; border-radius: 10px;
+  background: rgba(26,188,156,.12); color: var(--teal-lt);
+  border: 1px solid rgba(26,188,156,.2); flex-shrink: 0;
+}
+
+/* ── PRAYER TIMES ── */
+.prayer-row {
+  display: flex; justify-content: space-between;
+  padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 12px;
+}
+.prayer-row:last-child { border-bottom: none; }
+.prayer-name { color: var(--text-mid); }
+.prayer-time { font-family: 'Cinzel', serif; color: var(--gold-lt); font-size: 12px; }
+.prayer-row.next {
+  background: rgba(212,160,23,.08); padding: 7px 10px;
+  border-radius: 8px; border: 1px solid rgba(212,160,23,.2); margin-bottom: 3px;
+}
+.prayer-row.next .prayer-name { color: var(--gold-lt); font-weight: 600; }

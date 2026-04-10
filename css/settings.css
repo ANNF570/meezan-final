@@ -1,0 +1,97 @@
+/* ============================================================
+   MEEZAN — ميزان  |  css/settings.css
+   Settings page styles
+   ============================================================ */
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 1000px) { .settings-grid { grid-template-columns: 1fr; } }
+
+/* ── SECTION DIVIDER ── */
+.settings-section-title {
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 600;
+  color: var(--gold); letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: .75rem; padding-bottom: .4rem;
+  border-bottom: 1px solid var(--bdr);
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── AVATAR UPLOAD ── */
+.avatar-upload {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--fire), var(--gold), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 28px; font-weight: 700;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: all 0.2s; margin: 0 auto .75rem;
+}
+.avatar-upload:hover   { opacity: 0.85; }
+.avatar-upload-hint   {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,.5); font-size: 9px; text-align: center;
+  padding: 3px; color: #fff; text-transform: uppercase; letter-spacing: .5px;
+}
+
+/* ── THEME PICKER ── */
+.theme-picker-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+.theme-option {
+  border-radius: 12px; overflow: hidden;
+  cursor: pointer; border: 2px solid transparent; transition: all 0.2s;
+}
+.theme-option.selected { border-color: var(--gold); }
+.theme-option:hover    { border-color: rgba(212,160,23,.5); }
+.theme-preview  { height: 52px; position: relative; }
+.tp-glass-prev  { background: linear-gradient(135deg, #0b0f18, rgba(255,255,255,.1) 60%, #d4a017); }
+.tp-hell-prev   { background: linear-gradient(135deg, #0e0505, #8b1a00 60%, #c0392b); }
+.tp-heaven-prev { background: linear-gradient(135deg, #030f18, #0a4060 60%, #1abc9c); }
+.tp-marble-prev { background: linear-gradient(135deg, #f0ede8, #e8e4df 60%, #d4a017); }
+.theme-opt-label {
+  background: var(--bg-card); padding: 6px 10px;
+  font-size: 11px; color: var(--text-mid);
+  font-family: 'Cinzel', serif; letter-spacing: 1px;
+}
+.theme-option.selected .theme-opt-label { color: var(--gold-lt); }
+
+/* ── LANGUAGE SELECTOR (compact) ── */
+.lang-select-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+.lang-opt {
+  padding: 7px 6px; border-radius: 8px; text-align: center;
+  background: var(--bg-row); border: 1px solid var(--bdr);
+  cursor: pointer; transition: all 0.2s;
+}
+.lang-opt:hover, .lang-opt.selected {
+  background: rgba(212,160,23,.12); border-color: var(--bdr-gold);
+}
+.lang-n  { font-size: 12px; font-weight: 600; color: var(--text); }
+.lang-v  { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+/* ── DANGER ZONE ── */
+.danger-zone {
+  background: rgba(192,57,43,.08);
+  border: 1px solid rgba(192,57,43,.2);
+  border-radius: 12px; padding: 1rem;
+}
+.danger-title {
+  font-size: 11px; color: var(--fire-lt);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: .75rem;
+}
+
+/* ── NOTIFICATION TOGGLE ROWS ── */
+.notif-setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.notif-setting-row:last-child { border-bottom: none; }
+.nsr-left { display: flex; flex-direction: column; gap: 2px; }
+.nsr-name { font-size: 13px; color: var(--text); }
+.nsr-desc { font-size: 10px; color: var(--text-dim); }
+
+/* ── SAVE MESSAGE ── */
+.save-msg {
+  font-size: 12px; color: var(--teal-lt);
+  text-align: center; min-height: 18px; margin-top: 6px;
+}

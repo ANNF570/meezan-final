@@ -1,0 +1,65 @@
+/* ============================================================
+   MEEZAN — ميزان  |  css/calculator.css
+   Calculator page styles
+   ============================================================ */
+
+.calc-page { max-width: 380px; margin: 0 auto; }
+
+/* ── DISPLAY ── */
+.calc-display {
+  background: var(--bg-input);
+  border: 1px solid var(--bdr-gold);
+  border-radius: 14px;
+  padding: 1.25rem;
+  text-align: right;
+  margin-bottom: .875rem;
+}
+.calc-expr   { font-size: 13px; color: var(--text-dim); min-height: 20px; margin-bottom: 4px; word-break: break-all; }
+.calc-result { font-family: 'Cinzel', serif; font-size: 32px; color: var(--gold-lt); word-break: break-all; min-height: 44px; }
+.calc-memory { font-size: 10px; color: var(--teal-lt); margin-top: 4px; min-height: 16px; }
+
+/* ── BUTTON GRID ── */
+.calc-grid   { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.calc-btn {
+  padding: 14px 8px; border-radius: 10px;
+  border: 1px solid var(--bdr);
+  background: var(--bg-row); color: var(--text);
+  font-family: 'Cinzel', serif; font-size: 16px;
+  cursor: pointer; transition: all 0.15s; text-align: center;
+  user-select: none;
+}
+.calc-btn:hover  { background: rgba(255,255,255,.07); border-color: var(--bdr-gold); }
+.calc-btn:active { transform: scale(0.94); }
+
+/* Button variants */
+.calc-btn.op   { color: var(--gold-lt);  background: rgba(212,160,23,.10); }
+.calc-btn.eq   { background: linear-gradient(135deg, var(--teal-deep), var(--teal)); color: #fff; border-color: var(--teal); }
+.calc-btn.clr  { background: rgba(192,57,43,.20); color: var(--fire-lt); border-color: rgba(192,57,43,.30); }
+.calc-btn.del  { background: rgba(212,160,23,.12); color: var(--gold-lt); }
+.calc-btn.zk   { background: rgba(26,188,156,.12); color: var(--teal-lt); border-color: var(--bdr-teal); font-size: 11px; letter-spacing: .5px; }
+.calc-btn.pct  { color: var(--sky-lt); background: rgba(93,173,226,.10); }
+.calc-btn.span2{ grid-column: span 2; }
+
+/* ── SECTION LABELS ── */
+.calc-section-title {
+  font-size: 10px; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: .5rem;
+}
+
+/* ── ZAKAT RESULT BOX ── */
+.zakat-result-box {
+  background: rgba(26,188,156,.08);
+  border: 1px solid rgba(26,188,156,.25);
+  border-radius: 12px; padding: 1rem; margin-top: 1rem;
+}
+.zr-title { font-size: 10px; color: var(--teal); text-transform: uppercase; letter-spacing: 1px; margin-bottom: .5rem; }
+.zr-row   { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+.zr-label { color: var(--text-mid); }
+.zr-val   { font-family: 'Cinzel', serif; font-weight: 600; }
+
+@media (max-width: 767px) {
+  .calc-page   { max-width: 100%; }
+  .calc-result { font-size: 24px; }
+  .calc-btn    { padding: 11px 6px; font-size: 14px; }
+}

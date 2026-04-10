@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/ramadan.html
+     Ramadan Mode — Iftar budget, Suhoor tracker, charity goals
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Ramadan Mode</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+    <style>
+        .ramadan-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            align-items: start;
+        }
+        @media(max-width:1000px) {
+            .ramadan-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Crescent banner */
+        .ramadan-banner {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(13,64,96,0.4), rgba(26,188,156,0.15));
+            border: 1px solid rgba(26,188,156,0.25);
+            border-radius: 16px;
+            margin-bottom: 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .ramadan-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(93,173,226,0.15) 0%, transparent 70%);
+        }
+        .rm-icon  { font-size: 48px; margin-bottom: .5rem; }
+        .rm-title { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: var(--gold-lt); letter-spacing: 3px; }
+        .rm-sub   { font-size: 13px; color: var(--teal-lt); margin-top: 4px; }
+        .rm-date  { font-family: 'Noto Naskh Arabic', serif; font-size: 16px; color: var(--sky-lt); margin-top: 6px; }
+
+        /* Day counter ring */
+        .day-ring-wrap {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem; background: var(--bg-row);
+            border-radius: 12px; border: 1px solid var(--bdr); margin-bottom: .75rem;
+        }
+        .day-ring { position: relative; width: 70px; height: 70px; flex-shrink: 0; }
+        .day-ring svg { transform: rotate(-90deg); }
+        .day-num {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700; color: var(--gold-lt);
+        }
+
+        /* Budget progress bars */
+        .budget-item { padding: 10px; background: var(--bg-row); border-radius: 10px; border: 1px solid var(--bdr); margin-bottom: 7px; }
+        .bi-header   { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .bi-label    { font-size: 12px; font-weight: 600; color: var(--text); }
+        .bi-spent    { font-family: 'Cinzel', serif; font-size: 12px; }
+        .bi-track    { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.07); overflow: hidden; }
+        .bi-fill     { height: 100%; border-radius: 3px; transition: width 0.4s; }
+        .bi-meta     { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+
+        /* Charity goal */
+        .charity-goal { padding: 1rem; background: rgba(26,188,156,0.08); border: 1px solid rgba(26,188,156,0.22); border-radius: 12px; }
+        .cg-title     { font-size: 11px; color: var(--teal); text-transform: uppercase; letter-spacing: 1px; margin-bottom: .5rem; }
+        .cg-progress  { text-align: center; margin: .75rem 0; }
+        .cg-amount    { font-family: 'Cinzel', serif; font-size: 28px; color: var(--gold-lt); }
+        .cg-target    { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+        .cg-bar-track { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.07); overflow: hidden; margin: .5rem 0; }
+        .cg-bar-fill  { height: 100%; border-radius: 4px; background: linear-gradient(90deg,var(--teal-deep),var(--teal)); transition: width 0.5s; }
+
+        /* ── MODE TABS ── */
+        .mode-tabs {
+            display: flex; gap: 0;
+            border-radius: 12px; overflow: hidden;
+            border: 1px solid var(--bdr);
+            margin-bottom: 1.25rem;
+            background: var(--bg-row);
+            position: relative;
+            z-index: 100;
+        }
+        .mode-tab {
+            flex: 1; padding: 12px 16px; text-align: center;
+            cursor: pointer;
+            font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1px;
+            color: var(--text-dim);
+            transition: all 0.25s;
+            border: none; background: transparent;
+            position: relative; z-index: 100;
+            -webkit-user-select: none; user-select: none;
+            text-decoration: none;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .mode-tab.active {
+            background: rgba(212,160,23,0.12);
+            color: var(--gold-lt);
+            font-weight: 700;
+            border-bottom: 2px solid var(--gold);
+        }
+        .mode-tab:hover:not(.active) { background: rgba(255,255,255,0.05); color: var(--text); }
+
+        /* Prayer & Meal times */
+        .pt-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 10px; border-radius: 8px;
+            background: var(--bg-row); border: 1px solid var(--bdr); margin-bottom: 5px;
+        }
+        .pt-name { font-size: 12px; color: var(--text-mid); display: flex; align-items: center; gap: 6px; }
+        .pt-time { font-family: 'Cinzel', serif; font-size: 13px; color: var(--gold-lt); }
+        .pt-row.highlight { border-color: rgba(212,160,23,0.4); background: rgba(212,160,23,0.08); }
+        .pt-row.highlight .pt-name { color: var(--gold-lt); font-weight: 600; }
+
+        /* Ensure bg layers never block clicks */
+        .bg-scene, .bg-fire-glow, .bg-heaven-glow, .particles { pointer-events: none; }
+    </style>
+</head>
+
+<body data-page="ramadan">
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="avatar" id="mob-avatar">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap">
+                    <svg viewBox="0 0 60 60" fill="none">
+                        <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
+                        <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)"/>
+                        <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
+                        <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
+                        <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+                        <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)"/>
+                        <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+                        <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)"/>
+                        <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#f0c040"/>
+                            <stop offset="100%" stop-color="#a07010"/>
+                        </linearGradient></defs>
+                    </svg>
+                </div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <a class="nav-item" href="dashboard.html"><span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
+                <a class="nav-item" href="income.html"><span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
+                <a class="nav-item" href="expenses.html"><span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
+                <a class="nav-item" href="assets.html"><span class="nav-icon">🏅</span><span class="nav-label" data-i18n="assets">Wealth &amp; Assets</span></a>
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html"><span class="nav-icon">🕌</span><span class="nav-label" data-i18n="zakat">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html"><span class="nav-icon">📅</span><span class="nav-label" data-i18n="calendar">Dual Calendar</span></a>
+                <a class="nav-item active" href="ramadan.html"><span class="nav-icon">🌙</span><span class="nav-label" data-i18n="ramadan">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html"><span class="nav-icon">🤲</span><span class="nav-label" data-i18n="sadaqah">Sadaqah Log</span></a>
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html"><span class="nav-icon">📈</span><span class="nav-label" data-i18n="reports">Charts &amp; Reports</span></a>
+                <a class="nav-item" href="export.html"><span class="nav-icon">📤</span><span class="nav-label" data-i18n="exportPdf">Export PDF / Word</span></a>
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html"><span class="nav-icon">👨‍👩‍👧</span><span class="nav-label" data-i18n="family">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html"><span class="nav-icon">🔔</span><span class="nav-label" data-i18n="notifications">Notifications</span></a>
+                <span class="nav-section">Settings</span>
+                <a class="nav-item" href="language.html"><span class="nav-icon">🌐</span><span class="nav-label" data-i18n="language">Language</span></a>
+                <a class="nav-item" href="calculator.html"><span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span></a>
+                <a class="nav-item" href="settings.html"><span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell"  title="hell"  onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Theme: Glass</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <!-- PAGE TITLE + TABS -->
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:.75rem;flex-wrap:wrap">
+                <div class="section-title" style="margin:0">🌙 Ramadan Mode</div>
+            </div>
+
+            <!-- TABS: Ramadan stays here, Bakrid goes to bakrid.html -->
+            <div class="mode-tabs">
+                <button class="mode-tab active" type="button">🌙 Ramadan Mode</button>
+                <a class="mode-tab" href="bakrid.html">🐑 Bakrid / Eid al-Adha</a>
+            </div>
+
+            <!-- RAMADAN BANNER -->
+            <div class="ramadan-banner">
+                <div class="rm-icon">🌙</div>
+                <div class="rm-title">RAMADAN MODE</div>
+                <div class="rm-sub">رَمَضَان مُبَارَك — Blessed Ramadan</div>
+                <div class="rm-date" id="hijri-date">Loading Hijri date...</div>
+            </div>
+
+            <div class="ramadan-grid">
+
+                <!-- LEFT -->
+                <div style="display:flex;flex-direction:column;gap:1rem">
+
+                    <!-- DAY COUNTER -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="ramadanProgress">📅 Ramadan Progress</div>
+                        <div class="day-ring-wrap">
+                            <div class="day-ring">
+                                <svg width="70" height="70" viewBox="0 0 70 70">
+                                    <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="6"/>
+                                    <circle cx="35" cy="35" r="28" fill="none" stroke="url(#rg)" stroke-width="6"
+                                        stroke-dasharray="176" id="ramadan-circle" stroke-dashoffset="176" stroke-linecap="round"/>
+                                    <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%" stop-color="#d4a017"/>
+                                        <stop offset="100%" stop-color="#1abc9c"/>
+                                    </linearGradient></defs>
+                                </svg>
+                                <div class="day-num" id="ramadan-day">0</div>
+                            </div>
+                            <div>
+                                <div style="font-size:13px;font-weight:600;color:var(--text)">Day <span id="r-day-num">—</span> of 30</div>
+                                <div style="font-size:11px;color:var(--text-dim);margin-top:3px" id="r-day-sub">Set Ramadan start date below</div>
+                                <div style="font-size:11px;color:var(--teal-lt);margin-top:3px" id="r-days-left"></div>
+                            </div>
+                        </div>
+                        <div class="form-grid fg1" style="margin-top:.5rem">
+                            <div class="field-wrap">
+                                <div class="field-label">Ramadan start date (this year)</div>
+                                <input class="mz-input" id="r-start" type="date" oninput="updateRamadanDay()" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRAYER & MEAL TIMES -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="suhoorIftar">🕌 Suhoor &amp; Iftar Times</div>
+                        <div style="font-size:11px;color:var(--text-dim);margin-bottom:.5rem" id="pt-city">Hyderabad, India</div>
+                        <div id="ramadan-times">
+                            <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:.5rem">Loading...</div>
+                        </div>
+                        <div style="font-size:10px;color:var(--text-dim);margin-top:.5rem">Via Aladhan API · Change city in Settings</div>
+                    </div>
+
+                    <!-- SPECIAL NIGHTS -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="specialNights">✨ Special Nights</div>
+                        <div style="display:flex;flex-direction:column;gap:6px">
+                            <div style="display:flex;justify-content:space-between;padding:8px 10px;border-radius:8px;background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.2)">
+                                <span style="font-size:12px;color:var(--gold-lt)">✨ Laylatul Qadr (27th)</span>
+                                <span style="font-size:12px;color:var(--text-dim)" id="layla-date">—</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;padding:8px 10px;border-radius:8px;background:rgba(26,188,156,0.08);border:1px solid rgba(26,188,156,0.18)">
+                                <span style="font-size:12px;color:var(--teal-lt)">🎉 Eid ul-Fitr (1 Shawwal)</span>
+                                <span style="font-size:12px;color:var(--text-dim)" id="eid-date">—</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end left -->
+
+                <!-- RIGHT -->
+                <div style="display:flex;flex-direction:column;gap:1rem">
+
+                    <!-- BUDGET TRACKER -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="ramadanBudget">🍽️ Ramadan Budget Tracker</div>
+
+                        <div class="budget-item">
+                            <div class="bi-header">
+                                <div class="bi-label">🍽️ Iftar expenses</div>
+                                <div class="bi-spent" style="color:var(--fire-lt)" id="iftar-spent">₹0</div>
+                            </div>
+                            <div class="bi-track">
+                                <div class="bi-fill" id="iftar-bar" style="width:0%;background:linear-gradient(90deg,#c0392b,#e74c3c)"></div>
+                            </div>
+                            <div class="bi-meta"><span>Budget: <span id="iftar-budget">₹5,000</span></span><span id="iftar-pct">0%</span></div>
+                        </div>
+
+                        <div class="budget-item">
+                            <div class="bi-header">
+                                <div class="bi-label">🌙 Suhoor expenses</div>
+                                <div class="bi-spent" style="color:var(--amber)" id="suhoor-spent">₹0</div>
+                            </div>
+                            <div class="bi-track">
+                                <div class="bi-fill" id="suhoor-bar" style="width:0%;background:linear-gradient(90deg,#e67e22,#f39c12)"></div>
+                            </div>
+                            <div class="bi-meta"><span>Budget: <span id="suhoor-budget">₹2,000</span></span><span id="suhoor-pct">0%</span></div>
+                        </div>
+
+                        <div class="budget-item">
+                            <div class="bi-header">
+                                <div class="bi-label">🤲 Charity this Ramadan</div>
+                                <div class="bi-spent" style="color:var(--teal-lt)" id="charity-spent">₹0</div>
+                            </div>
+                            <div class="bi-track">
+                                <div class="bi-fill" id="charity-bar" style="width:0%;background:linear-gradient(90deg,var(--teal-deep),var(--teal))"></div>
+                            </div>
+                            <div class="bi-meta"><span>Goal: <span id="charity-budget">₹10,000</span></span><span id="charity-pct">0%</span></div>
+                        </div>
+
+                        <!-- Set budgets -->
+                        <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bdr)">
+                            <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem">Set Ramadan budgets</div>
+                            <div class="form-grid fg3">
+                                <div class="field-wrap">
+                                    <div class="field-label">Iftar (₹)</div>
+                                    <input class="mz-input" id="b-iftar" type="number" value="5000" oninput="updateBudgets()" />
+                                </div>
+                                <div class="field-wrap">
+                                    <div class="field-label">Suhoor (₹)</div>
+                                    <input class="mz-input" id="b-suhoor" type="number" value="2000" oninput="updateBudgets()" />
+                                </div>
+                                <div class="field-wrap">
+                                    <div class="field-label">Charity (₹)</div>
+                                    <input class="mz-input" id="b-charity" type="number" value="10000" oninput="updateBudgets()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LAYLATUL QADR CHARITY GOAL -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="laylatulQadr">✨ Laylatul Qadr Goal</div>
+                        <div class="charity-goal">
+                            <div class="cg-title">🤲 Charity goal for last 10 nights</div>
+                            <div class="cg-progress">
+                                <div class="cg-amount" id="cg-current">₹0</div>
+                                <div class="cg-target">of <span id="cg-target">₹10,000</span> goal</div>
+                            </div>
+                            <div class="cg-bar-track">
+                                <div class="cg-bar-fill" id="cg-bar" style="width:0%"></div>
+                            </div>
+                            <div style="display:flex;gap:8px;margin-top:.5rem">
+                                <input class="mz-input" id="cg-add" type="number" placeholder="Add charity (₹)" style="flex:1" />
+                                <button class="btn btn-teal" style="width:auto;padding:8px 14px;font-size:11px" onclick="addCharityGoal()">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DUAS REMINDER -->
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="dailyReminders">📖 Daily Reminders</div>
+                        <div style="display:flex;flex-direction:column;gap:6px">
+                            <div style="padding:9px 11px;border-radius:8px;background:rgba(26,188,156,0.07);border:1px solid rgba(26,188,156,0.15);font-size:12px;color:var(--text-mid);line-height:1.6">
+                                <strong style="color:var(--teal-lt)">Iftar Dua:</strong><br>
+                                <span style="font-family:'Noto Naskh Arabic',serif;font-size:14px;color:var(--sky-lt)">اللَّهُمَّ لَكَ صُمْتُ وَبِكَ آمَنْتُ</span><br>
+                                <span style="font-size:11px;color:var(--text-dim)">"O Allah, for You I have fasted, and in You I believe"</span>
+                            </div>
+                            <div style="padding:9px 11px;border-radius:8px;background:rgba(212,160,23,0.07);border:1px solid rgba(212,160,23,0.15);font-size:12px;color:var(--text-mid);line-height:1.6">
+                                <strong style="color:var(--gold-lt)">Suhoor reminder:</strong><br>
+                                <span style="font-size:11px;color:var(--text-dim)">Make niyyah (intention) for fasting before Fajr. Even a sip of water counts as Suhoor.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end right -->
+
+            </div>
+            <!-- end ramadan-grid -->
+
+        </main>
+    </div>
+
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span><span data-i18n="dashboard">Home</span></a>
+        <a class="bn-item" href="income.html"><span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"><span class="bn-icon">📊</span><span data-i18n="expenses">Spend</span></a>
+        <a class="bn-item" href="assets.html"><span class="bn-icon">🏅</span><span data-i18n="assets">Assets</span></a>
+        <a class="bn-item" href="settings.html"><span class="bn-icon">⚙️</span>Settings</a>
+    </nav>
+
+    <script>
+        const fmt = n => '₹' + Math.round(n || 0).toLocaleString('en-IN');
+        let charityTotal = 0, layla_target = 10000;
+
+        /* ── Theme ── */
+        const _t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', _t);
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === _t));
+        document.getElementById('theme-label').textContent = 'Theme: ' + _t.charAt(0).toUpperCase() + _t.slice(1);
+        window.setTheme = (th) => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+        };
+
+        /* ── Ramadan day counter ── */
+        window.updateRamadanDay = () => {
+            const start = document.getElementById('r-start').value;
+            if (!start) return;
+            const sd  = new Date(start), now = new Date();
+            const day = Math.floor((now - sd) / 86400000) + 1;
+            const d   = Math.max(1, Math.min(day, 30));
+            const left = 30 - d;
+            const offset = 176 - Math.round(d / 30 * 176);
+            document.getElementById('ramadan-circle').setAttribute('stroke-dashoffset', offset);
+            document.getElementById('ramadan-day').textContent = d;
+            document.getElementById('r-day-num').textContent = d;
+            document.getElementById('r-day-sub').textContent = d <= 30 ? 'of Ramadan' : 'Ramadan complete — Eid Mubarak!';
+            document.getElementById('r-days-left').textContent = left > 0 ? left + ' days until Eid' : '🎉 Eid Mubarak!';
+            const layla = new Date(sd); layla.setDate(layla.getDate() + 26);
+            document.getElementById('layla-date').textContent = layla.toLocaleDateString('en', { day:'numeric', month:'short' });
+            const eid = new Date(sd); eid.setDate(eid.getDate() + 30);
+            document.getElementById('eid-date').textContent = eid.toLocaleDateString('en', { day:'numeric', month:'short' });
+            localStorage.setItem('meezan-ramadan-start', start);
+        };
+
+        /* ── Budget tracker ── */
+        window.updateBudgets = () => {
+            const ib = parseFloat(document.getElementById('b-iftar').value) || 5000;
+            const sb = parseFloat(document.getElementById('b-suhoor').value) || 2000;
+            const cb = parseFloat(document.getElementById('b-charity').value) || 10000;
+            layla_target = cb;
+            document.getElementById('iftar-budget').textContent  = fmt(ib);
+            document.getElementById('suhoor-budget').textContent = fmt(sb);
+            document.getElementById('charity-budget').textContent = fmt(cb);
+            document.getElementById('cg-target').textContent     = fmt(cb);
+            updateCharityBar();
+        };
+
+        /* ── Charity goal ── */
+        window.addCharityGoal = () => {
+            const v = parseFloat(document.getElementById('cg-add').value) || 0;
+            if (v <= 0) return;
+            charityTotal += v;
+            document.getElementById('cg-current').textContent = fmt(charityTotal);
+            document.getElementById('cg-add').value = '';
+            updateCharityBar();
+            const spent = document.getElementById('charity-spent');
+            if (spent) spent.textContent = fmt(charityTotal);
+            const cb  = parseFloat(document.getElementById('b-charity').value) || 10000;
+            const pct = Math.min(Math.round(charityTotal / cb * 100), 100);
+            document.getElementById('charity-bar').style.width = pct + '%';
+            document.getElementById('charity-pct').textContent = pct + '%';
+        };
+        function updateCharityBar() {
+            const pct = layla_target > 0 ? Math.min(Math.round(charityTotal / layla_target * 100), 100) : 0;
+            document.getElementById('cg-bar').style.width = pct + '%';
+        }
+
+        /* ── Prayer times via Aladhan ── */
+        async function loadPrayerTimes() {
+            try {
+                const r = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Hyderabad&country=India&method=1');
+                const j = await r.json();
+                const t = j.data?.timings;
+                if (!t) throw 0;
+                document.getElementById('ramadan-times').innerHTML = [
+                    { icon:'🌙', name:'Suhoor ends (Fajr)', time:t.Fajr,    key:'fajr'    },
+                    { icon:'☀️', name:'Sunrise',             time:t.Sunrise, key:'sunrise'  },
+                    { icon:'🕛', name:'Dhuhr',               time:t.Dhuhr,   key:'dhuhr'   },
+                    { icon:'🕔', name:'Asr',                 time:t.Asr,     key:'asr'     },
+                    { icon:'🌅', name:'Iftar (Maghrib)',      time:t.Maghrib, key:'maghrib' },
+                    { icon:'🌃', name:'Isha',                time:t.Isha,    key:'isha'    },
+                ].map(p => `
+                    <div class="pt-row ${p.key==='maghrib'||p.key==='fajr'?'highlight':''}">
+                        <div class="pt-name"><span>${p.icon}</span> ${p.name}</div>
+                        <div class="pt-time">${p.time}</div>
+                    </div>`).join('');
+            } catch {
+                document.getElementById('ramadan-times').innerHTML = '<div style="color:var(--text-dim);font-size:12px;text-align:center">Could not load times</div>';
+            }
+        }
+
+        /* ── Hijri date ── */
+        async function loadHijriDate() {
+            const now = new Date();
+            const dd = String(now.getDate()).padStart(2,'0'),
+                  mm = String(now.getMonth()+1).padStart(2,'0'),
+                  yyyy = now.getFullYear();
+            try {
+                const r = await fetch(`https://api.aladhan.com/v1/gToH/${dd}-${mm}-${yyyy}`);
+                const j = await r.json();
+                const h = j.data?.hijri;
+                if (h) document.getElementById('hijri-date').textContent = h.day + ' ' + h.month.en + ' ' + h.year + ' AH';
+            } catch {}
+        }
+
+        /* ── Particles ── */
+        const pc = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle p-star';
+            p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+            pc.appendChild(p);
+        }
+
+        /* ── Init ── */
+        const saved = localStorage.getItem('meezan-ramadan-start');
+        if (saved) {
+            document.getElementById('r-start').value = saved;
+            updateRamadanDay();
+        }
+        loadHijriDate();
+        loadPrayerTimes();
+    </script>
+</body>
+</html>

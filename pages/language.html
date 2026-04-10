@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     MEEZAN — ميزان  |  pages/language.html
+     Language selector — 21 languages, live preview, RTL support
+     ============================================================ -->
+<html lang="en" data-theme="glass">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meezan — Language</title>
+    <link rel="icon" href="../assets/favicon.png">
+
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/phone.css" />
+    <link rel="stylesheet" href="../css/tablet.css" />
+    <link rel="stylesheet" href="../css/sidebar.css" />
+    <script src="../js/i18n.js"></script>
+    <script type="module" src="../js/i18n-loader.js"></script>
+    <style>
+        .lang-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 1.25rem;
+            align-items: start;
+        }
+        
+        @media(max-width:1000px) {
+            .lang-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* Language card grid */
+        
+        .lang-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        
+        @media(max-width:700px) {
+            .lang-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .lang-card {
+            padding: 10px 8px;
+            border-radius: 10px;
+            text-align: center;
+            background: var(--bg-row);
+            border: 1.5px solid var(--bdr);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .lang-card:hover {
+            background: rgba(212, 160, 23, 0.08);
+            border-color: rgba(212, 160, 23, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .lang-card.selected {
+            background: rgba(212, 160, 23, 0.12);
+            border-color: var(--gold);
+            box-shadow: 0 0 12px rgba(212, 160, 23, 0.15);
+        }
+        
+        .lang-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 7px;
+            font-size: 10px;
+            color: var(--gold-lt);
+        }
+        
+        .lang-flag {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        
+        .lc-native {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 2px;
+            line-height: 1.3;
+        }
+        
+        .lc-english {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+        
+        .rtl-badge {
+            display: inline-block;
+            font-size: 8px;
+            color: var(--fire-lt);
+            background: rgba(192, 57, 43, 0.15);
+            border-radius: 3px;
+            padding: 1px 4px;
+            margin-top: 2px;
+        }
+        /* Applied badge */
+        
+        .applied-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(26, 188, 156, 0.08);
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            margin-bottom: 1rem;
+        }
+        
+        .applied-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--teal-lt);
+            flex-shrink: 0;
+        }
+        /* Live preview box */
+        
+        .lang-preview {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--bdr);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 8px;
+        }
+        
+        .prev-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .prev-field {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .prev-label {
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+            font-family: 'Cinzel', serif;
+        }
+        
+        .prev-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .prev-value.gold {
+            color: var(--gold-lt);
+            font-family: 'Cinzel', serif;
+        }
+        
+        .prev-value.teal {
+            color: var(--teal-lt);
+        }
+        
+        .prev-value.small {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-mid);
+        }
+        /* Translation status bars */
+        
+        .ts-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .ts-bar-track {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.07);
+            overflow: hidden;
+        }
+        
+        .ts-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+
+<body data-page="language">
+
+    <div class="bg-scene">
+        <div class="bg-fire-glow"></div>
+        <div class="bg-heaven-glow"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <header class="mobile-header">
+        <div class="mobile-brand">MEEZAN</div>
+        <div class="mobile-notif-area">
+            <div class="avatar" id="mob-avatar">M</div>
+        </div>
+    </header>
+
+    <div class="app-wrap">
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-svg-wrap">
+                    <svg viewBox="0 0 60 60" fill="none">
+                        <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
+                        <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)"/>
+                        <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
+                        <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
+                        <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+                        <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)"/>
+                        <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+                        <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)"/>
+                        <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#f0c040"/>
+                            <stop offset="100%" stop-color="#a07010"/>
+                        </linearGradient></defs>
+                    </svg>
+                </div>
+                <div class="logo-name">MEEZAN</div>
+                <div class="logo-arabic">ميزان</div>
+            </div>
+            <nav class="nav">
+                <span class="nav-section">Main</span>
+                <a class="nav-item" href="dashboard.html" title="Dashboard"><span class="nav-icon">⚖️</span><span class="nav-label">Dashboard</span></a>
+                <a class="nav-item" href="income.html" title="Income"><span class="nav-icon">💰</span><span class="nav-label">Income</span></a>
+                <a class="nav-item" href="expenses.html" title="Expenses"><span class="nav-icon">📊</span><span class="nav-label">Expenses</span></a>
+                <a class="nav-item" href="assets.html" title="Assets"><span class="nav-icon">🏅</span><span class="nav-label">Wealth & Assets</span></a>
+                <span class="nav-section">Islamic</span>
+                <a class="nav-item" href="zakat.html" title="Zakat"><span class="nav-icon">🕌</span><span class="nav-label">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html" title="Calendar"><span class="nav-icon">📅</span><span class="nav-label">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html" title="Ramadan"><span class="nav-icon">🌙</span><span class="nav-label">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html" title="Sadaqah"><span class="nav-icon">🤲</span><span class="nav-label">Sadaqah Log</span></a>
+                <span class="nav-section">Reports</span>
+                <a class="nav-item" href="reports.html" title="Reports"><span class="nav-icon">📈</span><span class="nav-label">Charts & Reports</span></a>
+                <a class="nav-item" href="export.html" title="Export"><span class="nav-icon">📤</span><span class="nav-label">Export PDF / Word</span></a>
+                <span class="nav-section">Social</span>
+                <a class="nav-item" href="family.html" title="Family"><span class="nav-icon">👨‍👩‍👧</span><span class="nav-label">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html" title="Notifications"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></a>
+                <span class="nav-section">Settings</span>
+                <a class="nav-item active" href="language.html" title="Language"><span class="nav-icon">🌐</span><span class="nav-label">Language</span></a>
+                <a class="nav-item" href="calculator.html" title="Calculator"><span class="nav-icon">🧮</span><span class="nav-label">Calculator</span></a>
+                <a class="nav-item" href="settings.html" title="Settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="theme-pills">
+                    <div class="theme-pill tp-glass active" title="glass" onclick="setTheme('glass')"></div>
+                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
+                    <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
+                </div>
+                <div class="theme-label" id="theme-label">Theme: Glass</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-title" data-i18n="pageLanguage">🌐 Language</div>
+
+            <!-- Currently applied badge -->
+            <div class="applied-badge" id="applied-badge">
+                <div class="applied-dot"></div>
+                <div style="flex:1">
+                    <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Currently applied</div>
+                    <div style="font-size:13px;font-weight:600;color:var(--teal-lt)" id="applied-label">✓ English (Default)</div>
+                </div>
+                <div style="font-size:11px;color:var(--text-dim)">Saved across all devices</div>
+            </div>
+
+            <div class="lang-layout">
+
+                <!-- LEFT: Language selector -->
+                <div style="display:flex;flex-direction:column;gap:1rem">
+
+                    <div class="glass-card">
+                        <div class="card-title" data-i18n="languageLabel">🌍 Select Your Language</div>
+                        <div class="lang-grid" id="lang-grid">
+                            <!-- built by JS -->
+                        </div>
+                        <div id="rtl-indicator" style="display:none;margin-top:.75rem;border-radius:8px;padding:8px 12px;font-size:11px"></div>
+                    </div>
+
+                    <button class="btn btn-teal" onclick="applySelected()" style="font-size:14px;padding:14px">
+                        ✓ Apply Language
+                    </button>
+                    <div style="font-size:11px;color:var(--text-dim);text-align:center;margin-top:-8px">
+                        Language is saved and applied to all pages automatically
+                    </div>
+                    <div id="lang-apply-msg" style="text-align:center;font-size:12px;min-height:18px"></div>
+
+                </div>
+
+                <!-- RIGHT: Preview + info -->
+                <div style="display:flex;flex-direction:column;gap:1rem">
+
+                    <!-- Live preview -->
+                    <div class="glass-card">
+                        <div class="card-title">👁️ Live Preview</div>
+                        <div class="lang-preview" id="lang-preview-box">
+                            <div class="prev-row">
+                                <div class="prev-field">
+                                    <div class="prev-label">App name</div>
+                                    <div class="prev-value gold" id="prev-name">Meezan</div>
+                                </div>
+                                <div class="prev-field">
+                                    <div class="prev-label">Greeting</div>
+                                    <div class="prev-value teal" id="prev-bismillah">Bismillah</div>
+                                </div>
+                                <div class="prev-field">
+                                    <div class="prev-label">Dashboard label</div>
+                                    <div class="prev-value" id="prev-dashboard">Dashboard</div>
+                                </div>
+                                <div class="prev-field">
+                                    <div class="prev-label">Add income button</div>
+                                    <div class="prev-value teal" id="prev-add-income">+ Add Income</div>
+                                </div>
+                                <div class="prev-field">
+                                    <div class="prev-label">Zakat note</div>
+                                    <div class="prev-value small" id="prev-zakat-note">Only gold and silver count for Zakat.</div>
+                                </div>
+                                <div style="display:flex;gap:8px;margin-top:4px">
+                                    <div style="flex:1;background:rgba(26,188,156,0.12);border:1px solid rgba(26,188,156,0.2);border-radius:8px;padding:8px;text-align:center;font-size:12px;color:var(--teal-lt)" id="prev-save">Save</div>
+                                    <div style="flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--bdr);border-radius:8px;padding:8px;text-align:center;font-size:12px;color:var(--text-dim)" id="prev-cancel">Cancel</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RTL / LTR info -->
+                    <div class="glass-card">
+                        <div class="card-title">↔️ RTL / LTR Layout</div>
+                        <div style="font-size:12px;color:var(--text-mid);line-height:1.8">
+                            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px">
+                                <span style="color:var(--fire-lt)">←</span>
+                                <div><strong style="color:var(--text)">RTL (Right to Left):</strong> Arabic, Urdu, Persian — the entire page layout flips automatically. Sidebar moves right, text aligns right.</div>
+                            </div>
+                            <div style="display:flex;align-items:flex-start;gap:8px">
+                                <span style="color:var(--teal-lt)">→</span>
+                                <div><strong style="color:var(--text)">LTR (Left to Right):</strong> All other languages — normal layout.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Translation status -->
+                    <div class="glass-card">
+                        <div class="card-title">📊 Translation Status</div>
+                        <div id="translation-status">
+                            <div style="color:var(--text-dim);font-size:12px">Loading...</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <nav class="bottom-nav">
+        <a class="bn-item" href="dashboard.html"><span class="bn-icon">⚖️</span>Home</a>
+        <a class="bn-item" href="income.html"><span class="bn-icon">💰</span>Income</a>
+        <a class="bn-item" href="expenses.html"><span class="bn-icon">📊</span>Spend</a>
+        <a class="bn-item" href="assets.html"><span class="bn-icon">🏅</span>Assets</a>
+        <a class="bn-item active" href="settings.html"><span class="bn-icon">⚙️</span>Settings</a>
+    </nav>
+
+    <script type="module" src="../js/language.js"></script>
+
+    <script>
+        const pc = document.getElementById('particles');
+        for (let i = 0; i < 22; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle ' + (i < 13 ? 'p-fire' : 'p-star');
+            p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
+            pc.appendChild(p);
+        }
+        const t = localStorage.getItem('meezan-theme') || 'glass';
+        document.documentElement.setAttribute('data-theme', t);
+        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
+        window.setTheme = (th) => {
+            document.documentElement.setAttribute('data-theme', th);
+            localStorage.setItem('meezan-theme', th);
+            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
+            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
+        };
+    </script>
+
+</body>
+
+</html>
