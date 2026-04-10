@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Meezan — Group Expenses</title>
     <link rel="icon" href="../assets/favicon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0f172a">
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/themes.css" />
     <link rel="stylesheet" href="../css/phone.css" />
@@ -24,115 +26,58 @@
             gap: 1.25rem;
             align-items: start;
         }
-        
-        @media(max-width:1000px) {
-            .groups-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-        
+        @media(max-width:1000px) { .groups-layout { grid-template-columns: 1fr; } }
+
         .split-layout {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
             gap: 1.25rem;
             align-items: start;
         }
-        
-        @media(max-width:900px) {
-            .split-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-        
+        @media(max-width:900px) { .split-layout { grid-template-columns: 1fr; } }
+
         .group-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 14px;
-            border-radius: 12px;
-            background: var(--bg-row);
-            border: 1px solid var(--bdr);
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 14px; border-radius: 12px;
+            background: var(--bg-row); border: 1px solid var(--bdr);
+            margin-bottom: 8px; cursor: pointer; transition: all 0.2s;
         }
-        
-        .group-card:hover {
-            border-color: rgba(212, 160, 23, .35);
-            background: rgba(212, 160, 23, 0.05);
-        }
-        
+        .group-card:hover { border-color: rgba(212,160,23,.35); background: rgba(212,160,23,0.05); }
+
         .group-icon-box {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: rgba(212, 160, 23, 0.12);
-            border: 1px solid rgba(212, 160, 23, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            flex-shrink: 0;
+            width: 44px; height: 44px; border-radius: 12px;
+            background: rgba(212,160,23,0.12); border: 1px solid rgba(212,160,23,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0;
         }
-        
         .member-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: rgba(93, 173, 226, 0.1);
-            border: 1px solid rgba(93, 173, 226, 0.25);
-            font-size: 12px;
-            color: var(--sky-lt);
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 4px 10px; border-radius: 20px;
+            background: rgba(93,173,226,0.1); border: 1px solid rgba(93,173,226,0.25);
+            font-size: 12px; color: var(--sky-lt);
         }
-        
         .member-tag button {
-            background: none;
-            border: none;
-            color: var(--fire-lt);
-            cursor: pointer;
-            font-size: 11px;
-            padding: 0;
-            line-height: 1;
+            background: none; border: none; color: var(--fire-lt);
+            cursor: pointer; font-size: 11px; padding: 0; line-height: 1;
         }
-        
         .exp-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 12px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, .04);
-            border: 1px solid rgba(255, 255, 255, .06);
-            margin-bottom: 5px;
-            font-size: 12px;
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 12px; border-radius: 10px;
+            background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
+            margin-bottom: 5px; font-size: 12px;
         }
-        
         .settle-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 10px;
-            background: rgba(26, 188, 156, 0.06);
-            border: 1px solid rgba(26, 188, 156, 0.2);
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 10px;
+            background: rgba(26,188,156,0.06); border: 1px solid rgba(26,188,156,0.2);
             margin-bottom: 6px;
         }
-        
-        .settle-arrow {
-            color: var(--teal-lt);
-            font-size: 16px;
-            font-weight: 700;
-        }
-        
+        .settle-arrow { color: var(--teal-lt); font-size: 16px; font-weight: 700; }
         .share-section {
-            background: rgba(212, 160, 23, 0.06);
-            border: 1px solid rgba(212, 160, 23, 0.2);
-            border-radius: 12px;
-            padding: 14px;
-            margin-top: .75rem;
+            background: rgba(212,160,23,0.06); border: 1px solid rgba(212,160,23,0.2);
+            border-radius: 12px; padding: 14px; margin-top: .75rem;
         }
+        .bg-scene, .bg-fire-glow, .bg-heaven-glow, .particles { pointer-events: none; }
     </style>
 </head>
 
@@ -175,30 +120,30 @@
             </div>
             <nav class="nav">
                 <span class="nav-section">Main</span>
-                <a class="nav-item" href="dashboard.html" title="Dashboard"><span class="nav-icon">⚖️</span><span class="nav-label">Dashboard</span></a>
-                <a class="nav-item" href="income.html" title="Income"><span class="nav-icon">💰</span><span class="nav-label">Income</span></a>
-                <a class="nav-item" href="expenses.html" title="Expenses"><span class="nav-icon">📊</span><span class="nav-label">Expenses</span></a>
-                <a class="nav-item" href="assets.html" title="Assets"><span class="nav-icon">🏅</span><span class="nav-label">Wealth & Assets</span></a>
+                <a class="nav-item" href="dashboard.html"><span class="nav-icon">⚖️</span><span class="nav-label">Dashboard</span></a>
+                <a class="nav-item" href="income.html"><span class="nav-icon">💰</span><span class="nav-label">Income</span></a>
+                <a class="nav-item" href="expenses.html"><span class="nav-icon">📊</span><span class="nav-label">Expenses</span></a>
+                <a class="nav-item" href="assets.html"><span class="nav-icon">🏅</span><span class="nav-label">Wealth &amp; Assets</span></a>
                 <span class="nav-section">Islamic</span>
-                <a class="nav-item" href="zakat.html" title="Zakat"><span class="nav-icon">🕌</span><span class="nav-label">Zakat Calculator</span></a>
-                <a class="nav-item" href="calendar.html" title="Calendar"><span class="nav-icon">📅</span><span class="nav-label">Dual Calendar</span></a>
-                <a class="nav-item" href="ramadan.html" title="Ramadan"><span class="nav-icon">🌙</span><span class="nav-label">Ramadan Mode</span></a>
-                <a class="nav-item" href="sadaqah.html" title="Sadaqah"><span class="nav-icon">🤲</span><span class="nav-label">Sadaqah Log</span></a>
+                <a class="nav-item" href="zakat.html"><span class="nav-icon">🕌</span><span class="nav-label">Zakat Calculator</span></a>
+                <a class="nav-item" href="calendar.html"><span class="nav-icon">📅</span><span class="nav-label">Dual Calendar</span></a>
+                <a class="nav-item" href="ramadan.html"><span class="nav-icon">🌙</span><span class="nav-label">Ramadan Mode</span></a>
+                <a class="nav-item" href="sadaqah.html"><span class="nav-icon">🤲</span><span class="nav-label">Sadaqah Log</span></a>
                 <span class="nav-section">Reports</span>
-                <a class="nav-item" href="reports.html" title="Reports"><span class="nav-icon">📈</span><span class="nav-label">Charts & Reports</span></a>
-                <a class="nav-item" href="export.html" title="Export"><span class="nav-icon">📤</span><span class="nav-label">Export PDF / Word</span></a>
+                <a class="nav-item" href="reports.html"><span class="nav-icon">📈</span><span class="nav-label">Charts &amp; Reports</span></a>
+                <a class="nav-item" href="export.html"><span class="nav-icon">📤</span><span class="nav-label">Export PDF / Word</span></a>
                 <span class="nav-section">Social</span>
-                <a class="nav-item active" href="family.html" title="Family"><span class="nav-icon">👨‍👩‍👧</span><span class="nav-label">Family Hub</span></a>
-                <a class="nav-item" href="notifications.html" title="Notifications"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></a>
+                <a class="nav-item active" href="family.html"><span class="nav-icon">👨‍👩‍👧</span><span class="nav-label">Family Hub</span></a>
+                <a class="nav-item" href="notifications.html"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></a>
                 <span class="nav-section">Settings</span>
-                <a class="nav-item" href="language.html" title="Language"><span class="nav-icon">🌐</span><span class="nav-label">Language</span></a>
-                <a class="nav-item" href="calculator.html" title="Calculator"><span class="nav-icon">🧮</span><span class="nav-label">Calculator</span></a>
-                <a class="nav-item" href="settings.html" title="Settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+                <a class="nav-item" href="language.html"><span class="nav-icon">🌐</span><span class="nav-label">Language</span></a>
+                <a class="nav-item" href="calculator.html"><span class="nav-icon">🧮</span><span class="nav-label">Calculator</span></a>
+                <a class="nav-item" href="settings.html"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
             </nav>
             <div class="sidebar-bottom">
                 <div class="theme-pills">
                     <div class="theme-pill tp-glass active" title="glass" onclick="setTheme('glass')"></div>
-                    <div class="theme-pill tp-hell" title="hell" onclick="setTheme('hell')"></div>
+                    <div class="theme-pill tp-hell"   title="hell"   onclick="setTheme('hell')"></div>
                     <div class="theme-pill tp-heaven" title="heaven" onclick="setTheme('heaven')"></div>
                     <div class="theme-pill tp-marble" title="marble" onclick="setTheme('marble')"></div>
                 </div>
@@ -208,7 +153,7 @@
 
         <main class="main-content">
 
-            <!-- JOIN BANNER (shown when arriving via invite link) -->
+            <!-- JOIN BANNER -->
             <div id="join-banner" style="display:none"></div>
 
             <!-- BREADCRUMB -->
@@ -223,7 +168,6 @@
 
             <!-- ══ GROUP LIST PANEL ══ -->
             <div id="groups-list-panel">
-
                 <div class="groups-layout">
 
                     <!-- LEFT: Create group -->
@@ -253,9 +197,7 @@
                                 <div class="field-label">Description (optional)</div>
                                 <input class="mz-input" id="new-group-desc" placeholder="e.g. 8 friends trip to Delhi, April 2026" />
                             </div>
-                            <button class="btn btn-gold" id="create-group-btn" onclick="createGroup()">
-                                + Create Group
-                            </button>
+                            <button class="btn btn-gold" id="create-group-btn" onclick="createGroup()">+ Create Group</button>
                             <div id="create-group-msg" style="font-size:12px;min-height:16px;margin-top:6px;text-align:center"></div>
                         </div>
 
@@ -263,25 +205,29 @@
                         <div class="glass-card" style="margin-top:1rem">
                             <div class="card-title">ℹ️ How it works</div>
                             <div style="font-size:12px;color:var(--text-mid);line-height:1.8">
-                                · <strong style="color:var(--gold-lt)">Create</strong> a group for any trip or event<br> · <strong style="color:var(--teal-lt)">Add members</strong> by name (no login needed)<br> · <strong style="color:var(--sky-lt)">Log expenses</strong>                                — who paid, who owes<br> · <strong style="color:var(--amber)">View settlement</strong> — exact who pays whom<br> · <strong style="color:var(--gold-lt)">Share link</strong> via WhatsApp to anyone<br> · <strong style="color:var(--teal-lt)">Import</strong>                                your share to Meezan Expenses
+                                · <strong style="color:var(--gold-lt)">Create</strong> a group for any trip or event<br>
+                                · <strong style="color:var(--teal-lt)">Add members</strong> by name (no login needed)<br>
+                                · <strong style="color:var(--sky-lt)">Log expenses</strong> — who paid, who owes<br>
+                                · <strong style="color:var(--amber)">View settlement</strong> — exact who pays whom<br>
+                                · <strong style="color:var(--gold-lt)">Mark Paid</strong> once money is transferred<br>
+                                · <strong style="color:var(--teal-lt)">Share link</strong> via WhatsApp to anyone
                             </div>
                         </div>
                     </div>
 
-                    <!-- RIGHT: Your groups list -->
+                    <!-- RIGHT: Groups list -->
                     <div>
                         <div class="glass-card">
                             <div class="card-title">📋 Your Groups</div>
                             <div id="group-list">
-                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:1.5rem">
-                                    Loading groups...
-                                </div>
+                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:1.5rem">Loading groups...</div>
                             </div>
                         </div>
                     </div>
 
                 </div>
             </div>
+            <!-- end groups-list-panel -->
 
             <!-- ══ GROUP DETAIL PANEL ══ -->
             <div id="group-detail-panel" style="display:none">
@@ -303,26 +249,28 @@
 
                 <!-- ACTION BUTTONS -->
                 <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
-                    <button id="btn-mark-complete" onclick="markGroupComplete()" style="padding:8px 14px;border-radius:10px;background:rgba(26,188,156,.12);
+                    <button id="btn-mark-complete" onclick="markGroupComplete()"
+                        style="padding:8px 14px;border-radius:10px;background:rgba(26,188,156,.12);
                                border:1px solid rgba(26,188,156,.3);color:var(--teal-lt);
                                font-size:11px;cursor:pointer;font-family:inherit">
                         ✅ Mark Complete
                     </button>
-                    <button id="btn-reopen" onclick="reopenGroup()" style="display:none;
-                        padding:8px 14px;border-radius:10px;background:rgba(243,156,18,.12);
-                        border:1px solid rgba(243,156,18,.3);color:var(--amber);
-                        font-size:11px;cursor:pointer;font-family:inherit">
+                    <button id="btn-reopen" onclick="reopenGroup()"
+                        style="display:none;padding:8px 14px;border-radius:10px;
+                               background:rgba(243,156,18,.12);border:1px solid rgba(243,156,18,.3);
+                               color:var(--amber);font-size:11px;cursor:pointer;font-family:inherit">
                         🔄 Reopen
                     </button>
-                    <button id="btn-import-expenses" id="btn-import-expenses" onclick="importGroupToExpenses()" style="display:none;
-                        padding:8px 14px;border-radius:10px;background:rgba(212,160,23,.12);
-                        border:1px solid rgba(212,160,23,.3);color:var(--gold-lt);
-                        font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">
+                    <button id="btn-import-expenses" onclick="importGroupToExpenses()"
+                        style="display:none;padding:8px 14px;border-radius:10px;
+                               background:rgba(212,160,23,.12);border:1px solid rgba(212,160,23,.3);
+                               color:var(--gold-lt);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">
                         📥 Import to My Expenses
                     </button>
-                    <button id="btn-delete-group" onclick="deleteGroup()" style="margin-left:auto;padding:8px 14px;
-                        border-radius:10px;background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.2);
-                        color:var(--fire-lt);font-size:11px;cursor:pointer;font-family:inherit">
+                    <button id="btn-delete-group" onclick="deleteGroup()"
+                        style="margin-left:auto;padding:8px 14px;border-radius:10px;
+                               background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.2);
+                               color:var(--fire-lt);font-size:11px;cursor:pointer;font-family:inherit">
                         🗑️ Delete Group
                     </button>
                 </div>
@@ -353,7 +301,8 @@
                                 </div>
                                 <div class="field-wrap">
                                     <div class="field-label">Amount (₹) *</div>
-                                    <input class="mz-input" id="exp-amount" type="number" placeholder="6000" />
+                                    <input class="mz-input" id="exp-amount" type="number" placeholder="6000"
+                                           oninput="validateCustomSplitLive()" />
                                 </div>
                                 <div class="field-wrap">
                                     <div class="field-label">Paid by *</div>
@@ -372,7 +321,9 @@
                                 </select>
                             </div>
                             <div style="font-size:11px;color:var(--text-dim);margin-bottom:5px">Split among:</div>
-                            <div id="split-checkboxes" style="max-height:140px;overflow-y:auto;margin-bottom:8px"></div>
+                            <div id="split-checkboxes" style="max-height:140px;overflow-y:auto;margin-bottom:4px"></div>
+                            <!-- ✅ NEW: live custom split validation hint -->
+                            <div id="custom-split-hint" style="font-size:11px;min-height:16px;margin-bottom:6px;padding:0 2px"></div>
                             <div class="field-wrap" style="margin-bottom:8px">
                                 <div class="field-label">Note (optional)</div>
                                 <input class="mz-input" id="exp-note" placeholder="e.g. 3 nights stay" />
@@ -387,16 +338,14 @@
                         <div class="glass-card">
                             <div class="card-title">📋 All Expenses</div>
                             <div id="grp-expense-list">
-                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:1rem">
-                                    No expenses yet.
-                                </div>
+                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:1rem">No expenses yet.</div>
                             </div>
                         </div>
 
                     </div>
                     <!-- end left -->
 
-                    <!-- RIGHT: Balance + Settlement + Share -->
+                    <!-- RIGHT: Balance + Settlement + History + Share -->
                     <div style="display:flex;flex-direction:column;gap:1rem">
 
                         <!-- BALANCE SUMMARY -->
@@ -412,7 +361,7 @@
                             <div id="person-summary-table"></div>
                         </div>
 
-                        <!-- SETTLEMENT -->
+                        <!-- SETTLEMENT — WHO PAYS WHOM -->
                         <div class="glass-card" style="border-color:rgba(26,188,156,.3)">
                             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
                                 <div class="card-title" style="margin:0">⚖️ Who Pays Whom</div>
@@ -429,16 +378,30 @@
                                     Add expenses to see settlement
                                 </div>
                             </div>
+                            <!-- ✅ NEW: feedback message for Mark Paid actions -->
+                            <div id="settlement-msg" style="font-size:11px;min-height:16px;margin-top:6px;text-align:center"></div>
                         </div>
 
-                        <!-- MY PERSONAL SUMMARY (who I owe / who owes me) -->
-                        <div class="glass-card" style="border-color:rgba(212,160,23,0.3)">
-                            <div id="my-summary-box">
-                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:.5rem">Add expenses to see your summary</div>
+                        <!-- ✅ NEW: PAYMENT HISTORY with Undo -->
+                        <div class="glass-card" style="border-color:rgba(26,188,156,0.2)">
+                            <div class="card-title">🕓 Payment History</div>
+                            <div id="payment-history">
+                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:.5rem">
+                                    No payments recorded yet.
+                                </div>
                             </div>
                         </div>
 
-                        <!-- INVITE LINK — others join by clicking this -->
+                        <!-- MY PERSONAL SUMMARY -->
+                        <div class="glass-card" style="border-color:rgba(212,160,23,0.3)">
+                            <div id="my-summary-box">
+                                <div style="color:var(--text-dim);font-size:12px;text-align:center;padding:.5rem">
+                                    Add expenses to see your summary
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- INVITE LINK -->
                         <div class="glass-card" style="border-color:rgba(26,188,156,0.3)">
                             <div class="card-title">🔗 Invite Others to Join</div>
                             <div style="font-size:12px;color:var(--text-mid);margin-bottom:.75rem">
@@ -483,6 +446,7 @@
 
                     </div>
                     <!-- end right -->
+
                 </div>
                 <!-- end split-layout -->
 
@@ -502,6 +466,7 @@
 
     <script type="module" src="../js/groups.js"></script>
     <script>
+        // Particles
         const pc = document.getElementById('particles');
         for (let i = 0; i < 20; i++) {
             const p = document.createElement('div');
@@ -509,52 +474,23 @@
             p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
             pc.appendChild(p);
         }
+        // Theme
         const t = localStorage.getItem('meezan-theme') || 'glass';
         document.documentElement.setAttribute('data-theme', t);
         document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
-        window.setTheme = (th) => {
-            document.documentElement.setAttribute('data-theme', th);
-            localStorage.setItem('meezan-theme', th);
-            document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
-            document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
-        };
+        document.getElementById('theme-label').textContent = 'Theme: ' + t.charAt(0).toUpperCase() + t.slice(1);
 
+        // Default date
         document.getElementById('exp-date').value = new Date().toISOString().slice(0, 10);
+
+        // PWA service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(r => console.log('SW registered:', r.scope))
+                    .catch(e => console.log('SW failed:', e));
+            });
+        }
     </script>
 </body>
-
-</html>
-</body>
-
-</html>
-
-</html> <a class="bn-item active" href="family.html"><span class="bn-icon">👨‍👩‍👧</span>Family</a>
-</nav>
-
-<script type="module" src="../js/groups.js"></script>
-<script>
-    const pc = document.getElementById('particles');
-    for (let i = 0; i < 20; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle ' + (i < 12 ? 'p-fire' : 'p-star');
-        p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*6}s;`;
-        pc.appendChild(p);
-    }
-    const t = localStorage.getItem('meezan-theme') || 'glass';
-    document.documentElement.setAttribute('data-theme', t);
-    document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === t));
-    window.setTheme = (th) => {
-        document.documentElement.setAttribute('data-theme', th);
-        localStorage.setItem('meezan-theme', th);
-        document.querySelectorAll('.theme-pill').forEach(p => p.classList.toggle('active', p.title === th));
-        document.getElementById('theme-label').textContent = 'Theme: ' + th.charAt(0).toUpperCase() + th.slice(1);
-    };
-
-    document.getElementById('exp-date').value = new Date().toISOString().slice(0, 10);
-</script>
-</body>
-
-</html>
-</body>
-
 </html>
