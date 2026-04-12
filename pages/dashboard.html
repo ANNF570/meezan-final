@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- ============================================================
      MEEZAN — ميزان  |  pages/dashboard.html
-     FIXED: Single script block, all CSS linked, no conflicts
+     PWA-READY: Install button in sidebar + mobile header
      ============================================================ -->
 <html lang="en" data-theme="glass">
 
@@ -11,6 +11,15 @@
     <title>Meezan — Dashboard</title>
 
     <link rel="icon" href="../assets/favicon.png">
+
+    <!-- ═══ PWA REQUIRED ═══ -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Meezan" />
+    <link rel="apple-touch-icon" href="/assets/images/icons/icon-192.png" />
 
     <!-- ① Core CSS — these 4 on EVERY page, in this order -->
     <link rel="stylesheet" href="../css/main.css" />
@@ -24,51 +33,46 @@
     <!-- ② Dashboard has no separate page CSS — styles are inline below -->
     <style>
         /* Dashboard-specific layout */
-        
         .dash-3col {
             display: grid;
             grid-template-columns: 1fr 1.4fr 1.2fr;
             gap: 1rem;
         }
-        
+
         @media(max-width:1100px) {
-            .dash-3col {
-                grid-template-columns: 1fr;
-            }
+            .dash-3col { grid-template-columns: 1fr; }
         }
-        
+
         .scale-labels {
             display: flex;
             justify-content: space-between;
             font-size: 11px;
             margin-top: 4px;
         }
-        
+
         .scale-status {
             font-size: 11px;
             color: var(--amber);
             margin-top: 4px;
             text-align: center;
         }
-        
+
         .zakat-ring-wrap {
             display: flex;
             align-items: center;
             gap: 1rem;
             margin-bottom: .75rem;
         }
-        
+
         .zakat-ring {
             position: relative;
             width: 80px;
             height: 80px;
             flex-shrink: 0;
         }
-        
-        .zakat-ring svg {
-            transform: rotate(-90deg);
-        }
-        
+
+        .zakat-ring svg { transform: rotate(-90deg); }
+
         .zakat-pct {
             position: absolute;
             inset: 0;
@@ -80,39 +84,31 @@
             font-weight: 700;
             color: var(--gold-lt);
         }
-        
+
         .mh-row {
             display: flex;
             justify-content: space-between;
             font-size: 11px;
             margin-bottom: 3px;
         }
-        
-        .mh-l {
-            color: var(--text-dim);
-        }
-        
-        .mh-v {
-            color: var(--text);
-            font-weight: 600;
-        }
-        
+
+        .mh-l { color: var(--text-dim); }
+        .mh-v { color: var(--text); font-weight: 600; }
+
         .income-row {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 8px 10px;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
             margin-bottom: 6px;
             transition: all 0.2s;
         }
-        
-        .income-row:hover {
-            background: rgba(255, 255, 255, 0.07);
-        }
-        
+
+        .income-row:hover { background: rgba(255,255,255,0.07); }
+
         .ii {
             width: 30px;
             height: 30px;
@@ -121,6 +117,134 @@
             align-items: center;
             justify-content: center;
             font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* ═══════════════════════════════
+           PWA INSTALL BUTTON — Sidebar
+           ═══════════════════════════════ */
+        .pwa-install-sidebar {
+            display: none; /* hidden until prompt ready */
+            margin: 10px 12px 4px;
+            padding: 9px 12px;
+            border-radius: 11px;
+            border: 1px solid rgba(212,160,23,0.35);
+            background: rgba(212,160,23,0.1);
+            cursor: pointer;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+            width: calc(100% - 24px);
+            text-align: left;
+        }
+
+        .pwa-install-sidebar.show { display: flex; }
+        .pwa-install-sidebar:hover { background: rgba(212,160,23,0.18); }
+
+        .pwa-sb-icon {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .pwa-sb-text {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .pwa-sb-title {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 1px;
+            color: var(--gold-lt, #f0c040);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pwa-sb-sub {
+            font-size: 9px;
+            color: rgba(255,255,255,0.4);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ═══════════════════════════════
+           PWA INSTALL BANNER — Mobile bottom
+           ═══════════════════════════════ */
+        #pwa-install-bar {
+            display: none;
+            position: fixed;
+            bottom: 64px; /* above bottom-nav */
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            padding: 10px 12px;
+            background: rgba(15,23,42,0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(212,160,23,0.25);
+            animation: slideUp 0.35s ease;
+        }
+
+        #pwa-install-bar.show { display: block; }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+
+        .pwa-bar-inner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pwa-bar-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg,#d4a017,#1abc9c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .pwa-bar-text { flex: 1; }
+
+        .pwa-bar-title {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: var(--gold-lt, #f0c040);
+            margin-bottom: 1px;
+        }
+
+        .pwa-bar-sub { font-size: 10px; color: rgba(255,255,255,0.5); }
+
+        .pwa-bar-btn {
+            padding: 8px 16px;
+            border-radius: 9px;
+            border: none;
+            background: linear-gradient(135deg,#d4a017,#a07010);
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .pwa-bar-close {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px;
             flex-shrink: 0;
         }
     </style>
@@ -139,6 +263,11 @@
     <header class="mobile-header">
         <div class="mobile-brand">MEEZAN</div>
         <div class="mobile-notif-area">
+            <!-- PWA Install icon (mobile header) -->
+            <button id="pwa-mobile-hdr-btn" title="Install App"
+                style="display:none;background:none;border:none;cursor:pointer;font-size:20px;padding:4px;color:var(--gold-lt,#f0c040)">
+                ⬇️
+            </button>
             <div class="notif-btn" onclick="location.href='notifications.html'">
                 🔔
                 <div class="notif-dot"></div>
@@ -150,28 +279,27 @@
     <div class="app-wrap">
 
         <!-- ═══════════════════════════════════════════════════════
-       SIDEBAR — same on every page
-       To mark active page: add class="nav-item active" to that link
-       ═══════════════════════════════════════════════════════ -->
+             SIDEBAR — same on every page
+             ═══════════════════════════════════════════════════════ -->
         <aside class="sidebar">
             <div class="logo-area">
                 <div class="logo-svg-wrap">
                     <svg viewBox="0 0 60 60" fill="none">
-          <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
-          <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)" opacity=".9"/>
-          <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
-          <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
-          <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
-          <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)" opacity=".85"/>
-          <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
-          <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)" opacity=".85"/>
-          <defs>
-            <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#f0c040"/>
-              <stop offset="100%" stop-color="#a07010"/>
-            </linearGradient>
-          </defs>
-        </svg>
+                        <rect x="28" y="26" width="4" height="24" rx="2" fill="url(#gg)"/>
+                        <ellipse cx="30" cy="52" rx="14" ry="4" fill="url(#gg)" opacity=".9"/>
+                        <circle cx="30" cy="10" r="4" fill="url(#gg)"/>
+                        <rect x="8" y="18" width="44" height="3" rx="1.5" fill="url(#gg)"/>
+                        <line x1="14" y1="21" x2="12" y2="32" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+                        <ellipse cx="12" cy="34" rx="8" ry="3" fill="url(#gg)" opacity=".85"/>
+                        <line x1="46" y1="21" x2="48" y2="28" stroke="#d4a017" stroke-width="1" stroke-dasharray="2,2"/>
+                        <ellipse cx="48" cy="30" rx="8" ry="3" fill="url(#gg)" opacity=".85"/>
+                        <defs>
+                            <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#f0c040"/>
+                                <stop offset="100%" stop-color="#a07010"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
                 </div>
                 <div class="logo-name">MEEZAN</div>
                 <div class="logo-arabic">ميزان</div>
@@ -180,7 +308,6 @@
             <nav class="nav">
                 <!-- MAIN -->
                 <span class="nav-section">Main</span>
-                <!-- ↓ "active" class = current page (gold left bar) -->
                 <a class="nav-item active" href="dashboard.html" title="Dashboard"> <span class="nav-icon">⚖️</span><span class="nav-label" data-i18n="dashboard">Dashboard</span></a>
                 <a class="nav-item" href="income.html" title="Income"> <span class="nav-icon">💰</span><span class="nav-label" data-i18n="income">Income</span></a>
                 <a class="nav-item" href="expenses.html" title="Expenses"> <span class="nav-icon">📊</span><span class="nav-label" data-i18n="expenses">Expenses</span></a>
@@ -210,6 +337,15 @@
                 <a class="nav-item" href="settings.html" title="Settings"> <span class="nav-icon">⚙️</span><span class="nav-label" data-i18n="settings">Settings</span></a>
             </nav>
 
+            <!-- PWA INSTALL BUTTON — sidebar (desktop) -->
+            <button class="pwa-install-sidebar" id="pwa-sidebar-btn" title="Install Meezan App">
+                <span class="pwa-sb-icon">⬇️</span>
+                <div class="pwa-sb-text">
+                    <div class="pwa-sb-title">Install App</div>
+                    <div class="pwa-sb-sub">Add to home screen</div>
+                </div>
+            </button>
+
             <!-- THEME PILLS (bottom of sidebar) -->
             <div class="sidebar-bottom">
                 <div class="theme-pills">
@@ -223,8 +359,8 @@
         </aside>
 
         <!-- ═══════════════════════════════════════════════════════
-       MAIN CONTENT
-       ═══════════════════════════════════════════════════════ -->
+             MAIN CONTENT
+             ═══════════════════════════════════════════════════════ -->
         <main class="main-content">
 
             <!-- TOP BAR (desktop) -->
@@ -277,25 +413,25 @@
                     <div style="text-align:center;padding:.5rem 0">
                         <div style="max-width:200px;margin:0 auto .75rem;filter:drop-shadow(0 0 12px rgba(212,160,23,0.4))">
                             <svg viewBox="0 0 120 90" fill="none">
-              <rect x="57" y="20" width="6" height="55" rx="3" fill="url(#s1)"/>
-              <ellipse cx="60" cy="77" rx="22" ry="6" fill="url(#s1)" opacity=".85"/>
-              <circle cx="60" cy="14" r="6" fill="url(#s1)"/>
-              <rect x="16" y="26" width="88" height="5" rx="2.5" fill="url(#s1)"/>
-              <line x1="22" y1="31" x2="18" y2="52" stroke="#d4a017" stroke-width="1.5" stroke-dasharray="3,2"/>
-              <ellipse cx="18" cy="55" rx="16" ry="5" fill="url(#s1)" opacity=".8"/>
-              <ellipse cx="18" cy="53" rx="12" ry="4" fill="#e67e22" opacity=".5"/>
-              <circle cx="14" cy="49" r="2" fill="#f39c12" opacity=".9"/>
-              <line x1="98" y1="31" x2="102" y2="44" stroke="#d4a017" stroke-width="1.5" stroke-dasharray="3,2"/>
-              <ellipse cx="102" cy="47" rx="16" ry="5" fill="url(#s1)" opacity=".8"/>
-              <ellipse cx="102" cy="45" rx="12" ry="4" fill="#1abc9c" opacity=".4"/>
-              <circle cx="98" cy="42" r="2" fill="#48d1b0" opacity=".9"/>
-              <defs>
-                <linearGradient id="s1" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#f0c040"/>
-                  <stop offset="100%" stop-color="#a07010"/>
-                </linearGradient>
-              </defs>
-            </svg>
+                                <rect x="57" y="20" width="6" height="55" rx="3" fill="url(#s1)"/>
+                                <ellipse cx="60" cy="77" rx="22" ry="6" fill="url(#s1)" opacity=".85"/>
+                                <circle cx="60" cy="14" r="6" fill="url(#s1)"/>
+                                <rect x="16" y="26" width="88" height="5" rx="2.5" fill="url(#s1)"/>
+                                <line x1="22" y1="31" x2="18" y2="52" stroke="#d4a017" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                <ellipse cx="18" cy="55" rx="16" ry="5" fill="url(#s1)" opacity=".8"/>
+                                <ellipse cx="18" cy="53" rx="12" ry="4" fill="#e67e22" opacity=".5"/>
+                                <circle cx="14" cy="49" r="2" fill="#f39c12" opacity=".9"/>
+                                <line x1="98" y1="31" x2="102" y2="44" stroke="#d4a017" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                <ellipse cx="102" cy="47" rx="16" ry="5" fill="url(#s1)" opacity=".8"/>
+                                <ellipse cx="102" cy="45" rx="12" ry="4" fill="#1abc9c" opacity=".4"/>
+                                <circle cx="98" cy="42" r="2" fill="#48d1b0" opacity=".9"/>
+                                <defs>
+                                    <linearGradient id="s1" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stop-color="#f0c040"/>
+                                        <stop offset="100%" stop-color="#a07010"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
                         </div>
                         <div class="scale-labels">
                             <span style="color:var(--fire-lt)">🔥 Spent</span>
@@ -325,17 +461,17 @@
                     <div class="zakat-ring-wrap">
                         <div class="zakat-ring">
                             <svg width="80" height="80" viewBox="0 0 80 80">
-              <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
-              <circle cx="40" cy="40" r="32" fill="none" stroke="url(#zg)" stroke-width="7"
-                stroke-dasharray="201" stroke-dashoffset="201"
-                stroke-linecap="round" id="zakat-ring-circle"/>
-              <defs>
-                <linearGradient id="zg" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%"   stop-color="#d4a017"/>
-                  <stop offset="100%" stop-color="#1abc9c"/>
-                </linearGradient>
-              </defs>
-            </svg>
+                                <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
+                                <circle cx="40" cy="40" r="32" fill="none" stroke="url(#zg)" stroke-width="7"
+                                    stroke-dasharray="201" stroke-dashoffset="201"
+                                    stroke-linecap="round" id="zakat-ring-circle"/>
+                                <defs>
+                                    <linearGradient id="zg" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%"   stop-color="#d4a017"/>
+                                        <stop offset="100%" stop-color="#1abc9c"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
                             <div class="zakat-pct" id="zakat-ring-pct">0%</div>
                         </div>
                         <div>
@@ -446,22 +582,29 @@
         <a class="bn-item" href="settings.html"> <span class="bn-icon">⚙️</span>Settings</a>
     </nav>
 
+    <!-- PWA INSTALL BANNER — mobile (above bottom-nav) -->
+    <div id="pwa-install-bar">
+        <div class="pwa-bar-inner">
+            <div class="pwa-bar-icon">⚖️</div>
+            <div class="pwa-bar-text">
+                <div class="pwa-bar-title">Install Meezan</div>
+                <div class="pwa-bar-sub">Add to home screen</div>
+            </div>
+            <button class="pwa-bar-btn" id="pwa-install-btn">Install</button>
+            <button class="pwa-bar-close" id="pwa-dismiss-btn">✕</button>
+        </div>
+    </div>
+
 
     <!-- ══════════════════════════════════════════════════════════
-     ③ FIREBASE — single clean module, no duplicates
-     ══════════════════════════════════════════════════════════ -->
+         ③ FIREBASE — single clean module, no duplicates
+         ══════════════════════════════════════════════════════════ -->
     <script type="module" src="../js/dashboard.js"></script>
 
 
     <!-- ══════════════════════════════════════════════════════════
-     ④ LANGUAGE SYSTEM
-     ══════════════════════════════════════════════════════════ -->
-
-
-
-    <!-- ══════════════════════════════════════════════════════════
-     ⑤ THEME + PARTICLES — vanilla JS, runs on every page
-     ══════════════════════════════════════════════════════════ -->
+         ⑤ THEME + PARTICLES — vanilla JS, runs on every page
+         ══════════════════════════════════════════════════════════ -->
     <script>
         /* Apply saved theme immediately (prevents flash) */
         const _t = localStorage.getItem('meezan-theme') || 'glass';
@@ -493,10 +636,81 @@
             _pc.appendChild(p);
         }
     </script>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SERVICE WORKER + PWA INSTALL LOGIC
+         ══════════════════════════════════════════════════════════ -->
+    <script>
+        /* ── 1. Register Service Worker ── */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                    .then(reg => console.log('✅ Meezan SW registered, scope:', reg.scope))
+                    .catch(err => console.warn('⚠️ SW failed:', err.message));
+            });
+        }
+
+        /* ── 2. Capture the install prompt ── */
+        let _deferredPrompt = null;
+
+        const installBar   = document.getElementById('pwa-install-bar');
+        const installBtn   = document.getElementById('pwa-install-btn');
+        const dismissBtn   = document.getElementById('pwa-dismiss-btn');
+        const sidebarBtn   = document.getElementById('pwa-sidebar-btn');
+        const mobileHdrBtn = document.getElementById('pwa-mobile-hdr-btn');
+
+        /* Show all install UI when prompt is available */
+        function showInstallUI() {
+            if (sessionStorage.getItem('pwa-dismissed')) return;
+            installBar.classList.add('show');
+            sidebarBtn.classList.add('show');
+            mobileHdrBtn.style.display = 'block';
+        }
+
+        /* Hide all install UI */
+        function hideInstallUI() {
+            installBar.classList.remove('show');
+            sidebarBtn.classList.remove('show');
+            mobileHdrBtn.style.display = 'none';
+        }
+
+        /* Trigger actual install */
+        async function triggerInstall() {
+            if (!_deferredPrompt) return;
+            hideInstallUI();
+            _deferredPrompt.prompt();
+            const { outcome } = await _deferredPrompt.userChoice;
+            console.log('PWA install outcome:', outcome);
+            _deferredPrompt = null;
+        }
+
+        window.addEventListener('beforeinstallprompt', e => {
+            e.preventDefault();
+            _deferredPrompt = e;
+            showInstallUI();
+        });
+
+        installBtn.addEventListener('click', triggerInstall);
+        sidebarBtn.addEventListener('click', triggerInstall);
+        mobileHdrBtn.addEventListener('click', triggerInstall);
+
+        dismissBtn.addEventListener('click', () => {
+            hideInstallUI();
+            sessionStorage.setItem('pwa-dismissed', '1');
+        });
+
+        /* Already installed as standalone → hide everything */
+        if (window.matchMedia('(display-mode: standalone)').matches ||
+            window.navigator.standalone === true) {
+            hideInstallUI();
+        }
+
+        window.addEventListener('appinstalled', () => {
+            hideInstallUI();
+            _deferredPrompt = null;
+            console.log('✅ Meezan installed as PWA');
+        });
+    </script>
 </body>
-
-</html>
-
-</html>
 
 </html>
