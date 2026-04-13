@@ -19,7 +19,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Meezan" />
-    <link rel="apple-touch-icon" href="/assets/images/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+    <meta name="msapplication-TileImage" content="/assets/icon-192.png" />
+    <meta name="msapplication-TileColor" content="#0f172a" />
 
     <!-- ① Core CSS — these 4 on EVERY page, in this order -->
     <link rel="stylesheet" href="../css/main.css" />
@@ -637,78 +639,127 @@
         }
     </script>
 
+    <!-- iOS Safari install instructions popup -->
+    <div id="ios-install-popup" style="
+        display:none;position:fixed;bottom:0;left:0;right:0;z-index:10000;
+        padding:20px 20px 36px;
+        background:rgba(10,16,30,0.98);
+        backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+        border-top:1px solid rgba(212,160,23,0.3);
+        border-radius:20px 20px 0 0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="font-family:'Cinzel',serif;font-size:14px;letter-spacing:1.5px;color:#f0c040">⚖️ Install Meezan</div>
+            <button id="ios-popup-close" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:22px;cursor:pointer;padding:2px">✕</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px">
+                <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#d4a017,#a07010);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">1</div>
+                <div style="font-size:13px;color:rgba(255,255,255,0.8)">Tap the <strong style="color:#f0c040">Share ⎙</strong> button at the bottom of Safari</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px">
+                <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#d4a017,#a07010);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">2</div>
+                <div style="font-size:13px;color:rgba(255,255,255,0.8)">Scroll and tap <strong style="color:#f0c040">"Add to Home Screen"</strong></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px">
+                <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#d4a017,#a07010);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">3</div>
+                <div style="font-size:13px;color:rgba(255,255,255,0.8)">Tap <strong style="color:#f0c040">"Add"</strong> — done!</div>
+            </div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:12px">⬆ Share button is at the bottom of your Safari browser</div>
+    </div>
+
     <!-- ══════════════════════════════════════════════════════════
-         SERVICE WORKER + PWA INSTALL LOGIC
+         SERVICE WORKER + PWA INSTALL — ALL DEVICES
+         Android/Chrome/Edge: beforeinstallprompt banner
+         iOS Safari: step-by-step instructions popup
          ══════════════════════════════════════════════════════════ -->
     <script>
-        /* ── 1. Register Service Worker ── */
+        const IS_IOS        = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+        const IS_SAFARI     = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const IS_STANDALONE = window.matchMedia('(display-mode: standalone)').matches
+                           || window.navigator.standalone === true;
+        const DISMISSED_KEY = 'meezan-pwa-dismissed-v2';
+
+        /* ── Register SW ── */
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                    .then(reg => console.log('✅ Meezan SW registered, scope:', reg.scope))
-                    .catch(err => console.warn('⚠️ SW failed:', err.message));
+                    .then(r => console.log('✅ SW:', r.scope))
+                    .catch(e => console.warn('⚠️ SW:', e.message));
             });
         }
 
-        /* ── 2. Capture the install prompt ── */
-        let _deferredPrompt = null;
-
+        /* ── Elements ── */
         const installBar   = document.getElementById('pwa-install-bar');
         const installBtn   = document.getElementById('pwa-install-btn');
         const dismissBtn   = document.getElementById('pwa-dismiss-btn');
         const sidebarBtn   = document.getElementById('pwa-sidebar-btn');
         const mobileHdrBtn = document.getElementById('pwa-mobile-hdr-btn');
+        const iosPopup     = document.getElementById('ios-install-popup');
+        const iosCloseBtn  = document.getElementById('ios-popup-close');
 
-        /* Show all install UI when prompt is available */
+        let _deferredPrompt = null;
+
         function showInstallUI() {
-            if (sessionStorage.getItem('pwa-dismissed')) return;
-            installBar.classList.add('show');
-            sidebarBtn.classList.add('show');
-            mobileHdrBtn.style.display = 'block';
+            if (IS_STANDALONE || localStorage.getItem(DISMISSED_KEY)) return;
+            if (installBar)   installBar.classList.add('show');
+            if (sidebarBtn)   sidebarBtn.classList.add('show');
+            if (mobileHdrBtn) mobileHdrBtn.style.display = 'block';
         }
 
-        /* Hide all install UI */
         function hideInstallUI() {
-            installBar.classList.remove('show');
-            sidebarBtn.classList.remove('show');
-            mobileHdrBtn.style.display = 'none';
+            if (installBar)   installBar.classList.remove('show');
+            if (sidebarBtn)   sidebarBtn.classList.remove('show');
+            if (mobileHdrBtn) mobileHdrBtn.style.display = 'none';
         }
 
-        /* Trigger actual install */
         async function triggerInstall() {
             if (!_deferredPrompt) return;
             hideInstallUI();
             _deferredPrompt.prompt();
             const { outcome } = await _deferredPrompt.userChoice;
-            console.log('PWA install outcome:', outcome);
+            console.log('Install outcome:', outcome);
             _deferredPrompt = null;
         }
 
+        /* Android / Desktop Chrome / Edge */
         window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
             _deferredPrompt = e;
             showInstallUI();
         });
 
-        installBtn.addEventListener('click', triggerInstall);
-        sidebarBtn.addEventListener('click', triggerInstall);
-        mobileHdrBtn.addEventListener('click', triggerInstall);
-
-        dismissBtn.addEventListener('click', () => {
-            hideInstallUI();
-            sessionStorage.setItem('pwa-dismissed', '1');
+        installBtn  && installBtn.addEventListener('click', triggerInstall);
+        sidebarBtn  && sidebarBtn.addEventListener('click', triggerInstall);
+        mobileHdrBtn && mobileHdrBtn.addEventListener('click', () => {
+            if (_deferredPrompt) triggerInstall();
+            else if (IS_IOS) iosPopup && iosPopup.classList.add('show');
         });
 
-        /* Already installed as standalone → hide everything */
-        if (window.matchMedia('(display-mode: standalone)').matches ||
-            window.navigator.standalone === true) {
+        dismissBtn && dismissBtn.addEventListener('click', () => {
             hideInstallUI();
+            localStorage.setItem(DISMISSED_KEY, '1');
+        });
+
+        /* iOS Safari — auto-show instructions after 2s */
+        if (IS_IOS && IS_SAFARI && !IS_STANDALONE && !localStorage.getItem(DISMISSED_KEY + '-ios')) {
+            if (sidebarBtn)   sidebarBtn.classList.add('show');
+            if (mobileHdrBtn) mobileHdrBtn.style.display = 'block';
+            setTimeout(() => iosPopup && iosPopup.classList.add('show'), 2000);
         }
+
+        iosCloseBtn && iosCloseBtn.addEventListener('click', () => {
+            iosPopup && iosPopup.classList.remove('show');
+            localStorage.setItem(DISMISSED_KEY + '-ios', '1');
+        });
+
+        /* Already installed */
+        if (IS_STANDALONE) hideInstallUI();
 
         window.addEventListener('appinstalled', () => {
             hideInstallUI();
+            if (iosPopup) iosPopup.classList.remove('show');
             _deferredPrompt = null;
-            console.log('✅ Meezan installed as PWA');
         });
     </script>
 </body>
