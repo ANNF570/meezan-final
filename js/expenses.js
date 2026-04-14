@@ -181,7 +181,7 @@ function buildChart() {
   const now=new Date();
   for(let i=5;i>=0;i--){
     const d=new Date(now.getFullYear(),now.getMonth()-i,1);
-    const key=d.toISOString().slice(0,7);
+    const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
     months.push({key,lbl:d.toLocaleString('en',{month:'short'})});
     byM[key]=allExp.filter(e=>(e.date||'').slice(0,7)===key).reduce((s,e)=>s+e.amt,0);
   }

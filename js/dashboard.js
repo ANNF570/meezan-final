@@ -230,7 +230,7 @@ function buildChart() {
   const now = new Date(), months = [];
   for (let i = 5; i >= 0; i--) {
     const d   = new Date(now.getFullYear(), now.getMonth()-i, 1);
-    const key = d.toISOString().slice(0, 7);
+    const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
     const lbl = d.toLocaleString('en', { month: 'short' });
     const sp  = expenses.filter(e => (e.date||'').slice(0,7) === key).reduce((s,e) => s+(e.amt||0), 0);
     const ic  = income.filter(e  => (e.date||'').slice(0,7) === key).reduce((s,e) => s+(e.amt||0), 0);

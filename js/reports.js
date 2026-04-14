@@ -28,7 +28,7 @@ const ECOLORS = { Food:'#e74c3c',Shopping:'#9b59b6',Transport:'#3498db',Utilitie
 const IICONS  = { Salary:'💼', Freelance:'💻', Rental:'🏠', Business:'🏪', Investment:'📈', Gift:'🎁', Other:'💡' };
 const ICOLORS = { Salary:'#1abc9c', Freelance:'#d4a017', Rental:'#5dade2', Business:'#c0392b', Investment:'#9b59b6', Gift:'#e67e22', Other:'#95a5a6' };
 
-let income = [], expenses = [], periodMonths = 6, uid = '';
+let income = [], expenses = [], sadaqah = [], zakatPayments = [], periodMonths = 6, uid = '';
 
 /* ── AUTH ── */
 onAuthStateChanged(auth, user => {
@@ -44,6 +44,16 @@ onAuthStateChanged(auth, user => {
 
   onSnapshot(query(col('expenses'), orderBy('date','desc')), snap => {
     expenses = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAll();
+  });
+
+  onSnapshot(query(col('sadaqah'), orderBy('date','desc')), snap => {
+    sadaqah = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAll();
+  });
+
+  onSnapshot(query(col('zakatPayments'), orderBy('date','desc')), snap => {
+    zakatPayments = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAll();
   });
 });
@@ -82,6 +92,7 @@ function renderAll() {
   buildIncomeBreakdown();
   buildWeeklyView();
   buildSpendingDeepDive();
+  buildIslamicMonthly();
 }
 
 /* ══════════════════════════════════════
@@ -121,7 +132,7 @@ function buildIncExpChart() {
 
   for (let i = count - 1; i >= 0; i--) {
     const d   = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = d.toISOString().slice(0, 7);
+    const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
     const lbl = d.toLocaleString('en', { month: 'short' });
     const yr  = d.getFullYear().toString().slice(2);
     const inc = income.filter(e  => (e.date||'').slice(0,7) === key).reduce((s,e) => s+(e.amt||0), 0);
@@ -214,7 +225,7 @@ function buildNetWorthChart() {
 
   for (let i = count - 1; i >= 0; i--) {
     const d   = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = d.toISOString().slice(0, 7);
+    const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
     const lbl = d.toLocaleString('en', { month: 'short' });
     const inc = income.filter(e  => (e.date||'').slice(0,7) === key).reduce((s,e) => s+(e.amt||0), 0);
     const exp = expenses.filter(e => (e.date||'').slice(0,7) === key).reduce((s,e) => s+(e.amt||0), 0);
@@ -450,5 +461,103 @@ function buildSpendingDeepDive() {
             </div>`).join('')}
         </div>`;
     }).join('')}
+    </div>`;
+}
+
+/* ══════════════════════════════════════
+   SADAQAH + ZAKAT MONTHLY TRACKER
+   ══════════════════════════════════════ */
+const NISAB_VALUE = 595 * 82; // grams silver * price
+
+function buildIslamicMonthly() {
+  const el = document.getElementById('islamic-monthly');
+  if (!el) return;
+
+  const now = new Date();
+  const count = periodMonths || 6;
+  const months = [];
+
+  for (let i = count - 1; i >= 0; i--) {
+    const d   = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+    const lbl = d.toLocaleString('en', { month: 'short', year: '2-digit' });
+
+    const monthInc = income.filter(e => (e.date||'').slice(0,7) === key).reduce((s,e) => s+(e.amt||0), 0);
+    const monthExp = expenses.filter(e => (e.date||'').slice(0,7) === key).reduce((s,e) => s+(e.amt||0), 0);
+    const monthSavings = Math.max(0, monthInc - monthExp);
+    const zakatDue = monthSavings >= NISAB_VALUE ? Math.round(monthSavings * 0.025) : 0;
+    const zakatPaid = zakatPayments.filter(p => (p.date||'').slice(0,7) === key).reduce((s,p) => s+(p.amount||0), 0);
+    const zakatRemaining = Math.max(0, zakatDue - zakatPaid);
+    const zakatComplete = zakatDue > 0 && zakatPaid >= zakatDue;
+
+    const sdqAmt = sadaqah.filter(s => (s.date||'').slice(0,7) === key).reduce((s,x) => s+(x.amt||0), 0);
+    const sdqCount = sadaqah.filter(s => (s.date||'').slice(0,7) === key).length;
+
+    months.push({ key, lbl, monthInc, monthSavings, zakatDue, zakatPaid, zakatRemaining, zakatComplete, sdqAmt, sdqCount });
+  }
+
+  const totalSadaqah = months.reduce((s,m) => s + m.sdqAmt, 0);
+  const totalZakatPaid = months.reduce((s,m) => s + m.zakatPaid, 0);
+  const totalZakatDue = months.reduce((s,m) => s + m.zakatDue, 0);
+  const fmt2 = n => '₹' + Math.round(n||0).toLocaleString('en-IN');
+
+  el.innerHTML = `
+    <!-- Summary strip -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+      <div style="background:rgba(26,188,156,0.08);border:1px solid rgba(26,188,156,0.2);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Sadaqah Given</div>
+        <div style="font-family:'Cinzel',serif;font-size:16px;color:var(--teal-lt);margin-top:4px">${fmt2(totalSadaqah)}</div>
+        <div style="font-size:10px;color:var(--text-dim)">${months.reduce((s,m)=>s+m.sdqCount,0)} acts</div>
+      </div>
+      <div style="background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.2);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Zakat Due</div>
+        <div style="font-family:'Cinzel',serif;font-size:16px;color:var(--gold-lt);margin-top:4px">${totalZakatDue > 0 ? fmt2(totalZakatDue) : '—'}</div>
+        <div style="font-size:10px;color:var(--text-dim)">across period</div>
+      </div>
+      <div style="background:rgba(72,209,176,0.08);border:1px solid rgba(72,209,176,0.2);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Zakat Paid</div>
+        <div style="font-family:'Cinzel',serif;font-size:16px;color:var(--teal-lt);margin-top:4px">${totalZakatPaid > 0 ? fmt2(totalZakatPaid) : '—'}</div>
+        <div style="font-size:10px;color:${totalZakatDue > 0 && totalZakatPaid >= totalZakatDue ? 'var(--teal-lt)' : 'var(--amber, #e67e22)'}">${totalZakatDue > 0 ? (totalZakatPaid >= totalZakatDue ? '✅ Fully paid' : fmt2(Math.max(0,totalZakatDue-totalZakatPaid)) + ' remaining') : 'No zakat due'}</div>
+      </div>
+    </div>
+
+    <!-- Month-by-month table -->
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.1)">
+            <th style="text-align:left;padding:8px 10px;color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;font-weight:400">MONTH</th>
+            <th style="text-align:right;padding:8px 10px;color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;font-weight:400">SAVINGS</th>
+            <th style="text-align:right;padding:8px 10px;color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;font-weight:400">ZAKAT DUE</th>
+            <th style="text-align:right;padding:8px 10px;color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;font-weight:400">ZAKAT PAID</th>
+            <th style="text-align:center;padding:8px 10px;color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;font-weight:400">STATUS</th>
+            <th style="text-align:right;padding:8px 10px;color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;font-weight:400">SADAQAH</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${months.map(m => {
+            const isCurrentMonth = m.key === (now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0'));
+            let statusHtml = '';
+            if (m.zakatDue === 0) {
+              statusHtml = `<span style="color:var(--text-dim);font-size:10px">Nisab not met</span>`;
+            } else if (m.zakatComplete) {
+              statusHtml = `<span style="background:rgba(26,188,156,0.15);color:var(--teal-lt);padding:2px 8px;border-radius:20px;font-size:10px">✅ Complete</span>`;
+            } else {
+              statusHtml = `<span style="background:rgba(231,76,60,0.15);color:var(--fire-lt);padding:2px 8px;border-radius:20px;font-size:10px">⚠️ ${fmt2(m.zakatRemaining)} due</span>`;
+            }
+            return `
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);${isCurrentMonth ? 'background:rgba(255,255,255,0.03);' : ''}">
+                <td style="padding:10px 10px;font-weight:${isCurrentMonth ? '700' : '400'};color:${isCurrentMonth ? 'var(--gold-lt)' : 'var(--text)'}">
+                  ${m.lbl}${isCurrentMonth ? ' <span style="font-size:9px;color:var(--gold-lt)">(now)</span>' : ''}
+                </td>
+                <td style="padding:10px 10px;text-align:right;color:var(--text-mid);font-family:'Cinzel',serif">${m.monthSavings > 0 ? fmt2(m.monthSavings) : '—'}</td>
+                <td style="padding:10px 10px;text-align:right;font-family:'Cinzel',serif;color:${m.zakatDue > 0 ? 'var(--gold-lt)' : 'var(--text-dim)'}">${m.zakatDue > 0 ? fmt2(m.zakatDue) : '—'}</td>
+                <td style="padding:10px 10px;text-align:right;font-family:'Cinzel',serif;color:var(--teal-lt)">${m.zakatPaid > 0 ? fmt2(m.zakatPaid) : '—'}</td>
+                <td style="padding:10px 10px;text-align:center">${statusHtml}</td>
+                <td style="padding:10px 10px;text-align:right;font-family:'Cinzel',serif;color:var(--teal-lt)">${m.sdqAmt > 0 ? fmt2(m.sdqAmt) : '—'}${m.sdqCount > 0 ? `<span style="display:block;font-size:9px;color:var(--text-dim);font-family:inherit">${m.sdqCount} act${m.sdqCount>1?'s':''}</span>` : ''}</td>
+              </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
     </div>`;
 }

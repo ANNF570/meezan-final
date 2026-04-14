@@ -164,7 +164,7 @@ function buildChart() {
   const months = [];
   for (let i = 5; i >= 0; i--) {
     const d   = new Date(now.getFullYear(), now.getMonth()-i, 1);
-    const key = d.toISOString().slice(0,7);
+    const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
     const lbl = d.toLocaleString('en', { month:'short' });
     months.push({ key, lbl });
   }
