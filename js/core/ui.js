@@ -249,6 +249,7 @@ export function createHistory(container, opts) {
             return;
         }
         const pages = totalPages();
+        if (isNaN(page)) { page = 0; }
         page = Math.max(0, Math.min(pages - 1, page));
         const from = page * pageSize;
         const slice = items.slice(from, from + pageSize);
@@ -268,6 +269,7 @@ export function createHistory(container, opts) {
     }
 
     function goPage(next) {
+        if (isNaN(next)) { return; }
         const target = Math.max(0, Math.min(totalPages() - 1, next));
         if (target === page) { return; }
         const dir = target > page ? 'from-below' : 'from-above';
@@ -281,8 +283,13 @@ export function createHistory(container, opts) {
             goPage(page + (pg.getAttribute('data-pg') === 'down' ? 1 : -1));
             return;
         }
-        const n = e.target.closest('[data-page]');
-        if (n) { goPage(parseInt(n.getAttribute('data-page'), 10)); }
+        /* only the numbered pager buttons — NOT any ancestor that happens to carry data-page
+           (the page <body> does, which made every Edit/Delete click set page = NaN) */
+        const n = e.target.closest('.pg-num');
+        if (n && listPane.contains(n)) {
+            const target = parseInt(n.getAttribute('data-page'), 10);
+            if (!isNaN(target)) { goPage(target); }
+        }
     });
 
     listPane.addEventListener('keydown', function(e) {
