@@ -1,0 +1,368 @@
+{
+  "income": [
+    {
+      "name": "Monthly salary",
+      "amt": 42000,
+      "type": "Salary",
+      "recur": "Monthly",
+      "date": "2026-08-01",
+      "notes": "Sample"
+    },
+    {
+      "name": "Freelance logo work",
+      "amt": 8000,
+      "type": "Freelance",
+      "recur": "One-off",
+      "date": "2026-08-12",
+      "notes": "Sample"
+    },
+    {
+      "name": "Money from home",
+      "amt": 5000,
+      "type": "From Home",
+      "recur": "Monthly",
+      "date": "2026-08-05",
+      "notes": "Sample"
+    },
+    {
+      "name": "Monthly salary",
+      "amt": 42000,
+      "type": "Salary",
+      "recur": "Monthly",
+      "date": "2026-09-01",
+      "notes": "Sample"
+    },
+    {
+      "name": "Freelance logo work",
+      "amt": 6500,
+      "type": "Freelance",
+      "recur": "One-off",
+      "date": "2026-09-12",
+      "notes": "Sample"
+    },
+    {
+      "name": "Money from home",
+      "amt": 5000,
+      "type": "From Home",
+      "recur": "Monthly",
+      "date": "2026-09-05",
+      "notes": "Sample"
+    },
+    {
+      "name": "Monthly salary",
+      "amt": 42000,
+      "type": "Salary",
+      "recur": "Monthly",
+      "date": "2026-10-01",
+      "notes": "Sample"
+    },
+    {
+      "name": "Freelance logo work",
+      "amt": 9500,
+      "type": "Freelance",
+      "recur": "One-off",
+      "date": "2026-10-12",
+      "notes": "Sample"
+    },
+    {
+      "name": "Money from home",
+      "amt": 5000,
+      "type": "From Home",
+      "recur": "Monthly",
+      "date": "2026-10-05",
+      "notes": "Sample"
+    },
+    {
+      "name": "Monthly salary",
+      "amt": 42000,
+      "type": "Salary",
+      "recur": "Monthly",
+      "date": "2026-11-01",
+      "notes": "Sample"
+    },
+    {
+      "name": "Freelance logo work",
+      "amt": 8000,
+      "type": "Freelance",
+      "recur": "One-off",
+      "date": "2026-11-12",
+      "notes": "Sample"
+    },
+    {
+      "name": "Money from home",
+      "amt": 5000,
+      "type": "From Home",
+      "recur": "Monthly",
+      "date": "2026-11-05",
+      "notes": "Sample"
+    },
+    {
+      "name": "Eidi from uncle",
+      "amt": 2000,
+      "type": "Eidi",
+      "recur": "One-off",
+      "date": "2026-09-20",
+      "notes": "Sample"
+    },
+    {
+      "name": "Bilal gave to save",
+      "amt": 5000,
+      "type": "Friends (to save)",
+      "recur": "One-off",
+      "date": "2026-10-10",
+      "notes": "Sample \u2014 amanah"
+    }
+  ],
+  "expenses": [
+    {
+      "name": "House rent",
+      "amt": 9000,
+      "cat": "Rent",
+      "date": "2026-08-02",
+      "notes": "Sample"
+    },
+    {
+      "name": "Bike EMI",
+      "amt": 3200,
+      "cat": "EMI / Loan",
+      "date": "2026-08-05",
+      "notes": "Sample"
+    },
+    {
+      "name": "Electricity bill",
+      "amt": 850,
+      "cat": "Bills",
+      "date": "2026-08-08",
+      "notes": "Sample"
+    },
+    {
+      "name": "Mobile recharge",
+      "amt": 399,
+      "cat": "Mobile & Internet",
+      "date": "2026-08-09",
+      "notes": "Sample"
+    },
+    {
+      "name": "Groceries",
+      "amt": 2600,
+      "cat": "Groceries",
+      "date": "2026-08-14",
+      "notes": "Sample"
+    },
+    {
+      "name": "Food outside",
+      "amt": 1250,
+      "cat": "Food",
+      "date": "2026-08-18",
+      "notes": "Sample"
+    },
+    {
+      "name": "Sadaqah to masjid",
+      "amt": 1100,
+      "cat": "Charity",
+      "date": "2026-08-20",
+      "notes": "Sample"
+    },
+    {
+      "name": "Petrol",
+      "amt": 700,
+      "cat": "Fuel",
+      "date": "2026-08-22",
+      "notes": "Sample"
+    },
+    {
+      "name": "House rent",
+      "amt": 9000,
+      "cat": "Rent",
+      "date": "2026-09-02",
+      "notes": "Sample"
+    },
+    {
+      "name": "Bike EMI",
+      "amt": 3200,
+      "cat": "EMI / Loan",
+      "date": "2026-09-05",
+      "notes": "Sample"
+    },
+    {
+      "name": "Electricity bill",
+      "amt": 1320,
+      "cat": "Bills",
+      "date": "2026-09-08",
+      "notes": "Sample"
+    },
+    {
+      "name": "Mobile recharge",
+      "amt": 399,
+      "cat": "Mobile & Internet",
+      "date": "2026-09-09",
+      "notes": "Sample"
+    },
+    {
+      "name": "Groceries",
+      "amt": 2100,
+      "cat": "Groceries",
+      "date": "2026-09-14",
+      "notes": "Sample"
+    },
+    {
+      "name": "Food outside",
+      "amt": 900,
+      "cat": "Food",
+      "date": "2026-09-18",
+      "notes": "Sample"
+    },
+    {
+      "name": "Sadaqah to masjid",
+      "amt": 1100,
+      "cat": "Charity",
+      "date": "2026-09-20",
+      "notes": "Sample"
+    },
+    {
+      "name": "Petrol",
+      "amt": 700,
+      "cat": "Fuel",
+      "date": "2026-09-22",
+      "notes": "Sample"
+    },
+    {
+      "name": "House rent",
+      "amt": 9000,
+      "cat": "Rent",
+      "date": "2026-10-02",
+      "notes": "Sample"
+    },
+    {
+      "name": "Bike EMI",
+      "amt": 3200,
+      "cat": "EMI / Loan",
+      "date": "2026-10-05",
+      "notes": "Sample"
+    },
+    {
+      "name": "Electricity bill",
+      "amt": 850,
+      "cat": "Bills",
+      "date": "2026-10-08",
+      "notes": "Sample"
+    },
+    {
+      "name": "Mobile recharge",
+      "amt": 399,
+      "cat": "Mobile & Internet",
+      "date": "2026-10-09",
+      "notes": "Sample"
+    },
+    {
+      "name": "Groceries",
+      "amt": 2100,
+      "cat": "Groceries",
+      "date": "2026-10-14",
+      "notes": "Sample"
+    },
+    {
+      "name": "Food outside",
+      "amt": 650,
+      "cat": "Food",
+      "date": "2026-10-18",
+      "notes": "Sample"
+    },
+    {
+      "name": "Sadaqah to masjid",
+      "amt": 1100,
+      "cat": "Charity",
+      "date": "2026-10-20",
+      "notes": "Sample"
+    },
+    {
+      "name": "Petrol",
+      "amt": 950,
+      "cat": "Fuel",
+      "date": "2026-10-22",
+      "notes": "Sample"
+    },
+    {
+      "name": "House rent",
+      "amt": 9000,
+      "cat": "Rent",
+      "date": "2026-11-02",
+      "notes": "Sample"
+    },
+    {
+      "name": "Bike EMI",
+      "amt": 3200,
+      "cat": "EMI / Loan",
+      "date": "2026-11-05",
+      "notes": "Sample"
+    },
+    {
+      "name": "Electricity bill",
+      "amt": 850,
+      "cat": "Bills",
+      "date": "2026-11-08",
+      "notes": "Sample"
+    },
+    {
+      "name": "Mobile recharge",
+      "amt": 399,
+      "cat": "Mobile & Internet",
+      "date": "2026-11-09",
+      "notes": "Sample"
+    },
+    {
+      "name": "Groceries",
+      "amt": 2100,
+      "cat": "Groceries",
+      "date": "2026-11-14",
+      "notes": "Sample"
+    },
+    {
+      "name": "Food outside",
+      "amt": 650,
+      "cat": "Food",
+      "date": "2026-11-18",
+      "notes": "Sample"
+    },
+    {
+      "name": "Sadaqah to masjid",
+      "amt": 1100,
+      "cat": "Charity",
+      "date": "2026-11-20",
+      "notes": "Sample"
+    },
+    {
+      "name": "Petrol",
+      "amt": 950,
+      "cat": "Fuel",
+      "date": "2026-11-22",
+      "notes": "Sample"
+    },
+    {
+      "name": "Zakat paid",
+      "amt": 3500,
+      "cat": "Zakat",
+      "date": "2026-10-25",
+      "notes": "Sample"
+    }
+  ],
+  "ornaments": [
+    {
+      "name": "Gold chain",
+      "type": "Gold",
+      "karat": 22,
+      "weight": 12.5,
+      "notes": "Sample"
+    },
+    {
+      "name": "Silver coins",
+      "type": "Silver",
+      "weight": 150,
+      "notes": "Sample"
+    }
+  ],
+  "meta": {
+    "app": "Meezan",
+    "version": "1.0.0"
+  }
+}

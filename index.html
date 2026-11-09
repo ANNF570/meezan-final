@@ -1,569 +1,65 @@
 <!DOCTYPE html>
-<!--
-  MEEZAN — ميزان  |  index.html
-  PWA: Works on Android Chrome, iOS Safari, Desktop Chrome/Edge
--->
 <html lang="en" data-theme="glass">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Meezan — ميزان | Sign In</title>
-
-    <!-- ✅ CORRECT icon path — matches your /assets/ folder -->
-    <link rel="icon" href="/assets/favicon.png" />
-
-    <!-- ══════════════════════════════════════
-         PWA — ALL REQUIRED TAGS
-         ══════════════════════════════════════ -->
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#0f172a" />
-
-    <!-- Android -->
-    <meta name="mobile-web-app-capable" content="yes" />
-
-    <!-- iOS Safari (no beforeinstallprompt — needs these tags) -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Meezan" />
-    <!-- ✅ CORRECT path — your actual icon location -->
-    <link rel="apple-touch-icon" href="/assets/icon-192.png" />
-
-    <!-- Windows / Edge -->
-    <meta name="msapplication-TileImage" content="/assets/icon-192.png" />
-    <meta name="msapplication-TileColor" content="#0f172a" />
-
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/themes.css" />
-    <link rel="stylesheet" href="css/phone.css" />
-    <link rel="stylesheet" href="css/tablet.css" />
-    <script type="module" src="js/index1.js"></script>
-    <script src="js/i18n.js"></script>
-    <script type="module" src="js/i18n-loader.js"></script>
-
-    <style>
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 1rem;
-        }
-
-        .login-box {
-            width: 100%;
-            max-width: 420px;
-            z-index: 1;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .login-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(212,160,23,0.5), rgba(26,188,156,0.35), transparent);
-        }
-
-        .login-logo { text-align: center; margin-bottom: 1.75rem; }
-
-        .login-logo-name {
-            font-family: 'Cinzel', serif;
-            font-size: 30px;
-            font-weight: 700;
-            letter-spacing: 6px;
-            background: linear-gradient(135deg, #e74c3c, #d4a017, #1abc9c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-        }
-
-        .login-logo-ar {
-            font-family: 'Noto Naskh Arabic', serif;
-            font-size: 16px;
-            color: var(--gold);
-        }
-
-        .login-sub { font-size: 12px; color: var(--text-dim); margin-top: 6px; }
-
-        .login-tabs {
-            display: flex;
-            background: var(--bg-row);
-            border-radius: 10px;
-            padding: 3px;
-            margin-bottom: 1.25rem;
-        }
-
-        .login-tab {
-            flex: 1; text-align: center; padding: 7px;
-            border-radius: 8px;
-            font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 1px;
-            color: var(--text-dim); cursor: pointer; transition: all 0.2s;
-            border: none; background: transparent;
-        }
-
-        .login-tab.active {
-            background: rgba(212,160,23,0.15);
-            color: var(--gold-lt);
-            border: 1px solid rgba(212,160,23,0.3);
-        }
-
-        .google-btn {
-            width: 100%; padding: 11px; border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.07);
-            color: var(--text);
-            font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 1px;
-            cursor: pointer; display: flex; align-items: center;
-            justify-content: center; gap: 10px;
-            margin-bottom: 1rem; transition: all 0.2s;
-        }
-
-        .google-btn:hover {
-            background: rgba(255,255,255,0.12);
-            border-color: rgba(212,160,23,0.4);
-        }
-
-        .google-icon { font-size: 18px; }
-
-        .divider { text-align: center; font-size: 11px; color: var(--text-dim); margin-bottom: 1rem; }
-
-        .login-link {
-            background: none; border: none; color: var(--teal-lt);
-            cursor: pointer; font-size: 13px; font-family: 'Crimson Pro', serif;
-            text-decoration: underline; display: block; text-align: center; margin-top: 8px;
-        }
-
-        .login-link:hover { color: var(--gold-lt); }
-
-        .err-msg {
-            font-size: 12px; color: var(--fire-lt);
-            margin-top: 8px; text-align: center; min-height: 18px;
-        }
-
-        .loading { opacity: 0.6; pointer-events: none; }
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
-
-        /* ════════════════════════════════════════════════
-           ANDROID / DESKTOP — bottom banner
-           (shown when beforeinstallprompt fires)
-           ════════════════════════════════════════════════ */
-        #pwa-install-bar {
-            display: none;
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            z-index: 9999;
-            padding: 14px 16px 22px;
-            background: rgba(10, 16, 30, 0.97);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid rgba(212,160,23,0.3);
-        }
-
-        #pwa-install-bar.show { display: block; animation: slideUp 0.3s ease; }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to   { transform: translateY(0);    opacity: 1; }
-        }
-
-        .pwa-bar-inner {
-            max-width: 440px; margin: 0 auto;
-            display: flex; align-items: center; gap: 12px;
-        }
-
-        .pwa-bar-icon {
-            width: 46px; height: 46px; border-radius: 12px;
-            background: linear-gradient(135deg, #d4a017, #1abc9c);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px; flex-shrink: 0;
-        }
-
-        .pwa-bar-text { flex: 1; }
-
-        .pwa-bar-title {
-            font-family: 'Cinzel', serif; font-size: 12px;
-            letter-spacing: 1px; color: #f0c040; margin-bottom: 2px;
-        }
-
-        .pwa-bar-sub { font-size: 11px; color: rgba(255,255,255,0.5); }
-
-        .pwa-bar-btn {
-            padding: 10px 20px; border-radius: 10px; border: none;
-            background: linear-gradient(135deg, #d4a017, #a07010);
-            color: #fff; font-family: 'Cinzel', serif;
-            font-size: 11px; letter-spacing: 1px;
-            cursor: pointer; white-space: nowrap; flex-shrink: 0;
-            transition: opacity 0.2s;
-        }
-
-        .pwa-bar-btn:hover { opacity: 0.85; }
-
-        .pwa-bar-close {
-            background: none; border: none;
-            color: rgba(255,255,255,0.35); font-size: 20px;
-            cursor: pointer; padding: 4px; line-height: 1; flex-shrink: 0;
-        }
-
-        /* ════════════════════════════════════════════════
-           iOS SAFARI — instruction popup
-           (no beforeinstallprompt on iOS — show manual steps)
-           ════════════════════════════════════════════════ */
-        #ios-install-popup {
-            display: none;
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            z-index: 9999;
-            padding: 20px 20px 32px;
-            background: rgba(10, 16, 30, 0.98);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(212,160,23,0.3);
-            border-radius: 20px 20px 0 0;
-        }
-
-        #ios-install-popup.show { display: block; animation: slideUp 0.3s ease; }
-
-        .ios-popup-header {
-            display: flex; align-items: center;
-            justify-content: space-between; margin-bottom: 16px;
-        }
-
-        .ios-popup-title {
-            font-family: 'Cinzel', serif; font-size: 14px;
-            letter-spacing: 1.5px; color: #f0c040;
-        }
-
-        .ios-popup-close {
-            background: none; border: none;
-            color: rgba(255,255,255,0.4); font-size: 22px;
-            cursor: pointer; padding: 2px;
-        }
-
-        .ios-steps { display: flex; flex-direction: column; gap: 14px; }
-
-        .ios-step {
-            display: flex; align-items: center; gap: 14px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px; padding: 12px 14px;
-        }
-
-        .ios-step-num {
-            width: 28px; height: 28px; border-radius: 50%;
-            background: linear-gradient(135deg, #d4a017, #a07010);
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Cinzel', serif; font-size: 12px;
-            font-weight: 700; color: #fff; flex-shrink: 0;
-        }
-
-        .ios-step-text { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.4; }
-        .ios-step-text strong { color: #f0c040; }
-
-        .ios-arrow {
-            display: flex; align-items: center; justify-content: center;
-            margin-top: 14px;
-        }
-
-        /* The ↑ arrow pointing to the browser share button */
-        .ios-arrow-graphic {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-        }
-
-        .ios-arrow-line {
-            width: 2px; height: 24px;
-            background: linear-gradient(180deg, rgba(212,160,23,0.8), transparent);
-            border-radius: 2px;
-        }
-
-        .ios-arrow-head {
-            width: 0; height: 0;
-            border-left: 7px solid transparent;
-            border-right: 7px solid transparent;
-            border-bottom: 10px solid rgba(212,160,23,0.8);
-        }
-
-        .ios-tap-share-hint {
-            font-size: 11px; color: rgba(255,255,255,0.45);
-            text-align: center; margin-top: 12px;
-        }
-
-        /* ════════════════════════════════════════════════
-           INSTALL BUTTON inside login card (always visible fallback)
-           ════════════════════════════════════════════════ */
-        #pwa-card-btn {
-            display: none; /* shown by JS when needed */
-            width: 100%; margin-top: 12px;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid rgba(212,160,23,0.35);
-            background: rgba(212,160,23,0.1);
-            color: #f0c040;
-            font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 1.5px;
-            cursor: pointer; transition: background 0.2s;
-            align-items: center; justify-content: center; gap: 8px;
-        }
-
-        #pwa-card-btn.show { display: flex; }
-        #pwa-card-btn:hover { background: rgba(212,160,23,0.18); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meezan — Sign in</title>
+<meta name="description" content="Meezan — Islamic personal finance: budgeting, Zakat, Sadaqah, Eid savings and family expenses. Built by Akif Nehal.">
+<meta name="author" content="Akif Nehal">
+<meta name="theme-color" content="#0b0f18">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Meezan">
+<link rel="stylesheet" href="css/meezan.css">
+<style>
+  body { min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); }
+  .login { width: min(100%, 420px); }
+  .login-logo { text-align: center; margin-bottom: 14px; }
+  .login-logo img { width: 72px; height: 72px; object-fit: contain; }
+  .login-logo h1 { margin: 4px 0 0; font-family: var(--font-display); letter-spacing: 6px; font-size: 1.6rem; color: var(--gold-lt); }
+  .login-logo p { margin: 2px 0 0; color: var(--text-dim); }
+  .login .tabbar { margin-bottom: 14px; }
+  .login form { display: grid; gap: 12px; }
+  .login .btn { width: 100%; justify-content: center; }
+  .or { text-align: center; color: var(--text-dim); font-size: 0.8rem; margin: 10px 0; }
+  .login-credit { text-align: center; margin-top: 14px; font-size: 0.85rem; color: var(--text-dim); }
+  .login-credit a { color: var(--gold-lt); }
+  .link-row { text-align: end; }
+</style>
+<script src="js/i18n.js"></script>
+<script src="js/i18n-v2.js"></script>
 </head>
-
 <body>
+<main class="login card">
+  <div class="login-logo">
+    <img src="assets/logo-icon.png" alt="" width="72" height="72">
+    <h1>MEEZAN</h1>
+    <p>ميزان · The Scale of Balance</p>
+  </div>
 
-    <!-- ANIMATED BACKGROUND -->
-    <div class="bg-scene">
-        <div class="bg-fire-glow"></div>
-        <div class="bg-heaven-glow"></div>
-        <div class="particles" id="particles"></div>
-    </div>
+  <div class="tabbar" role="tablist">
+    <button type="button" class="tab on" role="tab" data-mode="login">Sign in</button>
+    <button type="button" class="tab" role="tab" data-mode="register">Register</button>
+  </div>
 
-    <!-- LOGIN CARD -->
-    <div class="login-box">
+  <button type="button" class="btn btn-ghost" id="google-btn">Continue with Google</button>
+  <div class="or">or use your email</div>
 
-        <div class="login-logo">
-            <div class="login-logo-name">MEEZAN</div>
-            <div class="login-logo-ar">ميزان</div>
-            <div class="login-sub">The Scale of Balance</div>
-        </div>
+  <form id="auth-form" novalidate>
+    <div class="field" id="name-field" hidden><label for="a-name">Your name</label><input type="text" id="a-name" autocomplete="name" maxlength="60"></div>
+    <div class="field"><label for="a-email">Email</label><input type="email" id="a-email" autocomplete="email" inputmode="email"></div>
+    <div class="field"><label for="a-pass">Password</label><span class="pw-wrap"><input type="password" id="a-pass" autocomplete="current-password" minlength="6"><button type="button" class="pw-eye" id="pw-eye" aria-label="Show password" aria-pressed="false">👁️</button></span></div>
+    <div class="link-row" id="forgot-row"><button type="button" class="link-btn" id="forgot-btn">Forgot password?</button></div>
+    <button type="submit" class="btn btn-teal" id="submit-btn">Sign in</button>
+  </form>
 
-        <div class="login-tabs">
-            <button class="login-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
-            <button class="login-tab" id="tab-register" onclick="switchTab('register')">Register</button>
-        </div>
-
-        <button class="google-btn" id="google-btn" onclick="doGoogle()">
-            <span class="google-icon">G</span> Continue with Google
-        </button>
-        <div class="divider">— or continue with email —</div>
-
-        <!-- SIGN IN PANEL -->
-        <div class="tab-panel active" id="panel-login">
-            <div class="form-grid fg1" style="gap:8px">
-                <div class="field-wrap">
-                    <div class="field-label">Email</div>
-                    <input class="mz-input" id="li-email" type="email" placeholder="you@email.com" />
-                </div>
-                <div class="field-wrap">
-                    <div class="field-label">Password</div>
-                    <input class="mz-input" id="li-pass" type="password" placeholder="••••••••" minlength="6" />
-                </div>
-            </div>
-            <button class="btn btn-fire" style="margin-top:4px" id="login-btn" onclick="doLogin()">Sign In</button>
-            <button class="login-link" onclick="doReset()">Forgot password?</button>
-        </div>
-
-        <!-- REGISTER PANEL -->
-        <div class="tab-panel" id="panel-register">
-            <div class="form-grid fg1" style="gap:8px">
-                <div class="field-wrap">
-                    <div class="field-label">Your name</div>
-                    <input class="mz-input" id="reg-name" type="text" placeholder="Abdul Kareem" />
-                </div>
-                <div class="field-wrap">
-                    <div class="field-label">Email</div>
-                    <input class="mz-input" id="reg-email" type="email" placeholder="you@email.com" />
-                </div>
-                <div class="field-wrap">
-                    <div class="field-label">Password (min 6 chars)</div>
-                    <input class="mz-input" id="reg-pass" type="password" placeholder="••••••••" minlength="6" />
-                </div>
-            </div>
-            <button class="btn btn-teal" style="margin-top:4px" id="reg-btn" onclick="doRegister()">Create Account</button>
-        </div>
-
-        <div class="err-msg" id="err-msg"></div>
-
-        <!-- Install button inside card (shown for iOS & as fallback) -->
-        <button id="pwa-card-btn" onclick="handleCardInstall()">
-            ⬇️ &nbsp;Install Meezan App
-        </button>
-
-    </div>
-
-
-    <!-- ════════════════════════════════════════════════
-         ANDROID / DESKTOP INSTALL BANNER
-         ════════════════════════════════════════════════ -->
-    <div id="pwa-install-bar">
-        <div class="pwa-bar-inner">
-            <div class="pwa-bar-icon">⚖️</div>
-            <div class="pwa-bar-text">
-                <div class="pwa-bar-title">Install Meezan</div>
-                <div class="pwa-bar-sub">Add to home screen — works offline</div>
-            </div>
-            <button class="pwa-bar-btn" id="pwa-install-btn">Install</button>
-            <button class="pwa-bar-close" id="pwa-dismiss-btn">✕</button>
-        </div>
-    </div>
-
-
-    <!-- ════════════════════════════════════════════════
-         iOS SAFARI INSTALL INSTRUCTIONS POPUP
-         ════════════════════════════════════════════════ -->
-    <div id="ios-install-popup">
-        <div class="ios-popup-header">
-            <div class="ios-popup-title">⚖️ Install Meezan</div>
-            <button class="ios-popup-close" id="ios-popup-close">✕</button>
-        </div>
-        <div class="ios-steps">
-            <div class="ios-step">
-                <div class="ios-step-num">1</div>
-                <div class="ios-step-text">Tap the <strong>Share</strong> button <strong>⎙</strong> at the bottom of your browser</div>
-            </div>
-            <div class="ios-step">
-                <div class="ios-step-num">2</div>
-                <div class="ios-step-text">Scroll down and tap <strong>"Add to Home Screen"</strong></div>
-            </div>
-            <div class="ios-step">
-                <div class="ios-step-num">3</div>
-                <div class="ios-step-text">Tap <strong>"Add"</strong> — Meezan will appear on your home screen</div>
-            </div>
-        </div>
-        <div class="ios-tap-share-hint">⬆ The Share button is at the bottom of your Safari browser</div>
-    </div>
-
-
-    <!-- PARTICLES + THEME -->
-    <script>
-        var savedTheme = localStorage.getItem('meezan-theme') || 'glass';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        var pc = document.getElementById('particles');
-        for (var i = 0; i < 28; i++) {
-            var p = document.createElement('div');
-            p.className = 'particle ' + (i < 16 ? 'p-fire' : 'p-star');
-            p.style.cssText =
-                'left:' + (i < 16 ? Math.random() * 45 : Math.random() * 100) + '%;' +
-                'animation-duration:' + (4 + Math.random() * 8) + 's;' +
-                'animation-delay:' + (Math.random() * 6) + 's;';
-            pc.appendChild(p);
-        }
-    </script>
-
-    <!-- ════════════════════════════════════════════════
-         SERVICE WORKER + FULL PWA INSTALL LOGIC
-         Handles: Android Chrome, iOS Safari, Desktop
-         ════════════════════════════════════════════════ -->
-    <script>
-        /* ── Detect platform ── */
-        const IS_IOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
-        const IS_ANDROID = /android/i.test(navigator.userAgent);
-        const IS_STANDALONE = window.matchMedia('(display-mode: standalone)').matches
-                           || window.navigator.standalone === true;
-        const IS_SAFARI = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-        /* ── Elements ── */
-        const installBar    = document.getElementById('pwa-install-bar');
-        const installBtn    = document.getElementById('pwa-install-btn');
-        const dismissBtn    = document.getElementById('pwa-dismiss-btn');
-        const iosPopup      = document.getElementById('ios-install-popup');
-        const iosCloseBtn   = document.getElementById('ios-popup-close');
-        const cardBtn       = document.getElementById('pwa-card-btn');
-
-        let _deferredPrompt = null;
-        const DISMISSED_KEY = 'meezan-pwa-dismissed-v2';
-
-        /* ── 1. Register Service Worker ── */
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                    .then(reg => console.log('✅ SW registered, scope:', reg.scope))
-                    .catch(err => console.warn('⚠️ SW failed:', err.message));
-            });
-        }
-
-        /* ── 2. Already installed? Hide everything ── */
-        if (IS_STANDALONE) {
-            console.log('App running as standalone — already installed');
-            /* Don't show anything */
-        }
-
-        /* ── 3. Android/Desktop Chrome & Edge ── */
-        window.addEventListener('beforeinstallprompt', e => {
-            e.preventDefault();
-            _deferredPrompt = e;
-            console.log('✅ beforeinstallprompt captured');
-
-            if (!IS_STANDALONE && !localStorage.getItem(DISMISSED_KEY)) {
-                installBar.classList.add('show');
-                cardBtn.classList.add('show');
-            }
-        });
-
-        /* Install via banner */
-        installBtn && installBtn.addEventListener('click', async () => {
-            if (!_deferredPrompt) return;
-            installBar.classList.remove('show');
-            cardBtn.classList.remove('show');
-            _deferredPrompt.prompt();
-            const { outcome } = await _deferredPrompt.userChoice;
-            console.log('Install outcome:', outcome);
-            _deferredPrompt = null;
-        });
-
-        /* Dismiss banner */
-        dismissBtn && dismissBtn.addEventListener('click', () => {
-            installBar.classList.remove('show');
-            localStorage.setItem(DISMISSED_KEY, '1');
-            /* Keep card button visible so they can still install */
-        });
-
-        /* ── 4. iOS Safari — show instructions ── */
-        if (IS_IOS && IS_SAFARI && !IS_STANDALONE) {
-            if (!localStorage.getItem(DISMISSED_KEY + '-ios')) {
-                /* Show after 1.5s so login UI loads first */
-                setTimeout(() => {
-                    iosPopup.classList.add('show');
-                    cardBtn.classList.add('show');
-                }, 1500);
-            } else {
-                /* User dismissed before — still show card button */
-                cardBtn.classList.add('show');
-            }
-        }
-
-        /* Close iOS popup */
-        iosCloseBtn && iosCloseBtn.addEventListener('click', () => {
-            iosPopup.classList.remove('show');
-            localStorage.setItem(DISMISSED_KEY + '-ios', '1');
-        });
-
-        /* ── 5. Card button handler ── */
-        window.handleCardInstall = async () => {
-            if (_deferredPrompt) {
-                /* Android/Desktop: trigger native prompt */
-                cardBtn.classList.remove('show');
-                installBar.classList.remove('show');
-                _deferredPrompt.prompt();
-                const { outcome } = await _deferredPrompt.userChoice;
-                _deferredPrompt = null;
-            } else if (IS_IOS) {
-                /* iOS: show instruction popup */
-                iosPopup.classList.add('show');
-            } else {
-                /* Desktop Firefox / others — show instructions */
-                alert('To install:\n\nChrome: Click the ⊕ icon in the address bar\nFirefox: Open menu → "Install Page as App"\nSafari Mac: Click Share → "Add to Dock"');
-            }
-        };
-
-        /* ── 6. Installed callback ── */
-        window.addEventListener('appinstalled', () => {
-            installBar.classList.remove('show');
-            iosPopup.classList.remove('show');
-            cardBtn.classList.remove('show');
-            _deferredPrompt = null;
-            console.log('✅ Meezan installed!');
-        });
-    </script>
-
+  <div class="banner banner-bad" id="auth-msg" hidden role="alert"></div>
+  <div class="login-credit">Designed &amp; built by <a href="https://www.linkedin.com/in/akif-nehal/" target="_blank" rel="noopener noreferrer">Akif Nehal</a></div>
+</main>
+<noscript><p style="padding:20px">Meezan needs JavaScript to run.</p></noscript>
+<script type="module" src="js/login.js"></script>
 </body>
 </html>

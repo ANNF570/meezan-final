@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""Generates the thin HTML shell for every page. All logic lives in js/pages/*.js.
+Run:  python3 scripts/make_pages.py"""
+import os
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PAGES = {
+  'dashboard': 'Dashboard', 'income': 'Income', 'expenses': 'Expenses',
+  'assets': 'Accounts & Assets', 'zakat': 'Zakat & Sadaqah', 'eid': 'Eid & Ramadan',
+  'reports': 'Reports', 'export': 'Export', 'family': 'Family & Groups',
+  'loans': 'Friends & Loans', 'import': 'Import Data',
+  'settings': 'Settings & Profile',
+}
+TEMPLATE = """<!DOCTYPE html>
+<html lang="en" data-theme="glass">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meezan — {title}</title>
+<meta name="description" content="Meezan — Islamic personal finance. Built by Akif Nehal.">
+<meta name="author" content="Akif Nehal">
+<meta name="theme-color" content="#0b0f18">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Meezan">
+<link rel="stylesheet" href="../css/meezan.css">
+<script src="../js/i18n.js"></script>
+<script src="../js/i18n-v2.js"></script>
+</head>
+<body data-page="{key}">
+<div class="app" id="app">
+  <div class="main" id="main">
+    <div id="page">
+      <div class="card" id="page-loading"><div class="empty"><div class="empty-ico">⚖️</div><div>Loading your Meezan…</div></div></div>
+    </div>
+  </div>
+</div>
+<noscript><p style="padding:20px">Meezan needs JavaScript to run.</p></noscript>
+<script type="module" src="../js/pages/{key}.js"></script>
+</body>
+</html>
+"""
+for key, title in PAGES.items():
+    path = os.path.join(ROOT, 'pages', key + '.html')
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(TEMPLATE.format(key=key, title=title.replace('&', '&amp;')))
+    print('wrote', path)

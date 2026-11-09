@@ -1,0 +1,60 @@
+rules_version = '2';
+
+// Meezan v2 — publish in Firebase Console → Firestore Database → Rules.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+
+    // Everything a person owns: profile, settings, income, expenses, accounts,
+    // transfers, ornaments, sadaqah, zakatRecords, eidSavings and the old
+    // v1 collections (bakridSavings, bakridPlan, family, expenseGroups …).
+    match /users/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+      match /{document=**} {
+        allow read, write: if signedIn() && request.auth.uid == uid;
+      }
+    }
+
+    // Shared family / group expenses (top-level on purpose, so several people can open one group).
+    match /groups/{gid} {
+      function isMember() { return signedIn() && request.auth.uid in resource.data.memberUids; }
+
+      // Anyone signed in who has the (unguessable) link can open a group to join it.
+      allow get: if signedIn();
+      // The list screen only ever asks for groups the user belongs to.
+      allow list: if signedIn() && request.auth.uid in resource.data.memberUids;
+
+      allow create: if signedIn()
+        && request.resource.data.createdBy == request.auth.uid
+        && request.auth.uid in request.resource.data.memberUids;
+
+      allow update: if
+        // members edit the group (but cannot change who owns it)
+        (isMember() && request.resource.data.createdBy == resource.data.createdBy)
+        // a new person joins: only the member lists change, and only by adding themselves
+        || (signedIn()
+            && !(request.auth.uid in resource.data.memberUids)
+            && request.auth.uid in request.resource.data.memberUids
+            && request.resource.data.memberUids.size() == resource.data.memberUids.size() + 1
+            && request.resource.data.memberUids.hasAll(resource.data.memberUids)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberUids', 'memberNames', 'memberMap']));
+
+      allow delete: if signedIn() && resource.data.createdBy == request.auth.uid;
+
+      match /expenses/{eid} {
+        allow read, write: if signedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/groups/$(gid)).data.memberUids;
+      }
+      match /payments/{pid} {
+        allow read, write: if signedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/groups/$(gid)).data.memberUids;
+      }
+    }
+
+    // Everything else is closed.
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

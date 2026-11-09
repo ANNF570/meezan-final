@@ -1,44 +1,26 @@
 {
   "name": "Meezan — ميزان",
   "short_name": "Meezan",
-  "description": "Islamic Personal Finance — The Scale of Balance",
-  "start_url": "/index.html",
+  "description": "Islamic personal finance — budgeting, Zakat, Sadaqah, Eid savings and family expenses. Built by Akif Nehal.",
+  "id": "/",
+  "start_url": "/pages/dashboard.html",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "theme_color": "#0f172a",
-  "background_color": "#0f172a",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "theme_color": "#0b0f18",
+  "background_color": "#0b0f18",
   "lang": "en",
   "categories": ["finance", "productivity"],
   "icons": [
-    {
-      "src": "/assets/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/assets/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/assets/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/assets/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
     { "name": "Dashboard", "url": "/pages/dashboard.html" },
-    { "name": "Add Expense", "url": "/pages/expenses.html" },
-    { "name": "Zakat", "url": "/pages/zakat.html" }
+    { "name": "Add expense", "url": "/pages/expenses.html" },
+    { "name": "Zakat & Sadaqah", "url": "/pages/zakat.html" }
   ]
 }
